@@ -23,8 +23,18 @@
 # They're tracked by git-lfs, don't forget to track other files if adding them here.
 !/Content/**/*.uasset
 !/Content/**/*.umap
+
 !/Content/NotSharedResources
 /Content/NotSharedResources/**/*
+
+!/Content/HandPaintedEnvironment
+/Content/HandPaintedEnvironment/**/*
+
+!/Content/Low_Poly_Dungeon_Asset_Pack
+/Content/Low_Poly_Dungeon_Asset_Pack/**/*
+
+!/Content/Procedural_Dungeon
+/Content/Procedural_Dungeon/**/*
 
 # Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.
