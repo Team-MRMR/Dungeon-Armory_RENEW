@@ -36,10 +36,10 @@ EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 
-	const FVector TargetLocation = NPC->GetNextPoint();
+	
 
 	FAIMoveRequest MoveRequest;
-	MoveRequest.SetGoalLocation(TargetLocation);
+	
 	MoveRequest.SetAcceptanceRadius(50.f); // 허용 오차 거리 조정 가능
 
 	FNavPathSharedPtr NavPath;

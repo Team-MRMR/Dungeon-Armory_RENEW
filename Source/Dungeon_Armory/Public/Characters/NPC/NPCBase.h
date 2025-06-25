@@ -42,18 +42,14 @@ public:
 /***** Behavior Tree *****/
 private:
 	/** AI가 머물러 있는 포인트 */
-	UPROPERTY(EditInstanceOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
 	ALocationPoint* HomePoint;
 
 	/** AI가 경로를 순회할 때 사용할 이동 포인트 */
-	UPROPERTY(EditInstanceOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
-	TArray<ALocationPoint*> LocationPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ALocationPoint> LocationPointClass;
 
 	/** 현재 이동 지점 인덱스 */
 	int32 CurrLocationPointIndex = 0;
-
-public:
-	FVector GetNextPoint();
-	FVector GetHomePoint() const;
 
 };

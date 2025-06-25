@@ -30,8 +30,7 @@ EBTNodeResult::Type UBTTask_RoamToPoints::ExecuteTask(UBehaviorTreeComponent& Ow
 	}
 
     // 이동 명령 실행
-    FVector MovePointLocation = NPC->GetNextPoint();
-    NPCController->MoveToLocation(MovePointLocation);
+    
 
     // 이동 완료 후 OnRoamToPointReached에서 처리, OnRoamingReached 호출
 
