@@ -20,6 +20,12 @@ protected:
 
 /***** Behavior Tree *****/
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point")
-	TArray<float> WaitTimes;	// 대기 시간 (초 단위)
+	FORCEINLINE FVector GetLocation() const { return FVector(Location.X, Location.Y, 0.0f); }
+	FORCEINLINE float GetWaitTime() const { return WaitTime; }
+
+protected:
+	FVector Location;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Point")
+	float WaitTime;		// 대기 시간 (초 단위)
 };

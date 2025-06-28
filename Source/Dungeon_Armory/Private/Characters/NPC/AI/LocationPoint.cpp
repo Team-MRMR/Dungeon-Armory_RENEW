@@ -11,4 +11,6 @@ ALocationPoint::ALocationPoint()
 void ALocationPoint::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Location = GetActorLocation();
 }

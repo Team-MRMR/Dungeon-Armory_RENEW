@@ -6,9 +6,6 @@
 #include "Characters/NPC/AI/NPCAIController.h"
 #include "Characters/NPC/NPCBase.h"
 
-#include "Characters/Core/Component/CharacterStatComponent.h"
-#include "Characters/Core/Component/MovementControllerComponent.h"
-
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -19,41 +16,36 @@
 UBTTask_MoveToPoint::UBTTask_MoveToPoint()
 {
 	bNotifyTick = false;
-    NodeName = "NPC MoveToPoint"; // BT에서 보이는 이름
+    NodeName = "Move To Point"; // BT에서 보이는 이름
 }
 
 EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (!AIController)
-	{
 		return EBTNodeResult::Failed;
-	}
 
 	ANPCBase* NPC = Cast<ANPCBase>(AIController->GetPawn());
 	if (!NPC)
-	{
 		return EBTNodeResult::Failed;
-	}
 
-	
-
-	FAIMoveRequest MoveRequest;
-	
-	MoveRequest.SetAcceptanceRadius(50.f); // 허용 오차 거리 조정 가능
-
-	FNavPathSharedPtr NavPath;
-	FPathFollowingRequestResult Result = AIController->MoveTo(MoveRequest, &NavPath);
-
-	if (Result.Code == EPathFollowingRequestResult::Failed)
-	{
+	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard)
 		return EBTNodeResult::Failed;
-	}
 
-	if (Result.Code == EPathFollowingRequestResult::AlreadyAtGoal)
-	{
+	ALocationPoint* LocationPoint = Cast<ALocationPoint>(Blackboard->GetValueAsObject(BBKeys::LocationPoint));
+	if (!LocationPoint)
+		return EBTNodeResult::Failed;
+
+	FVector Location = LocationPoint->GetActorLocation();
+
+	EPathFollowingRequestResult::Type Result = AIController->MoveToLocation(Location, 50.f);
+
+	if (Result == EPathFollowingRequestResult::Failed)
+		return EBTNodeResult::Failed;
+
+	if (Result == EPathFollowingRequestResult::AlreadyAtGoal)
 		return EBTNodeResult::Succeeded;
-	}
 
 	return EBTNodeResult::InProgress;
 }

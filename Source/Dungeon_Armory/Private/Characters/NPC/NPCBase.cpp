@@ -65,3 +65,22 @@ void ANPCBase::SetGenericTeamId(const FGenericTeamId& NewTeamID)
 {
 	TeamComponent->SetTeamType(static_cast<ETeamType>(NewTeamID.GetId()));
 }
+
+ALocationPoint* const ANPCBase::GetPoint(bool bIsRandom)
+{
+	if (LocationPoints.Num() <= 0)
+		return nullptr;
+
+	ALocationPoint* LocationPoint;
+
+	if (bIsRandom)
+	{
+		int32 RandomIndex = FMath::RandRange(0, LocationPoints.Num() - 1);
+		LocationPoint = LocationPoints.IsValidIndex(RandomIndex) ? LocationPoints[RandomIndex] : nullptr;
+		return LocationPoint;
+	}
+
+	CurrentIndex = (CurrentIndex + 1) % LocationPoints.Num();
+	LocationPoint = LocationPoints.IsValidIndex(CurrentIndex) ? LocationPoints[CurrentIndex] : nullptr;
+	return LocationPoint;
+}
