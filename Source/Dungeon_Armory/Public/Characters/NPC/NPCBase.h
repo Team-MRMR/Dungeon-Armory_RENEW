@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "GenericTeamAgentInterface.h"
 
+#include "Characters/NPC/AI/LocationPoint.h"
+
 #include "NPCBase.generated.h"
 
 class UCharacterStatComponent;
@@ -40,20 +42,25 @@ public:
 	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
 
 /***** Behavior Tree *****/
+public:
+	void SetIsShopping(bool _bIsShopping) { bIsShopping = _bIsShopping; }
+	FORCEINLINE bool GetIsShopping() const { return bIsShopping; }
+
+	FORCEINLINE ALocationPoint* const GetPoint(bool bIsRandom);
+
 private:
+	/** 대장간 내부에서 랜덤하게 돌아다닐 변수 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	bool bIsShopping = false;
+
 	/** AI가 머물러 있는 포인트 */
-	UPROPERTY(EditInstanceOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
 	ALocationPoint* HomePoint;
 
 	/** AI가 경로를 순회할 때 사용할 이동 포인트 */
-	UPROPERTY(EditInstanceOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
 	TArray<ALocationPoint*> LocationPoints;
 
 	/** 현재 이동 지점 인덱스 */
-	int32 CurrLocationPointIndex = 0;
-
-public:
-	FVector GetNextPoint();
-	FVector GetHomePoint() const;
-
+	int32 CurrentIndex = 0;
 };

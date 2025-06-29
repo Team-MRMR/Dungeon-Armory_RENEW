@@ -4,7 +4,6 @@
 #include "Characters/NPC/AI/NPCAIController.h"
 #include "Characters/NPC/NPCBase.h"
 
-#include "Characters/Core/AI/Interface/IMovableTask.h"
 #include "Characters/Core/Component/CharacterStatComponent.h"
 #include "Characters/Core/Component/MovementControllerComponent.h"
 
@@ -37,7 +36,6 @@ void ANPCAIController::OnPossess(APawn* InPawn)
 			Stat = NPCBase->FindComponentByClass<UCharacterStatComponent>();
 
             MovementController = NPCBase->FindComponentByClass<UMovementControllerComponent>();
-            //MovementController->OnMovementCompleted.AddDynamic(this, &ANPCAIController::OnMovementCompleted);
         }
     }
 
@@ -66,50 +64,20 @@ void ANPCAIController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ANPCAIController::SetNPCState(ENPCStates NewNPCState)
-{
-    if (BlackboardComponent == nullptr)
-    {
-        return;
-    }
-
-    BlackboardComponent->SetValueAsEnum(BBKey_NPCState, static_cast<uint8>(NewNPCState));
-}
-
 void ANPCAIController::InitializeBlackboardKeys()
 {
-    // --- 상태 관련 키값 ---
-    BlackboardComponent->SetValueAsEnum(NPCBBKeys::NPCState, static_cast<uint8>(ENPCStates::Stay));
+    //// --- 상태 관련 키값 ---
+    //BlackboardComponent->SetValueAsEnum(NPCBBKeys::NPCState, static_cast<uint8>(ENPCStates::Stay));
 
-    // --- 컴포넌트 관련 키값 ---
-    BlackboardComponent->SetValueAsObject(NPCBBKeys::Stat, Stat);
-    BlackboardComponent->SetValueAsObject(NPCBBKeys::MovementController, MovementController);
+    //// --- 컴포넌트 관련 키값 ---
+    //BlackboardComponent->SetValueAsObject(NPCBBKeys::Stat, Stat);
+    //BlackboardComponent->SetValueAsObject(NPCBBKeys::MovementController, MovementController);
 
-    // --- 거리 관련 키값 ---
-    BlackboardComponent->SetValueAsVector(NPCBBKeys::HomeLocation, GetPawn()->GetActorLocation());
+    //// --- 거리 관련 키값 ---
+    //BlackboardComponent->SetValueAsVector(NPCBBKeys::HomeLocation, GetPawn()->GetActorLocation());
 }
 
 void ANPCAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
-    if (!BehaviorTreeComponent)
-        return;
-
-    const UBTNode* ActiveNode = BehaviorTreeComponent->GetActiveNode();
-    if (ActiveNode)
-    {
-        // IIMovableTask 인터페이스를 사용하여 이동 완료 처리
-        IIMovableTask* MovableTask = const_cast<IIMovableTask*>(Cast<IIMovableTask>(ActiveNode));
-        if (MovableTask)
-        {
-            if (Result == EPathFollowingResult::Success)
-            {
-                MovableTask->OnMoveCompleted(BehaviorTreeComponent);    // 이동 완료 처리를 어떻게 할까. Result.Code의 완료와 실패에 대한 구분을 해야 함
-            }
-            else
-            {
-                MovableTask->OnMoveCompleted(BehaviorTreeComponent);
-                BehaviorTreeComponent->RestartTree();
-            }
-        }
-    }
+	Super::OnMoveCompleted(RequestID, Result);
 }

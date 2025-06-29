@@ -12,7 +12,7 @@ class AActor;
 class UMovementControllerComponent;
 
 UCLASS()
-class DUNGEON_ARMORY_API UBTTask_Chase : public UBTTask_BlackboardBase, public IIMovableTask
+class DUNGEON_ARMORY_API UBTTask_Chase : public UBTTask_BlackboardBase, public IMovableTask
 {
 	GENERATED_BODY()
 	

@@ -209,7 +209,7 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 
 	// 4. 디버그용으로 시각화	
 #if WITH_EDITOR
-	// DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Red : FColor::Green, false, 0.1f, 0, 1.0f);
+	DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Red : FColor::Green, false, 0.1f, 0, 1.0f);
 #endif
 
 	auto MobBase = Cast<AMobBase>(HitActor);
@@ -254,4 +254,9 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 			Die();	// 죽음 처리
 		}
 	}
+}
+
+float AManny::GetCurrentStamina()
+{
+	return StatComponent->Stamina.GetCurrent();
 }

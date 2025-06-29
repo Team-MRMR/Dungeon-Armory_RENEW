@@ -35,21 +35,21 @@ void UBTTask_Chase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
         return;
     }
 
-	AActor* TargetActor = Cast<AActor>(Blackboard->GetValueAsObject(MobBBKeys::Target));
+	AActor* TargetActor = Cast<AActor>(Blackboard->GetValueAsObject(BBKeys::Mob::Target));
 	if (!TargetActor)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 
-	auto MovementController = Cast<UMovementControllerComponent>(Blackboard->GetValueAsObject(MobBBKeys::MovementController));
+	auto MovementController = Cast<UMovementControllerComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::MovementController));
 	if (!MovementController)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 
-	auto* Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(MobBBKeys::Stat));
+	auto* Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::Stat));
 	if (!Stat)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);

@@ -35,7 +35,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	auto Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(MobBBKeys::Stat));
+	auto Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::Stat));
 	if (!Stat)
 	{
 		return EBTNodeResult::Failed;
@@ -47,7 +47,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	FVector HomeLocation = Blackboard->GetValueAsVector(MobBBKeys::HomeLocation);
+	FVector HomeLocation = Blackboard->GetValueAsVector(BBKeys::Mob::HomeLocation);
 
 	FNavLocation RandomLocation;
 	bool bFound = NavSys->GetRandomPointInNavigableRadius(HomeLocation, Stat->PatrolRadius, RandomLocation);
@@ -55,7 +55,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{
 		return EBTNodeResult::Failed;
 	}
-	Blackboard->SetValueAsVector(MobBBKeys::RandomLocation, RandomLocation.Location);
+	Blackboard->SetValueAsVector(BBKeys::Mob::RandomLocation, RandomLocation.Location);
 
 	// MovementControllerComponent 할당 과정
 	AAIController* AIController = OwnerComp.GetAIOwner();
@@ -81,7 +81,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{
 		return EBTNodeResult::Failed;
 	}
-	Blackboard->SetValueAsObject(MobBBKeys::MovementController, MovementController);
+	Blackboard->SetValueAsObject(BBKeys::Mob::MovementController, MovementController);
 
 	return EBTNodeResult::InProgress;
 }
@@ -94,19 +94,19 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
-	auto* MovementController = Cast<UMovementControllerComponent>(Blackboard->GetValueAsObject(MobBBKeys::MovementController));
+	auto* MovementController = Cast<UMovementControllerComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::MovementController));
 	if (!MovementController)
 	{
 		return;
 	}
 
-	auto* Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(MobBBKeys::Stat));
+	auto* Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::Stat));
 	if (!Stat)
 	{
 		return;
 	}
 
-	FVector Location = Blackboard->GetValueAsVector(MobBBKeys::RandomLocation);
+	FVector Location = Blackboard->GetValueAsVector(BBKeys::Mob::RandomLocation);
 	MovementController->MoveToDestination(Location);
 }
 

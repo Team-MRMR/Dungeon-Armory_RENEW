@@ -4,21 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
 #include "LocationPoint.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class DUNGEON_ARMORY_API ALocationPoint : public AActor
 {
 	GENERATED_BODY()
 
-/***** Functions (Unreal) *****/
-public:	
+/***** Unreal *****/
+public:
 	ALocationPoint();
 
-/***** Patrol *****/
-public:
-	UFUNCTION(BlueprintCallable, Category = "LocationPoint")
-	FORCEINLINE FVector GetPointLocation() const { return GetActorLocation(); }
+protected:
+	virtual void BeginPlay() override;
 
+/***** Behavior Tree *****/
+public:
+	FORCEINLINE FVector GetLocation() const { return FVector(Location.X, Location.Y, 0.0f); }
+	FORCEINLINE float GetWaitTime() const { return WaitTime; }
+
+protected:
+	FVector Location;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Point")
+	float WaitTime;		// 대기 시간 (초 단위)
 };

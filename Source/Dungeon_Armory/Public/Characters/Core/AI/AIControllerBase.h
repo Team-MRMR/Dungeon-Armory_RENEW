@@ -84,4 +84,6 @@ protected:
 	/** 블랙보드에서 NPC의 상태를 저장하는 키 */
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior Tree")
 	FName BBKey_NPCState = "NPCState";
+
+	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result) override;
 };

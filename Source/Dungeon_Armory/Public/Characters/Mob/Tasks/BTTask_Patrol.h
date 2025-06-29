@@ -13,7 +13,7 @@ struct FBlackboardKeySelector;
 class UMovementControllerComponent;
 
 UCLASS()
-class DUNGEON_ARMORY_API UBTTask_Patrol : public UBTTask_BlackboardBase, public IIMovableTask
+class DUNGEON_ARMORY_API UBTTask_Patrol : public UBTTask_BlackboardBase, public IMovableTask
 {
 	GENERATED_BODY()
 	

@@ -7,7 +7,6 @@
 
 #include "Characters/Core/Component/CharacterStatComponent.h"
 #include "Characters/Core/Component/MovementControllerComponent.h"
-
 #include "Characters/Core/AI/Interface/IMovableTask.h"
 
 #include "BehaviorTree/BehaviorTree.h"
@@ -46,7 +45,7 @@ void AMobAIController::OnPossess(APawn* InPawn)
             StatComponent = MobBase->FindComponentByClass<UCharacterStatComponent>();
 
 			MovementControllerComponent = MobBase->FindComponentByClass<UMovementControllerComponent>();
-			MovementControllerComponent->OnMovementCompleted.AddDynamic(this, &AMobAIController::OnMovementCompleted);
+			//MovementControllerComponent->OnMovementCompleted.AddDynamic(this, &AMobAIController::OnMovementCompleted);
 
 			MobAttackComponent = MobBase->FindComponentByClass<UMobAttackComponent>();
         }
@@ -137,32 +136,20 @@ void AMobAIController::SetMobState(EMobState NewState)
 void AMobAIController::InitializeBlackboardKeys()
 {
 	// --- 상태 관련 키값 ---S
-    BlackboardComponent->SetValueAsEnum(MobBBKeys::MobState, static_cast<uint8>(EMobState::Patrol));
+    BlackboardComponent->SetValueAsEnum(BBKeys::Mob::MobState, static_cast<uint8>(EMobState::Patrol));
 
 	// --- 컴포넌트 관련 키값 ---
-	BlackboardComponent->SetValueAsObject(MobBBKeys::Stat, StatComponent);
-	BlackboardComponent->SetValueAsObject(MobBBKeys::MovementController, MovementControllerComponent);
-	BlackboardComponent->SetValueAsObject(MobBBKeys::AttackComponent, MobAttackComponent);
+	BlackboardComponent->SetValueAsObject(BBKeys::Mob::Stat, StatComponent);
+	BlackboardComponent->SetValueAsObject(BBKeys::Mob::MovementController, MovementControllerComponent);
+	BlackboardComponent->SetValueAsObject(BBKeys::Mob::AttackComponent, MobAttackComponent);
 
     // --- 거리 관련 키값 ---
-    BlackboardComponent->SetValueAsVector(MobBBKeys::HomeLocation, GetPawn()->GetActorLocation());
+    BlackboardComponent->SetValueAsVector(BBKeys::Mob::HomeLocation, GetPawn()->GetActorLocation());
 }
 
-void AMobAIController::OnMovementCompleted()
+void AMobAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
-    if (!BehaviorTreeComponent)
-        return;
-
-    const UBTNode* ActiveNode = (BehaviorTreeComponent->GetActiveNode());
-    if (ActiveNode)
-    {
-        // IIMovableTask 인터페이스를 사용하여 이동 완료 처리
-        IIMovableTask* MovableTask = const_cast<IIMovableTask*>(Cast<IIMovableTask>(ActiveNode));
-        if (MovableTask)
-        {
-            MovableTask->OnMoveCompleted(BehaviorTreeComponent);
-        }
-    }
+	Super::OnMoveCompleted(RequestID, Result);
 }
 
 // 감지 이벤트 처리

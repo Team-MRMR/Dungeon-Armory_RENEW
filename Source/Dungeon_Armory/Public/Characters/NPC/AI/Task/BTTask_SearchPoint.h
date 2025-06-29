@@ -4,20 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "BTTask_Return.generated.h"
+#include "BTTask_SearchPoint.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DUNGEON_ARMORY_API UBTTask_Return : public UBTTask_BlackboardBase
+class DUNGEON_ARMORY_API UBTTask_SearchPoint : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
-
+	
 public:
-	UBTTask_Return();
+	UBTTask_SearchPoint();
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
 };

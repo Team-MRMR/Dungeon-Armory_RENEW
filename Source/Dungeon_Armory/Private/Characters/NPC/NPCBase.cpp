@@ -66,28 +66,22 @@ void ANPCBase::SetGenericTeamId(const FGenericTeamId& NewTeamID)
 	TeamComponent->SetTeamType(static_cast<ETeamType>(NewTeamID.GetId()));
 }
 
-/*
-* Functions (Behavior Tree)
-*/
-
-FVector ANPCBase::GetNextPoint()
+ALocationPoint* const ANPCBase::GetPoint(bool bIsRandom)
 {
-	if (LocationPoints.Num() == 0)
+	if (LocationPoints.Num() <= 0)
+		return nullptr;
+
+	ALocationPoint* LocationPoint;
+
+	if (bIsRandom)
 	{
-		return GetActorLocation();
+		int32 RandomIndex = FMath::RandRange(0, LocationPoints.Num() - 1);
+		LocationPoint = LocationPoints.IsValidIndex(RandomIndex) ? LocationPoints[RandomIndex] : nullptr;
+		return LocationPoint;
 	}
 
-	const FVector NextPoint = LocationPoints[CurrLocationPointIndex]->GetPointLocation();
-	CurrLocationPointIndex = (CurrLocationPointIndex + 1) % LocationPoints.Num();
-	return NextPoint;
-}
+	LocationPoint = LocationPoints.IsValidIndex(CurrentIndex) ? LocationPoints[CurrentIndex] : nullptr;
+	CurrentIndex = (++CurrentIndex) % LocationPoints.Num();
 
-FVector ANPCBase::GetHomePoint() const
-{
-	if (!HomePoint)
-	{
-		return GetActorLocation();
-	}
-
-	return HomePoint->GetPointLocation();
+	return LocationPoint;
 }

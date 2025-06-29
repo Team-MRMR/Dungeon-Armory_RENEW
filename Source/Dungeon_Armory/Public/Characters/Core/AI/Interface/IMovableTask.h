@@ -8,22 +8,17 @@
 #include "IMovableTask.generated.h"
 
 class UBehaviorTreeComponent;
-	
-// This class does not need to be modified.
-UINTERFACE(MinimalAPI)
-class UIMovableTask : public UInterface
+
+UINTERFACE()
+class DUNGEON_ARMORY_API UMovableTask : public UInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 };
 
-/**
- * 
- */
-class DUNGEON_ARMORY_API IIMovableTask
+class DUNGEON_ARMORY_API IMovableTask
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void OnMoveCompleted(UBehaviorTreeComponent* OwnerComp) = 0;
 };
