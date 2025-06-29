@@ -12,6 +12,31 @@ class UCharacterStatComponent;
 class UMovementControllerComponent;
 class UMobAttackComponent;
 
+namespace BBKeys
+{
+	namespace Mob
+	{
+		// 상태 수치
+		static const FName MobState(TEXT("MobState"));
+
+		// 플레이어 객체
+		static const FName Target(TEXT("Target"));
+
+		// 스탯 관련 수치
+		static const FName Stat(TEXT("Stat"));
+
+		// 이동 관련 객체
+		static const FName MovementController(TEXT("MovementController"));
+
+		// 공격 관련 객체
+		static const FName AttackComponent(TEXT("AttackComponent"));
+
+		// 거리 관련 수치
+		static const FName HomeLocation(TEXT("HomeLocation"));
+		static const FName RandomLocation(TEXT("RandomLocation"));
+	}
+}
+
 UCLASS()
 class DUNGEON_ARMORY_API AMobAIController : public AAIControllerBase
 {
@@ -42,35 +67,10 @@ public:
 
 private:
 	void InitializeBlackboardKeys();
-
-	UFUNCTION()
-	void OnMovementCompleted();
+	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result) override;
 
 /***** AI *****/
 protected:
 	UFUNCTION()
 	void OnTargetPerceived(AActor* Actor, FAIStimulus Stimulus) override;
 };
-
-// --- 블랙보드 키값 스트링 캐싱 ---
-namespace MobBBKeys
-{
-	// 상태 수치
-	static const FName MobState(TEXT("MobState"));
-
-	// 플레이어 객체
-	static const FName Target(TEXT("Target"));
-
-	// 스탯 관련 수치
-	static const FName Stat(TEXT("Stat"));
-
-	// 이동 관련 객체
-	static const FName MovementController(TEXT("MovementController"));
-
-	// 공격 관련 객체
-	static const FName AttackComponent(TEXT("AttackComponent"));
-
-	// 거리 관련 수치
-	static const FName HomeLocation(TEXT("HomeLocation"));
-	static const FName RandomLocation(TEXT("RandomLocation"));
-}

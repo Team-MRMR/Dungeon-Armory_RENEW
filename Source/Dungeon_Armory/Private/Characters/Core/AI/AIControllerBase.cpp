@@ -2,6 +2,8 @@
 
 
 #include "Characters/Core/AI/AIControllerBase.h"
+#include "Characters/Core/AI/Interface/IMovableTask.h"
+#include "Characters/Core/AI/Team/TeamComponent.h"
 #include "Characters/NPC/NPCBase.h"
 
 #include "BehaviorTree/BehaviorTree.h"
@@ -10,7 +12,8 @@
 
 #include "Manager/TeamManager.h"
 
-#include "Characters/Core/AI/Team/TeamComponent.h"
+
+#include "Navigation/PathFollowingComponent.h"
 
 AAIControllerBase::AAIControllerBase()
 {
@@ -66,4 +69,25 @@ FGenericTeamId AAIControllerBase::GetGenericTeamId() const
     }
 
     return FGenericTeamId::NoTeam;
+}
+
+void AAIControllerBase::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
+{
+    if (!BehaviorTreeComponent)
+        return;
+
+    const UBTNode* ActiveNode = BehaviorTreeComponent->GetActiveNode();
+    if (!ActiveNode)
+        return;
+
+    // IMovableTask 인터페이스를 사용하여 이동 완료 처리
+    if (IMovableTask* MovableTask = Cast<IMovableTask>(const_cast<UBTNode*>(ActiveNode)))
+    {
+        MovableTask->OnMoveCompleted(BehaviorTreeComponent);
+
+        if (Result != EPathFollowingResult::Success)
+        {
+            BehaviorTreeComponent->RestartTree();
+        }
+    }
 }

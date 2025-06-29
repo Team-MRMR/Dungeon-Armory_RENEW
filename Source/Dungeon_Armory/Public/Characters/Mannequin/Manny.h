@@ -168,9 +168,15 @@ public:
 	virtual void Die_Implementation() { }
 
 /***** Utilities *****/
+public:
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentStamina();
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Durability")
 	void DecreaseDurability();
 	virtual void DecreaseDurability_Implementation() { }
 
 	virtual EToolType GetToolType_Implementation() const override { return EToolType::Other; }
+
+
 };

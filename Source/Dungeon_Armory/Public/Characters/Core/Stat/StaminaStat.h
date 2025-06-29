@@ -30,6 +30,7 @@ struct DUNGEON_ARMORY_API FStaminaStat
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
     float RegenDelay = 1.0f;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     float Current = 100.f;
     double StartRegenTime = 0.0;
     bool bIsBeingConsumed = false;
@@ -76,7 +77,7 @@ struct DUNGEON_ARMORY_API FStaminaStat
     /** 스태미너 회복 타이머 종료 */
     void StopConsume()
     {
-		 UE_LOG(LogTemp, Warning, TEXT("StopConsume called!"));
+		UE_LOG(LogTemp, Warning, TEXT("StopConsume called!"));
 
         const double CurrentTime = World->GetTimeSeconds();
         StartRegenTime = CurrentTime;

@@ -11,7 +11,7 @@
 class UBehaviorTreeComponent;
 
 UCLASS()
-class DUNGEON_ARMORY_API UBTTask_MoveToPoint : public UBTTask_BlackboardBase
+class DUNGEON_ARMORY_API UBTTask_MoveToPoint : public UBTTask_BlackboardBase, public IMovableTask
 {
 	GENERATED_BODY()
 
@@ -20,4 +20,7 @@ public:
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	UFUNCTION()
+	virtual void OnMoveCompleted(UBehaviorTreeComponent* BehaviorTreeComponent) override;
 };

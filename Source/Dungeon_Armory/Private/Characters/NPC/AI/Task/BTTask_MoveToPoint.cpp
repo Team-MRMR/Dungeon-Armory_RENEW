@@ -33,19 +33,29 @@ EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& Own
 	if (!Blackboard)
 		return EBTNodeResult::Failed;
 
-	ALocationPoint* LocationPoint = Cast<ALocationPoint>(Blackboard->GetValueAsObject(BBKeys::LocationPoint));
+	ALocationPoint* LocationPoint = Cast<ALocationPoint>(Blackboard->GetValueAsObject(BBKeys::NPC::LocationPoint));
 	if (!LocationPoint)
 		return EBTNodeResult::Failed;
 
 	FVector Location = LocationPoint->GetActorLocation();
 
-	EPathFollowingRequestResult::Type Result = AIController->MoveToLocation(Location, 50.f);
+	FAIMoveRequest MoveRequest;
+	MoveRequest.SetGoalLocation(Location);
+	MoveRequest.SetAcceptanceRadius(50.f);
 
-	if (Result == EPathFollowingRequestResult::Failed)
+	FNavPathSharedPtr NavPath;
+	FPathFollowingRequestResult Result = AIController->MoveTo(MoveRequest, &NavPath);
+
+	if (Result.Code == EPathFollowingRequestResult::Failed)
 		return EBTNodeResult::Failed;
 
-	if (Result == EPathFollowingRequestResult::AlreadyAtGoal)
+	if (Result.Code == EPathFollowingRequestResult::AlreadyAtGoal)
 		return EBTNodeResult::Succeeded;
 
 	return EBTNodeResult::InProgress;
+}
+
+void UBTTask_MoveToPoint::OnMoveCompleted(UBehaviorTreeComponent* BehaviorTreeComponent)
+{
+	FinishLatentTask(*BehaviorTreeComponent, EBTNodeResult::Succeeded);
 }

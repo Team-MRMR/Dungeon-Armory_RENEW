@@ -17,12 +17,6 @@ class UBehaviorTreeComponent;
 
 struct FAIStimulus;
 
-namespace BBKeys
-{
-	const FName LocationPoint = FName("LocationPoint");
-	const FName IsShopping = FName("IsShopping");
-}
-
 /**
  * Base Class에서 Controller의 기능적 역할을 맡고,
  * Dervied Class에서는 비헤이비어 트리와 관련된 작업을 실행하는 역할을 수행
@@ -90,4 +84,6 @@ protected:
 	/** 블랙보드에서 NPC의 상태를 저장하는 키 */
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior Tree")
 	FName BBKey_NPCState = "NPCState";
+
+	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result) override;
 };

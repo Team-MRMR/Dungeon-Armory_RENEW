@@ -1,8 +1,8 @@
 #include "Characters/NPC/AI/Task/BTTask_SearchPoint.h"
+#include "Characters/NPC/AI/NPCAIController.h"
 #include "Characters/NPC/AI/LocationPoint.h"
 #include "Characters/NPC/NPCBase.h"
 
-#include "Characters/Core/AI/AIControllerBase.h"
 
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -34,7 +34,7 @@ EBTNodeResult::Type UBTTask_SearchPoint::ExecuteTask(UBehaviorTreeComponent& Own
 	if (!LocationPoint)
 		return EBTNodeResult::Failed;
 
-	Blackboard->SetValueAsObject(BBKeys::LocationPoint, LocationPoint);
+	Blackboard->SetValueAsObject(BBKeys::NPC::LocationPoint, LocationPoint);
 
 	return EBTNodeResult::Type();
 }

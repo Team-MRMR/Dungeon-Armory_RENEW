@@ -80,7 +80,8 @@ ALocationPoint* const ANPCBase::GetPoint(bool bIsRandom)
 		return LocationPoint;
 	}
 
-	CurrentIndex = (CurrentIndex + 1) % LocationPoints.Num();
 	LocationPoint = LocationPoints.IsValidIndex(CurrentIndex) ? LocationPoints[CurrentIndex] : nullptr;
+	CurrentIndex = (++CurrentIndex) % LocationPoints.Num();
+
 	return LocationPoint;
 }
