@@ -32,9 +32,9 @@ private:
 
     int32 CurrentComboIndex; // 현재 콤보 인덱스
 
-    bool bIsMontageEnded;   // 몽타주 종료 여부
-    bool bCanReceiveInput;  // 콤보 입력 가능 여부
-    bool bNextCombo;        // 다음 콤보 진행 여부
+    bool bIsMontageEnded;    // 몽타주 종료 여부
+    bool bCanReceiveInput;   // 콤보 입력 가능 여부
+    bool bNextCombo;         // 다음 콤보 진행 여부
 
     /***** Unreal *****/
 public:
@@ -46,11 +46,11 @@ protected:
 
     /***** Attack *****/
 public:
-    void StartAttack()override;     // 외부에서 공격 시작 시 호출
-    void OnAttack() override;        // AttackNotify에서 호출
+    void StartAttack() override;    // 외부에서 공격 시작 시 호출
+    void OnAttack() override;       // AttackNotify에서 호출
     void OnAttackEnd() override;
-    void ReceiveInput();    // 콤보 입력 수신
-
+    void ReceiveInput();            // 콤보 입력 수신
+    
 protected:
     void ProceedCombo();
     void PlayComboAttackMontage(int32 ComboIndex);

@@ -42,6 +42,7 @@ void UPlayerAttackComponent::StartAttack()
 {
 	const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
 	const float CurrentStamina = Stat->Stamina.GetCurrent();
+
 	// 현재 스태미너가 소비 스태미너보다 작으면 공격할 수 없음
 	if (CurrentStamina <= ConsumptionStamina)
 		return;
@@ -124,12 +125,11 @@ void UPlayerAttackComponent::OnAttack()
 	if (!GetOwner())
 		return;
 
-	const FVector Start = GetOwner()->GetActorLocation();
-	const FVector Forward = GetOwner()->GetActorForwardVector();
-	const float TraceDistance = 150.f;
-	const FVector End = Start + Forward * TraceDistance;
+	FVector Start, End;
+	FRotator ViewRot;
+	GetOwner()->GetActorEyesViewPoint(Start, ViewRot);
+	End = Start + ViewRot.Vector() * Stat->AttackableDistance;
 
-	const float Radius = 50.f;
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(GetOwner());
@@ -138,24 +138,27 @@ void UPlayerAttackComponent::OnAttack()
 		HitResults,
 		Start,
 		End,
-		FQuat::Identity,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
 		ECC_Pawn,
-		FCollisionShape::MakeSphere(Radius),
+		FCollisionShape::MakeCapsule(
+			Stat->AttackRadius,
+			Stat->AttackRange * 0.5f
+		),
 		Params
 	);
 
-	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
-
+#if WITH_EDITOR
 	DrawDebugCapsule(
 		GetWorld(),
 		(Start + End) * 0.5f,
-		TraceDistance * 0.5f,
-		Radius,
+		Stat->AttackRange * 0.5f,
+		Stat->AttackRadius,
 		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-		TraceColor,
+		bHit ? FColor::Red : FColor::Green,
 		false,
 		0.5f
 	);
+#endif
 
 	if (bHit)
 	{

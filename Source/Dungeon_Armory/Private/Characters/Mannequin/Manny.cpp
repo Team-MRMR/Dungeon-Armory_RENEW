@@ -189,7 +189,7 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 	// 1. 라인 트레이스의 시작점과 끝점 계산
 	FVector Start, End;
 	FRotator ViewRot;
-	GetActorEyesViewPoint(Start, ViewRot);
+	GetActorEyesViewPoint(Start, ViewRot);  
 	End = Start + ViewRot.Vector() * StatComponent->AttackableDistance;
 
 	// 2. 충돌 파라미터 설정
@@ -198,30 +198,44 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 	Params.AddIgnoredActor(this);
 
 	// 3. 실제 라인 트레이스 수행
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
+	bool bHit = GetWorld()->SweepSingleByChannel(
 		Hit,
 		Start,
 		End,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
 		ECC_Pawn,
+		FCollisionShape::MakeCapsule(
+			StatComponent->AttackRadius,
+			StatComponent->AttackRange * 0.5f
+		),
 		Params
 	);
 	AActor* HitActor = bHit ? Hit.GetActor() : nullptr;
+	UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *GetNameSafe(HitActor));
 
 	// 4. 디버그용으로 시각화	
 #if WITH_EDITOR
-	DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Red : FColor::Green, false, 0.1f, 0, 1.0f);
+	DrawDebugCapsule(
+		GetWorld(),
+		(Start + End) * 0.5f,
+		StatComponent->AttackRange * 0.5f,
+		StatComponent->AttackRadius,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+		bHit ? FColor::Red : FColor::Green,
+		false,
+		0.5f
+	);
 #endif
 
-	auto MobBase = Cast<AMobBase>(HitActor);
 	auto GatherableActor = Cast<AGatherableActorBase>(HitActor);
-
-	if (MobBase && AttackComponent)
-	{
-		AttackComponent->StartAttack();
-	}
-	else if (GatherableActor && GatherComponent)
+	
+	if (GatherableActor && GatherComponent)
 	{
 		GatherComponent->StartGather();
+	}
+	else
+	{
+		AttackComponent->StartAttack();
 	}
 }
 

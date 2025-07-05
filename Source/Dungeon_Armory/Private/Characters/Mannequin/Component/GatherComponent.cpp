@@ -103,37 +103,41 @@ void UGatherComponent::ReceiveInput()
 
 void UGatherComponent::DoLineTrace(FHitResult& OutHitResult)
 {
-    // 1. 플레이어 또는 컴포넌트 오너 얻기
-    AActor* OwnerActor = GetOwner();
-    if (!OwnerActor)
-        return;
-
-    // 2. 라인 트레이스의 시작점과 끝점 계산
     FVector Start, End;
     FRotator ViewRot;
-    OwnerActor->GetActorEyesViewPoint(Start, ViewRot);
-    End = Start + ViewRot.Vector() * GatheringDistance;
+    GetOwner()->GetActorEyesViewPoint(Start, ViewRot);
+    End = Start + ViewRot.Vector() * Stat->AttackableDistance;
 
     // 3. 충돌 파라미터 설정
     FCollisionQueryParams TraceParams;
-    TraceParams.AddIgnoredActor(OwnerActor); // 자신은 무시
+    TraceParams.AddIgnoredActor(GetOwner()); // 자신은 무시
 
-    // 4. 실제 라인 트레이스 수행
-    bIsHit = GetWorld()->LineTraceSingleByChannel(
+    // 4. 실제 스윕 트레이스 수행
+    bIsHit = GetWorld()->SweepSingleByChannel(
         OutHitResult,
         Start,
         End,
-        ECC_Visibility, // 또는 커스텀 채널: ECC_GameTraceChannel1 등
+        FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+        ECC_Visibility,
+        FCollisionShape::MakeCapsule(
+            Stat->AttackRadius,
+            Stat->AttackRange * 0.5f
+        ),
         TraceParams
     );
 
     // 5. 디버그용 선 그리기 (테스트 시에만)
 #if WITH_EDITOR
-    DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 0.1f);
-    if (OutHitResult.bBlockingHit)
-    {
-        DrawDebugSphere(GetWorld(), OutHitResult.ImpactPoint, 5.0f, 12, FColor::Red, false, 0.1f);
-    }
+    DrawDebugCapsule(
+        GetWorld(),
+        (Start + End) * 0.5f,
+        Stat->AttackRange * 0.5f,
+        Stat->AttackRadius,
+        FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+        bIsHit ? FColor::Red : FColor::Green,
+        false,
+        0.5f
+    );
 #endif
 }
 
