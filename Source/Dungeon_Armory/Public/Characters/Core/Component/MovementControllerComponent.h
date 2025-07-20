@@ -39,7 +39,7 @@ private:
 
 public:
 	void PatrolAtBase(const FVector& Destination, const float AcceptableRadius);
-	void MoveToDestination(const FVector& Destination, const float AcceptableRadius = 1.0f);
+	void MoveToDestination(const FVector& Destination, const float AcceptableRadius = 10.0f);
 	void RotateToTarget(const FVector& TargetLocation, float DeltaTime, float RotationSpeed = 5.f);
 		
 private:
