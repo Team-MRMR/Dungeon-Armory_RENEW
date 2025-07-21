@@ -13,6 +13,8 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+#include "Characters/Core/AI/Interface/IMovableTask.h"
+
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
@@ -150,6 +152,20 @@ void AMobAIController::InitializeBlackboardKeys()
 void AMobAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
 	Super::OnMoveCompleted(RequestID, Result);
+
+	if (!BehaviorTreeComponent)
+		return;
+
+	const UBTNode* ActiveNode = (BehaviorTreeComponent->GetActiveNode());
+	if (ActiveNode)
+	{
+		// IIMovableTask 인터페이스를 사용하여 이동 완료 처리
+		IMovableTask* MovableTask = const_cast<IMovableTask*>(Cast<IMovableTask>(ActiveNode));
+		if (MovableTask)
+		{
+			MovableTask->OnMoveCompleted(BehaviorTreeComponent);
+		}
+	}
 }
 
 // 감지 이벤트 처리

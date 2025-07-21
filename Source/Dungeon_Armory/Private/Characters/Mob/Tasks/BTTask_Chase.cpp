@@ -10,6 +10,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+#include "Navigation/PathFollowingComponent.h"
+
 UBTTask_Chase::UBTTask_Chase()
 {
     bNotifyTick = true;
@@ -28,6 +30,10 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 void UBTTask_Chase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	if (!AIController)
+		return;
+
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
     if (!Blackboard)
     {
@@ -42,32 +48,16 @@ void UBTTask_Chase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		return;
 	}
 
-	auto MovementController = Cast<UMovementControllerComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::MovementController));
-	if (!MovementController)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-		return;
-	}
+	FAIMoveRequest MoveRequest;
+	MoveRequest.SetGoalLocation(TargetActor->GetTargetLocation());
+	MoveRequest.SetAcceptanceRadius(10.f);
 
-	auto* Stat = Cast<UCharacterStatComponent>(Blackboard->GetValueAsObject(BBKeys::Mob::Stat));
-	if (!Stat)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-		return;
-	}
-
-
-	MovementController->MoveToDestination(TargetActor->GetActorLocation(), Stat->AttackableDistance);
+	FNavPathSharedPtr NavPath;
+	FPathFollowingRequestResult Result = AIController->MoveTo(MoveRequest, &NavPath);
 }
 
 void UBTTask_Chase::OnMoveCompleted(UBehaviorTreeComponent* BTComp)
 {
-	//auto MobAIController = Cast<AMobAIController>(BTComp->GetAIOwner());
-	//if (!MobAIController)
-	//	return;
-	//
-	//MobAIController->SetMobState(EMobState::Battle);
-
     // Task Á¾·á
     FinishLatentTask(*BTComp, EBTNodeResult::Succeeded);
 }
