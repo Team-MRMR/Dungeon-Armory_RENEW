@@ -62,11 +62,13 @@ protected:
 
 // IIDamageable을(를) 통해 상속됨
 public:
-	void ReceiveDamage(float DamageAmount) override;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
+	void ReceiveDamage(float DamageAmount);
+	virtual void ReceiveDamage_Implementation(float DamageAmount) override;
 
 protected:
-	UFUNCTION(BlueprintNativeEvent, Category = "Die")
-	void Die() override;
-	virtual void Die_Implementation() { }
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
+	void Die();
+	virtual void Die_Implementation() override;
 
 };

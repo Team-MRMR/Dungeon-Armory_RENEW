@@ -65,11 +65,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
 	USoundBase* DieSound;
 
+/***** IIDamageable *****/
 public:
-	void ReceiveDamage(float DamageAmount) override;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
+	void ReceiveDamage(float DamageAmount);
+	virtual void ReceiveDamage_Implementation(float DamageAmount) override;
 
 protected:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
 	void Die();
-	virtual void Die_Implementation() { }
+	virtual void Die_Implementation() override;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* DieMontage;
 };
