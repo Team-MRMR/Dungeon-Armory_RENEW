@@ -25,10 +25,6 @@ EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& Own
 	if (!AIController)
 		return EBTNodeResult::Failed;
 
-	ANPCBase* NPC = Cast<ANPCBase>(AIController->GetPawn());
-	if (!NPC)
-		return EBTNodeResult::Failed;
-
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard)
 		return EBTNodeResult::Failed;

@@ -159,7 +159,7 @@ void UMobAttackComponent::OnAttack()
 			if (DamagedActor && Stat)
 			{
 				const float DamageAmount = CalculateDamage(Stat, TargetStat);
-				DamagedActor->ReceiveDamage(DamageAmount);
+				DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 			}
 		}
 	}

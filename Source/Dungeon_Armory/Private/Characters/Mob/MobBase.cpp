@@ -7,6 +7,8 @@
 #include "Characters/Core/Component/CharacterStatComponent.h"
 #include "Characters/Core/Component/MovementControllerComponent.h"
 
+#include "Components/CapsuleComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Characters/Core/AI/Team/TeamComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -73,7 +75,7 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 	OutRotation = GetActorRotation();
 }
 
-void AMobBase::ReceiveDamage(float DamageAmount)
+void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 {
 	if (StatComponent)
 	{
@@ -86,7 +88,31 @@ void AMobBase::ReceiveDamage(float DamageAmount)
 		else
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, DieSound, GetActorLocation());
-			Die();	// 죽음 처리
+			Execute_Die(this);	// 죽음 처리
 		}
 	}
+}
+
+void AMobBase::Die_Implementation()
+{
+	// 애니메이션 몽타주 재생
+	if (DieMontage)
+	{
+		PlayAnimMontage(DieMontage);
+	}
+
+	AAIController* AIController = Cast<AAIController>(GetController());
+	if (AIController)
+	{
+		AIController->StopMovement();	// AI 컨트롤러의 이동 중지
+		AIController->UnPossess();		// AI 컨트롤러의 언포제스
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);		// 캡슐 콜리전 비활성화
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);					// 메쉬 콜리전 활성화
+	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);	// 메쉬 콜리전 무시
+
+	// 행동 종료
+	DetachFromControllerPendingDestroy();
+	SetLifeSpan(2.5f); // 5초 뒤 제거
 }
