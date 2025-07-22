@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/Core/Component/AttackComponentBase.h"
+#include "Characters/Mannequin/Interface/IToolEuipable.h"
 #include "PlayerAttackComponent.generated.h"
 
 class AManny;
@@ -44,6 +45,10 @@ protected:
     // Called when the game starts
     virtual void BeginPlay() override;
 
+	/***** Tool *****/
+public:
+    EToolType ToolType;
+
     /***** Attack *****/
 public:
     void StartAttack() override;    // 외부에서 공격 시작 시 호출
@@ -56,5 +61,6 @@ protected:
     void PlayComboAttackMontage(int32 ComboIndex);
 
 private:
+    void UpdateToolType();
     virtual float CalculateDamage(UCharacterStatComponent* Attacker, UCharacterStatComponent* Defender);
 };
