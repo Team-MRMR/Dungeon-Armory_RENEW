@@ -40,6 +40,13 @@ void UPlayerAttackComponent::BeginPlay()
 
 void UPlayerAttackComponent::StartAttack()
 {
+	UpdateToolType(); // 도구 타입 업데이트
+	if (ToolType != EToolType::Weapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ToolType is None. Cannot attack."));
+		return;
+	}
+
 	const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
 	const float CurrentStamina = Stat->Stamina.GetCurrent();
 
@@ -197,4 +204,17 @@ void UPlayerAttackComponent::OnAttack()
 			}
 		}
 	}
+}
+
+void UPlayerAttackComponent::UpdateToolType()
+{
+	auto OwnerActor = GetOwner();
+	if (!OwnerActor)
+		return;
+
+	auto IToolEuipable = Cast<IIToolEuipable>(OwnerActor);
+	if (!IToolEuipable)
+		return;
+
+	ToolType = IToolEuipable->Execute_GetToolType(OwnerActor);
 }
