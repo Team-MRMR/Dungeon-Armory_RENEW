@@ -64,7 +64,7 @@ AManny::AManny()
 
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 
-	GatherComponent = CreateDefaultSubobject<UGatherComponent>(TEXT("GatherComponent"));
+	_GatherComponent = CreateDefaultSubobject<UGatherComponent>(TEXT("GatherComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -229,9 +229,9 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 
 	auto GatherableActor = Cast<AGatherableActorBase>(HitActor);
 	
-	if (GatherableActor && GatherComponent)
+	if (GatherableActor && _GatherComponent)
 	{
-		GatherComponent->StartGather();
+		_GatherComponent->StartGather();
 	}
 	else
 	{

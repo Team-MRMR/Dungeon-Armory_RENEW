@@ -70,6 +70,12 @@ void UPlayerAttackComponent::ProceedCombo()
 	if (!ComboAttackMontage || !AnimInstance)
 		return;
 
+	UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
+	if (AnimInstance != NewAnimInstance)
+	{
+		AnimInstance = NewAnimInstance;
+	}
+
 	if (AnimInstance->Montage_IsPlaying(ComboAttackMontage))
 		return;
 
