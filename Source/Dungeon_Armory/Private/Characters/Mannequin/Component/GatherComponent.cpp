@@ -29,7 +29,6 @@ void UGatherComponent::BeginPlay()
         AnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
         Stat = OwnerPlayerCharacter->GetComponentByClass<UCharacterStatComponent>();
     }
-
 }
 
 
@@ -42,43 +41,50 @@ void UGatherComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UGatherComponent::StartGather()
 {
-    if (bCanReceiveInput)
-    {
-        bHasNextGather = true;
-        bCanReceiveInput = false;
-    }
+    const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
+    const float CurrentStamina = Stat->Stamina.GetCurrent();
 
-    if (bIsMontageEnded)
+    // 현재 스태미너가 소비 스태미너보다 작으면
+    if (CurrentStamina <= ConsumptionStamina)
+        return;
+
+    DoLineTrace(HitResult);
+
+    AActor* Target = HitResult.GetActor();
+    if (!Target)
+        return;
+
+    AGatherableActorBase* GatherableActor = Cast<AGatherableActorBase>(Target);
+    if (!GatherableActor)
+        return;
+
+    EResourceType ResourceType = GatherableActor->GetResourceType();      // 자원 액터에서 ResourceType을 가져옴
+
+    UpdateToolType();
+
+    if ((ToolType == EToolType::Axe && ResourceType == EResourceType::Tree)
+        || (ToolType == EToolType::Pickaxe && ResourceType == EResourceType::Vein))
     {
-        ProceedGather();
+        if (bCanReceiveInput)
+        {
+            bHasNextGather = true;
+            bCanReceiveInput = false;
+        }
+
+        if (bIsMontageEnded)
+        {
+            ProceedGather();
+        }
     }
 }
 
 void UGatherComponent::OnGather()
 {
-    DoLineTrace(HitResult);
-
-    // 1. 라인 트레이스를 통해 감지한 대상 검사
-    AActor* Target = HitResult.GetActor();
-    if (!Target)
-        return;
-
-    // 2. 플레이어의 도구와 자원 액터의 타입을 가져오기 위한 준비
-    IIToolEuipable* IToolEuipable = Cast<IIToolEuipable>(GetOwner());
-	if (!IToolEuipable)
-		return;
-
-    AGatherableActorBase* GatherableActor = Cast<AGatherableActorBase>(Target);
-	if (!GatherableActor)
-		return;
-
-    // 3. 대상에 따라 분기 처리
-	EResourceType ResourceType = GatherableActor->GetResourceType();      // 자원 액터에서 ResourceType을 가져옴
-    if (ToolType == EToolType::Axe && ResourceType == EResourceType::Tree)
+    if (ToolType == EToolType::Axe)
     {
         Logging();
     }
-    else if(ToolType == EToolType::Pickaxe && ResourceType == EResourceType::Vein)
+    else if(ToolType == EToolType::Pickaxe)
     {
         Mining();
     }
@@ -169,14 +175,12 @@ void UGatherComponent::Logging()
             if (DamagedActor && Stat)
             {
                 const float DamageAmount = Stat->BaseAttackDamage;
-                DamagedActor->ReceiveDamage(DamageAmount);
+                DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
                 const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
                 Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
 
                 OwnerPlayerCharacter->DecreaseDurability();  // 도구 내구도 감소
-
-                PlayGatherMontage();
 
                 return;
             }
@@ -199,7 +203,7 @@ void UGatherComponent::Mining()
             if (DamagedActor && Stat)
             {
                 const float DamageAmount = Stat->BaseAttackDamage;
-                DamagedActor->ReceiveDamage(DamageAmount);
+                DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
                 const float ConsumptionStamina = Stat->Stamina.MiningConsumption;
                 Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
@@ -234,25 +238,12 @@ void UGatherComponent::PlayGatherMontage()
 
     if (ToolType == EToolType::Axe)
     {
-        const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
-        const float CurrentStamina = Stat->Stamina.GetCurrent();
-
-        // 현재 스태미너가 소비 스태미너보다 작으면 공격할 수 없음
-        if (CurrentStamina <= ConsumptionStamina)
-            return;
-
         AnimInstance->Montage_Play(LoggingMontage);
     }
     else if (ToolType == EToolType::Pickaxe)
     {
-        const float ConsumptionStamina = Stat->Stamina.MiningConsumption;
-        const float CurrentStamina = Stat->Stamina.GetCurrent();
-
-        // 현재 스태미너가 소비 스태미너보다 작으면 공격할 수 없음
-        if (CurrentStamina <= ConsumptionStamina)
-            return;
         AnimInstance->Montage_Play(MiningMontage);
     }
-    
+
     bIsMontageEnded = false;
 }
