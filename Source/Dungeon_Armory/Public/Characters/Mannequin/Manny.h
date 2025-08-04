@@ -102,7 +102,7 @@ private:
 /***** Tool Stat *****/
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
-	UGatherComponent* GatherComponent;
+	UGatherComponent* _GatherComponent;
 
 // ***** Animation *****/
 private:

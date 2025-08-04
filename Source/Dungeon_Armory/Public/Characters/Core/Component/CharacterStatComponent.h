@@ -163,6 +163,9 @@ public:
 
 public:
     UFUNCTION(BlueprintCallable, Category = "Stamina")
+    void UpdateStamina();
+
+    UFUNCTION(BlueprintCallable, Category = "Stamina")
     void ConsumeStamina(const float ConsumptionStamina);
 
 private:

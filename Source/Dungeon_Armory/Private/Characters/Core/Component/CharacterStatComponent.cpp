@@ -80,6 +80,11 @@ float UCharacterStatComponent::GetSpeedForState(EMobState State) const
 	}
 }
 
+void UCharacterStatComponent::UpdateStamina()
+{
+	Stamina.ApplyRegen();
+}
+
 void UCharacterStatComponent::ConsumeStamina(const float ConsumptionStamina)
 {
 	Stamina.Consume(ConsumptionStamina);
