@@ -10,13 +10,23 @@
 class UCharacterStatComponent;
 class UMovementControllerComponent;
 
+class ANPCBase;
+
 namespace BBKeys
 {
 	namespace NPC
 	{
 		// 블랙보드 키 이름 상수
-		static const FName LocationPoint(TEXT("LocationPoint"));
+		static const FName NPCState(TEXT("NPCState"));
+
 		static const FName IsShopping(TEXT("IsShopping"));
+
+		static const FName PayPoint(TEXT("PayPoint"));
+		static const FName ExitPoint(TEXT("ExitPoint"));
+		static const FName ShoppingPoint(TEXT("ShoppingPoint"));
+
+		static const FName ReturnPoint(TEXT("ReturnPoint"));
+		static const FName RoammingPoint(TEXT("RoammingPoint"));
 	}
 }
 
@@ -45,5 +55,5 @@ private:
 
 /***** Functions (Task) *****/
 private:
-	void InitializeBlackboardKeys();
+	virtual void InitializeBlackboardKeys(ANPCBase* NPCBase);
 };

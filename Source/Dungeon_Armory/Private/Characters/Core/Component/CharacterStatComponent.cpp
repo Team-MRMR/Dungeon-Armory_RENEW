@@ -98,5 +98,5 @@ void UCharacterStatComponent::SetSpeedForState(EMobState State)
 
 void UCharacterStatComponent::ApplyDamage(const float DamageAmount)
 {
-	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+	CurrentHealth -= DamageAmount;
 }

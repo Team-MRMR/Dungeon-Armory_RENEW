@@ -90,11 +90,15 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 			UGameplayStatics::PlaySoundAtLocation(this, DieSound, GetActorLocation());
 			Execute_Die(this);	// 磷澜 贸府
 		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Received damage: %f, Current Health: %f"), DamageAmount, StatComponent->CurrentHealth);
 	}
 }
 
 void AMobBase::Die_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("MobBase::Die_Implementation() called."));
+
 	// 局聪皋捞记 根鸥林 犁积
 	if (DieMontage)
 	{

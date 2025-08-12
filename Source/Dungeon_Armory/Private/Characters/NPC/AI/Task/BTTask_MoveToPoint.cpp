@@ -17,6 +17,9 @@ UBTTask_MoveToPoint::UBTTask_MoveToPoint()
 {
 	bNotifyTick = false;
     NodeName = "Move To Point"; // BT에서 보이는 이름
+
+	// 이 태스크가 Vector 타입 키를 요구하도록 설정
+	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_MoveToPoint, BlackboardKey));
 }
 
 EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -29,15 +32,11 @@ EBTNodeResult::Type UBTTask_MoveToPoint::ExecuteTask(UBehaviorTreeComponent& Own
 	if (!Blackboard)
 		return EBTNodeResult::Failed;
 
-	ALocationPoint* LocationPoint = Cast<ALocationPoint>(Blackboard->GetValueAsObject(BBKeys::NPC::LocationPoint));
-	if (!LocationPoint)
-		return EBTNodeResult::Failed;
-
-	FVector Location = LocationPoint->GetActorLocation();
+	FVector Point = Blackboard->GetValueAsVector(BlackboardKey.SelectedKeyName);
 
 	FAIMoveRequest MoveRequest;
-	MoveRequest.SetGoalLocation(Location);
-	MoveRequest.SetAcceptanceRadius(50.f);
+	MoveRequest.SetGoalLocation(Point);
+	MoveRequest.SetAcceptanceRadius(10.f);
 
 	FNavPathSharedPtr NavPath;
 	FPathFollowingRequestResult Result = AIController->MoveTo(MoveRequest, &NavPath);

@@ -51,6 +51,7 @@ float UAttackComponentBase::CalculateDamage(UCharacterStatComponent* Attacker, U
 	float ElementalFactor = ElementalCompatibility[AttackerElement][DefenderElement];
 
 	float Damage = (Attacker->BaseAttackDamage * ElementalFactor) - Defender->Defense;
+	float Result = FMath::Clamp(Damage, 0, Damage);
 
-	return Damage;
+	return Result;
 }

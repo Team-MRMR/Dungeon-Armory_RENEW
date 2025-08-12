@@ -211,7 +211,6 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 		Params
 	);
 	AActor* HitActor = bHit ? Hit.GetActor() : nullptr;
-	UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *GetNameSafe(HitActor));
 
 	// 4. 디버그용으로 시각화	
 #if WITH_EDITOR
