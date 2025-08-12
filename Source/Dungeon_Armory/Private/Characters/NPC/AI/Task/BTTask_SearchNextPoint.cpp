@@ -1,4 +1,4 @@
-#include "Characters/NPC/AI/Task/BTTask_SearchPoint.h"
+#include "Characters/NPC/AI/Task/BTTask_SearchNextPoint.h"
 #include "Characters/NPC/AI/NPCAIController.h"
 #include "Characters/NPC/AI/LocationPoint.h"
 #include "Characters/NPC/NPCBase.h"
@@ -8,14 +8,14 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 
-UBTTask_SearchPoint::UBTTask_SearchPoint()
+UBTTask_SearchNextPoint::UBTTask_SearchNextPoint()
 {
 	bNotifyTick = false;
 
 	NodeName = TEXT("Search Point");
 }
 
-EBTNodeResult::Type UBTTask_SearchPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_SearchNextPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (!AIController)
@@ -30,11 +30,16 @@ EBTNodeResult::Type UBTTask_SearchPoint::ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 
 	bool bIsShopping = NPC->GetIsShopping();
-	ALocationPoint* LocationPoint = NPC->GetPoint(bIsShopping);
-	if (!LocationPoint)
-		return EBTNodeResult::Failed;
+	FVector PointLocation= NPC->GetPointLocation();
 
-	Blackboard->SetValueAsObject(BBKeys::NPC::LocationPoint, LocationPoint);
+	if (bIsShopping)
+	{
+		Blackboard->SetValueAsVector(BBKeys::NPC::ShoppingPoint, PointLocation);
+	}
+	else
+	{
+		Blackboard->SetValueAsVector(BBKeys::NPC::RoammingPoint, PointLocation);
+	}
 
-	return EBTNodeResult::Type();
+	return EBTNodeResult::Succeeded;
 }

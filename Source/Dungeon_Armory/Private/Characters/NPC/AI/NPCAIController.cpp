@@ -29,14 +29,16 @@ void ANPCAIController::OnPossess(APawn* InPawn)
     Super::OnPossess(InPawn);
 
     // 컴포넌트 참조 할당
-    if (ACharacter* NPCCharacter = Cast<ANPCBase>(InPawn))
-    {
-        if (ANPCBase* NPCBase = Cast<ANPCBase>(NPCCharacter))
-        {
-			Stat = NPCBase->FindComponentByClass<UCharacterStatComponent>();
+    ACharacter* NPCCharacter = Cast<ANPCBase>(InPawn);
+    if (!NPCCharacter)
+        return;
 
-            MovementController = NPCBase->FindComponentByClass<UMovementControllerComponent>();
-        }
+    ANPCBase* NPCBase = Cast<ANPCBase>(NPCCharacter);
+    if (NPCBase)
+    {
+        Stat = NPCBase->FindComponentByClass<UCharacterStatComponent>();
+
+        MovementController = NPCBase->FindComponentByClass<UMovementControllerComponent>();
     }
 
     // 비헤이비어 트리 실행
@@ -48,7 +50,7 @@ void ANPCAIController::OnPossess(APawn* InPawn)
         // 블랙보드 변수 초기화
         if (BlackboardComponent)
         {
-            InitializeBlackboardKeys();
+            InitializeBlackboardKeys(NPCBase);
         }
 
         // 비헤이비어 트리 실행 (이 시점에서 BehaviorTreeComponent가 자동으로 생성됨)
@@ -64,17 +66,30 @@ void ANPCAIController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ANPCAIController::InitializeBlackboardKeys()
+void ANPCAIController::InitializeBlackboardKeys(ANPCBase* NPCBase)
 {
-    //// --- 상태 관련 키값 ---
-    //BlackboardComponent->SetValueAsEnum(NPCBBKeys::NPCState, static_cast<uint8>(ENPCStates::Stay));
+    BlackboardComponent->SetValueAsBool(BBKeys::NPC::IsShopping, false);
 
-    //// --- 컴포넌트 관련 키값 ---
-    //BlackboardComponent->SetValueAsObject(NPCBBKeys::Stat, Stat);
-    //BlackboardComponent->SetValueAsObject(NPCBBKeys::MovementController, MovementController);
+    if (NPCBase->RoammingPoints.Num() <= 0 || NPCBase->ShoppingPoints.Num() <= 0)
+    {
+		UE_LOG(LogTemp, Warning, TEXT("ANPCAIController::InitializeBlackboardKeys - RoammingPoints or ShoppingPoints is empty!"));
+        return;
+    }
 
-    //// --- 거리 관련 키값 ---
-    //BlackboardComponent->SetValueAsVector(NPCBBKeys::HomeLocation, GetPawn()->GetActorLocation());
+	// SearchNextPoint Task에서 키 초기화
+	BlackboardComponent->SetValueAsVector(BBKeys::NPC::RoammingPoint, FVector::ZeroVector);
+	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ShoppingPoint, FVector::ZeroVector);
+
+
+    if (!NPCBase->ReturnPoint || !NPCBase->ExitPoint || !NPCBase->PayPoint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("ANPCAIController::InitializeBlackboardKeys - Some Point is nullptr"));
+        return;
+	}
+
+	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ReturnPoint, NPCBase->ReturnPoint->GetActorLocation());
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::ExitPoint, NPCBase->ExitPoint->GetActorLocation());
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::PayPoint, NPCBase->PayPoint->GetActorLocation());
 }
 
 void ANPCAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
