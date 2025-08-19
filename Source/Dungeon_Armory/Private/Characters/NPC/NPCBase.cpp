@@ -112,13 +112,13 @@ void ANPCBase::SetIsShopping(bool _bIsShopping)
 
 FVector const ANPCBase::GetPointLocation()
 {
-	if (RoammingPoints.Num() <= 0)
+	if (RoammingPoints.Num() < 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RoammingPoints is empty!"));
 		return GetActorLocation();
 	}
 
-	if (ShoppingPoints.Num() <= 0)
+	if (ShoppingPoints.Num() < 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ShoppingPoints is empty!"));
 		return GetActorLocation();
