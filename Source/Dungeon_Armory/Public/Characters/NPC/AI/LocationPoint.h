@@ -20,7 +20,7 @@ protected:
 
 /***** Behavior Tree *****/
 public:
-	FORCEINLINE FVector GetLocation() const { return FVector(Location.X, Location.Y, 0.0f); }
+	FORCEINLINE FVector GetLocation() const { return Location; }
 	FORCEINLINE float GetWaitTime() const { return WaitTime; }
 
 protected:

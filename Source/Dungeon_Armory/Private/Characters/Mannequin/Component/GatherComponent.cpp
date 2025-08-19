@@ -220,6 +220,12 @@ void UGatherComponent::ProceedGather()
 {
     UpdateToolType();
 
+    UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
+    if (AnimInstance != NewAnimInstance)
+    {
+        AnimInstance = NewAnimInstance;
+    }
+
     PlayGatherMontage();
 
     bHasNextGather = false;
