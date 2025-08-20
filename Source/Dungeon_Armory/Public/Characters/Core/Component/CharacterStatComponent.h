@@ -97,6 +97,22 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Attack | Logic")
     float AttackRadius = 50.0f;     // °ø°Ý ¹Ý°æ
 
+// --- ¹ú¸ñ/Ã¤±¤ °ü·Ã ½ºÅÈ ---
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingDamage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingSpeed;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingEfficiency;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningDamage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningSpeed;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningEfficiency;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Damage")
     void ApplyDamage(float DamageAmount);

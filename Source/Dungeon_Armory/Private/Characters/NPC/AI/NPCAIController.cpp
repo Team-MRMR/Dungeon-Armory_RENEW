@@ -70,29 +70,18 @@ void ANPCAIController::InitializeBlackboardKeys(ANPCBase* NPCBase)
 {
     BlackboardComponent->SetValueAsBool(BBKeys::NPC::IsShopping, false);
 
-    if (NPCBase->RoammingPoints.Num() <= 0 || NPCBase->ShoppingPoints.Num() <= 0)
-    {
-		UE_LOG(LogTemp, Warning, TEXT("ANPCAIController::InitializeBlackboardKeys - RoammingPoints or ShoppingPoints is empty!"));
-        return;
-    }
-
-	// SearchNextPoint Task에서 키 초기화
+	// SearchNextPoint Task에서 값 변경
 	BlackboardComponent->SetValueAsVector(BBKeys::NPC::RoammingPoint, FVector::ZeroVector);
 	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ShoppingPoint, FVector::ZeroVector);
 
-
-    if (!NPCBase->ReturnPoint || !NPCBase->ExitPoint || !NPCBase->PayPoint)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("ANPCAIController::InitializeBlackboardKeys - Some Point is nullptr"));
-        return;
-	}
-
-	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ReturnPoint, NPCBase->ReturnPoint->GetActorLocation());
-    BlackboardComponent->SetValueAsVector(BBKeys::NPC::ExitPoint, NPCBase->ExitPoint->GetActorLocation());
-    BlackboardComponent->SetValueAsVector(BBKeys::NPC::PayPoint, NPCBase->PayPoint->GetActorLocation());
+	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ReturnPoint, NPCBase->ReturnPoint ? NPCBase->ReturnPoint->GetActorLocation() : FVector::ZeroVector);
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::ExitPoint, NPCBase->ReturnPoint ? NPCBase->ExitPoint->GetActorLocation() : FVector::ZeroVector);
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::PayPoint, NPCBase->ReturnPoint ? NPCBase->PayPoint->GetActorLocation() : FVector::ZeroVector);
 }
 
 void ANPCAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
 	Super::OnMoveCompleted(RequestID, Result);
+
+    OnMoveToPointCompleted();
 }
