@@ -174,7 +174,7 @@ void UGatherComponent::Logging()
             IIDamageable* DamagedActor = Cast<IIDamageable>(GatherableActor);
             if (DamagedActor && Stat)
             {
-                const float DamageAmount = Stat->BaseAttackDamage;
+                const float DamageAmount = Stat->LoggingDamage;
                 DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
                 const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
@@ -202,7 +202,7 @@ void UGatherComponent::Mining()
             IIDamageable* DamagedActor = Cast<IIDamageable>(GatherableActor);
             if (DamagedActor && Stat)
             {
-                const float DamageAmount = Stat->BaseAttackDamage;
+                const float DamageAmount = Stat->MiningDamage;
                 DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
                 const float ConsumptionStamina = Stat->Stamina.MiningConsumption;

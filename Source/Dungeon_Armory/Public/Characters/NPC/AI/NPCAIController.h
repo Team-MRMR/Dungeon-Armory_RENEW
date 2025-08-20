@@ -42,8 +42,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-
-public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result) override;
 
@@ -56,4 +54,9 @@ private:
 /***** Functions (Task) *****/
 private:
 	virtual void InitializeBlackboardKeys(ANPCBase* NPCBase);
+
+/***** Function(BP) *****/
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Behavior Tree")
+	void OnMoveToPointCompleted();
 };
