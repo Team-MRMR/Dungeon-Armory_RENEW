@@ -12,11 +12,15 @@
 UENUM(BlueprintType)
 enum class EMobState : uint8
 {
+    None UMETA(Hidden),
+
     Idle,
     Patrol,
     Chase,
     Battle,
-    Dead
+    Dead,
+
+    Size UMETA(Hidden)
 };
 
 UENUM(BlueprintType)
