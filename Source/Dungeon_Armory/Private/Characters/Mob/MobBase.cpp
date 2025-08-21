@@ -2,6 +2,7 @@
 
 
 #include "Characters/Mob/MobBase.h"
+#include "Characters/Mob/AIController/MobAIController.h"
 #include "Characters/Mob/Component/MobAttackComponent.h"
 
 #include "Characters/Core/Component/CharacterStatComponent.h"
@@ -12,8 +13,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Characters/Core/AI/Team/TeamComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-
-#include "AIController.h"
 
 // sound
 #include "Sound/SoundBase.h"
@@ -105,11 +104,13 @@ void AMobBase::Die_Implementation()
 		PlayAnimMontage(DieMontage);
 	}
 
-	AAIController* AIController = Cast<AAIController>(GetController());
-	if (AIController)
+	AMobAIController* MobAIController = Cast<AMobAIController>(GetController());
+	if (MobAIController)
 	{
-		AIController->StopMovement();	// AI 컨트롤러의 이동 중지
-		AIController->UnPossess();		// AI 컨트롤러의 언포제스
+		MobAIController->SetMobState(EMobState::Dead);
+
+		MobAIController->StopMovement();	// AI 컨트롤러의 이동 중지
+		MobAIController->UnPossess();		// AI 컨트롤러의 언포제스
 	}
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);		// 캡슐 콜리전 비활성화

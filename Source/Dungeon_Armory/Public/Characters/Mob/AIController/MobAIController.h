@@ -63,6 +63,7 @@ protected:
 	static const FName MobStateKey;
 
 public:
+	EMobState GetMobState() const;
 	void SetMobState(EMobState NewState);
 
 private:
