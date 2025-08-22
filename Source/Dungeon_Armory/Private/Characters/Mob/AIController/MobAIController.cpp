@@ -102,7 +102,10 @@ void AMobAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    if (!DetectedPlayer)
+    if (!DetectedPlayer || !GetPawn())
+        return;
+
+    if (GetMobState() == EMobState::Dead)
         return;
 
     // 플레이어와의 거리 계산
@@ -118,11 +121,26 @@ void AMobAIController::Tick(float DeltaTime)
     {
 		SetMobState(EMobState::Chase);
     }
+    else
+    {
+        SetMobState(EMobState::Patrol);
+    }
+}
+
+EMobState AMobAIController::GetMobState() const
+{
+    if (!BlackboardComponent)
+        return EMobState::None;
+
+	return static_cast<EMobState>(BlackboardComponent->GetValueAsEnum(MobStateKey));
 }
 
 void AMobAIController::SetMobState(EMobState NewState)
 {
-    EMobState CurrState = static_cast<EMobState>(BlackboardComponent->GetValueAsEnum(MobStateKey));
+    if (!BlackboardComponent)
+        return;
+
+    EMobState CurrState = GetMobState();
     if (CurrState == NewState)
     {
         return;  // 동일 상태로의 변경은 무시
@@ -197,6 +215,5 @@ void AMobAIController::OnTargetPerceived(AActor* Actor, FAIStimulus Stimulus)
         // 플레이어를 놓침
         DetectedPlayer = nullptr;
         BlackboardComponent->SetValueAsObject("Target", nullptr);
-        SetMobState(EMobState::Patrol);
     }
 }

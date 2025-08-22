@@ -67,12 +67,12 @@ protected:
 
 /***** IIDamageable *****/
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
+	UFUNCTION(BlueprintNativeEvent, Category = "Die")
 	void ReceiveDamage(float DamageAmount);
 	virtual void ReceiveDamage_Implementation(float DamageAmount) override;
 
 protected:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Die")
+	UFUNCTION(BlueprintNativeEvent, Category = "Die")
 	void Die();
 	virtual void Die_Implementation() override;
 

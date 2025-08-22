@@ -31,7 +31,6 @@ void AGatherableActorBase::Tick(float DeltaTime)
 
 void AGatherableActorBase::ReceiveDamage_Implementation(float DamageAmount)
 {
-
 	CurrentHealth -= DamageAmount;
 	if (0 <= CurrentHealth)
 	{
@@ -46,11 +45,6 @@ void AGatherableActorBase::ReceiveDamage_Implementation(float DamageAmount)
 
 void AGatherableActorBase::Die_Implementation()
 {
-	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);		// 캡슐 콜리전 비활성화
-	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);					// 메쉬 콜리전 활성화
-	//GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);	// 메쉬 콜리전 무시
 
-	//// 행동 종료
-	//DetachFromControllerPendingDestroy();
-	SetLifeSpan(0.01f); // 5초 뒤 제거
+	SetLifeSpan(0.01f); // 0.01초 뒤 제거
 }

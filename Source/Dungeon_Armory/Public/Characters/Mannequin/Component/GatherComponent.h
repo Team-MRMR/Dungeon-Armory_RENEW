@@ -51,28 +51,6 @@ protected:
 public:
 	EToolType ToolType;
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Distance")
-	float GatheringDistance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Logging")
-	float LoggingDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Logging")
-	float LoggingStamina;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Logging")
-	float LoggingSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Logging")
-	float LoggingEfficiency;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Mining")
-	float MiningDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Mining")
-	float MiningStamina;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Mining")
-	float MiningSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Mining")
-	float MiningEfficiency;
-
 // --- 입력 관련 ---
 private:
 	bool bIsMontageEnded;		// 몽타주가 끝났는지 판별
