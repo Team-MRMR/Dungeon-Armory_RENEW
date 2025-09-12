@@ -19,20 +19,20 @@ AGatherableActorBase::AGatherableActorBase()
 void AGatherableActorBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CurrentHealth = MaxHealth;
 }
 
 // Called every frame
 void AGatherableActorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AGatherableActorBase::ReceiveDamage_Implementation(float DamageAmount)
 {
 	CurrentHealth -= DamageAmount;
-	if (0 <= CurrentHealth)
+	if (0.0f < CurrentHealth)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 	}
@@ -45,6 +45,5 @@ void AGatherableActorBase::ReceiveDamage_Implementation(float DamageAmount)
 
 void AGatherableActorBase::Die_Implementation()
 {
-
 	SetLifeSpan(0.01f); // 0.01초 뒤 제거
 }
