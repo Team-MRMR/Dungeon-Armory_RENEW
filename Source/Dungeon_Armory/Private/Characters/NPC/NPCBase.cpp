@@ -128,14 +128,14 @@ FVector const ANPCBase::GetPointLocation()
 
 	if (bIsShopping)
 	{
-		int32 RandomIndex = FMath::RandRange(0, ShoppingPoints.Num() - 1);
-		LocationPoint = ShoppingPoints.IsValidIndex(RandomIndex) ? ShoppingPoints[RandomIndex] : nullptr;
+		CurrentShoppingIndex = FMath::RandRange(0, ShoppingPoints.Num() - 1);
+		LocationPoint = ShoppingPoints.IsValidIndex(CurrentShoppingIndex) ? ShoppingPoints[CurrentShoppingIndex] : nullptr;
 		return LocationPoint->GetLocation();
 	}
 	else
 	{
-		LocationPoint = RoammingPoints.IsValidIndex(CurrentIndex) ? RoammingPoints[CurrentIndex] : nullptr;
-		CurrentIndex = (++CurrentIndex) % RoammingPoints.Num();
+		LocationPoint = RoammingPoints.IsValidIndex(CurrentRommaingIndex) ? RoammingPoints[CurrentRommaingIndex] : nullptr;
+		CurrentRommaingIndex = (++CurrentRommaingIndex) % RoammingPoints.Num();
 		return LocationPoint->GetLocation();
 	}
 }
