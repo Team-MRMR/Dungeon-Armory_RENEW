@@ -95,5 +95,8 @@ private:
 	NPCState CurrentState = NPCState::None;
 
 	/** 현재 이동 지점 인덱스 */
-	int32 CurrentIndex = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	int32 CurrentShoppingIndex = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Behavior Tree", meta = (AllowPrivateAccess = "true"))
+	int32 CurrentRommaingIndex = 0;
 };
