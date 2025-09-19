@@ -75,8 +75,8 @@ void ANPCAIController::InitializeBlackboardKeys(ANPCBase* NPCBase)
 	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ShoppingPoint, FVector::ZeroVector);
 
 	BlackboardComponent->SetValueAsVector(BBKeys::NPC::ReturnPoint, NPCBase->ReturnPoint ? NPCBase->ReturnPoint->GetActorLocation() : FVector::ZeroVector);
-    BlackboardComponent->SetValueAsVector(BBKeys::NPC::ExitPoint, NPCBase->ReturnPoint ? NPCBase->ExitPoint->GetActorLocation() : FVector::ZeroVector);
-    BlackboardComponent->SetValueAsVector(BBKeys::NPC::PayPoint, NPCBase->ReturnPoint ? NPCBase->PayPoint->GetActorLocation() : FVector::ZeroVector);
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::ExitPoint, NPCBase->ExitPoint ? NPCBase->ExitPoint->GetActorLocation() : FVector::ZeroVector);
+    BlackboardComponent->SetValueAsVector(BBKeys::NPC::PayPoint, NPCBase->PayPoint ? NPCBase->PayPoint->GetActorLocation() : FVector::ZeroVector);
 }
 
 void ANPCAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
