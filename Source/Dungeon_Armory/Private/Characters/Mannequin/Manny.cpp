@@ -64,7 +64,7 @@ AManny::AManny()
 
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 
-	_GatherComponent = CreateDefaultSubobject<UGatherComponent>(TEXT("GatherComponent"));
+	GatherComponent = CreateDefaultSubobject<UGatherComponent>(TEXT("GatherComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -228,9 +228,9 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 
 	auto GatherableActor = Cast<AGatherableActorBase>(HitActor);
 	
-	if (GatherableActor && _GatherComponent)
+	if (GatherableActor && GatherComponent)
 	{
-		_GatherComponent->StartGather();
+		GatherComponent->StartGather();
 	}
 	else
 	{
@@ -240,32 +240,35 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 
 void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 {
-	if (StatComponent)
-	{
-		StatComponent->ApplyDamage(DamageAmount);
+	if (!StatComponent)
+		return;
 
-		if (0.0f <= StatComponent->CurrentHealth)
+	if (StatComponent->bIsSuperArmor)
+		return;
+
+	StatComponent->ApplyDamage(DamageAmount);
+
+	if (0.0f <= StatComponent->CurrentHealth)
+	{
+		if (!AnimInstance->Montage_IsPlaying(Hit1Montage) || !AnimInstance->Montage_IsPlaying(Hit2Montage))
 		{
-			if (!AnimInstance->Montage_IsPlaying(Hit1Montage) || !AnimInstance->Montage_IsPlaying(Hit2Montage))
+			const int motion = FMath::RandRange(0, 1);
+			switch (motion)
 			{
-				const int motion = FMath::RandRange(0, 1);
-				switch (motion)
-				{
-				case 0:
-					AnimInstance->Montage_Play(Hit1Montage, 1.0f);
-					break;
-				case 1:
-					AnimInstance->Montage_Play(Hit2Montage, 1.0f);
-					break;
-				default:
-					break;
-				}
+			case 0:
+				AnimInstance->Montage_Play(Hit1Montage, 1.0f);
+				break;
+			case 1:
+				AnimInstance->Montage_Play(Hit2Montage, 1.0f);
+				break;
+			default:
+				break;
 			}
 		}
-		else
-		{
-			Die();	// 죽음 처리
-		}
+	}
+	else
+	{
+		Die();	// 죽음 처리
 	}
 }
 
