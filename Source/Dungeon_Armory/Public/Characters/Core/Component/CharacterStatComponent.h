@@ -56,6 +56,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+/***** Super Armor *****/
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Super Armor")
+	bool bIsSuperArmor = false;
+
 /***** Character *****/
 private:
     ACharacter* OwnerCharacter;
