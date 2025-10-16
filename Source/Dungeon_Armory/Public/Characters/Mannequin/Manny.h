@@ -114,6 +114,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Hit", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Hit2Montage;
 
+public:
+	UFUNCTION(BlueprintCallable, Category = "Animation | AnimInstance")
+	void SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimClass);
+
 /***** Unreal *****/
 public:
 	// Sets default values for this character's properties
@@ -169,7 +173,7 @@ public:
 
 /***** Utilities *****/
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Tool | ToolType")
+	UFUNCTION(BlueprintCallable, Category = "Tool | ToolType")
 	float GetCurrentStamina();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Tool | Durability")

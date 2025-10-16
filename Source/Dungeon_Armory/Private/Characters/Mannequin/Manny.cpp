@@ -237,6 +237,11 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 	}
 }
 
+void AManny::SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimClass)
+{
+	GetMesh()->SetAnimInstanceClass(NewAnimClass);
+}
+
 void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 {
 	if (!StatComponent)
@@ -260,11 +265,9 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 			{
 			case 0:
 				AnimInstance->Montage_Play(Hit1Montage);
-				UE_LOG(LogTemp, Warning, TEXT("Hit1 Montage Play"));
 				break;
 			case 1:
 				AnimInstance->Montage_Play(Hit2Montage);
-				UE_LOG(LogTemp, Warning, TEXT("Hit2 Montage Play"));	
 				break;
 			//default:
 			//	break;
@@ -282,7 +285,7 @@ void AManny::Die_Implementation()
 
 }
 
-float AManny::GetCurrentStamina_Implementation()
+float AManny::GetCurrentStamina()
 {
 	return StatComponent->Stamina.GetCurrent();
 }
