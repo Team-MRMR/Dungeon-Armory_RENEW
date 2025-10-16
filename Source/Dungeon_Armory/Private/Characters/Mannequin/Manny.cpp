@@ -240,6 +240,7 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 void AManny::SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimClass)
 {
 	GetMesh()->SetAnimInstanceClass(NewAnimClass);
+	AnimInstance = GetMesh()->GetAnimInstance();
 }
 
 void AManny::ReceiveDamage_Implementation(const float DamageAmount)
