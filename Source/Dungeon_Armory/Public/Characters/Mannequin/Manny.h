@@ -160,23 +160,19 @@ public:
 	// IIDamageable을(를) 통해 상속됨
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Hit & Die")
 	void ReceiveDamage(float DamageAmount);
-	virtual void ReceiveDamage_Implementation(float DamageAmount);
+	//virtual void ReceiveDamage_Implementation(float DamageAmount);
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Hit & Die")
 	void Die();
-	virtual void Die_Implementation() { }
+	// virtual void Die_Implementation() { }
 
 /***** Utilities *****/
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Tool | ToolType")
 	float GetCurrentStamina();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Durability")
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Tool | Durability")
 	void DecreaseDurability();
-	virtual void DecreaseDurability_Implementation() { }
-
-	virtual EToolType GetToolType_Implementation() const override { return EToolType::Other; }
-
 
 };

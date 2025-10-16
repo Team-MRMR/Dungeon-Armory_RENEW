@@ -200,7 +200,7 @@ void UPlayerAttackComponent::OnAttack()
 					const float DamageAmount = CalculateDamage(Stat, TargetStat);
 					DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
-					OwnerPlayerCharacter->DecreaseDurability();  // 도구 내구도 감소
+					OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
 
 					const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
 					Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비

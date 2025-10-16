@@ -71,7 +71,7 @@ public:
     float MaxHealth = 100.f;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Stat | HP")
-    float CurrentHealth;
+    float CurrentHealth = 0.001f;
 
 // --- Stamina °ü·Ã ½ºÅÈ ---
 public:
