@@ -249,29 +249,40 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 
 	if (1.0f < StatComponent->CurrentHealth)
 	{
-		if (!AnimInstance->Montage_IsPlaying(Hit1Montage) && !AnimInstance->Montage_IsPlaying(Hit2Montage))
+		if (AnimInstance->Montage_IsPlaying(Hit1Montage) || AnimInstance->Montage_IsPlaying(Hit2Montage))
+		{
+			return;
+		}
+		else // 피격 몽타주가 재생되고 있지 않을 때
 		{
 			const int motion = FMath::RandRange(0, 1);
 			switch (motion)
 			{
 			case 0:
-				AnimInstance->Montage_Play(Hit1Montage, 1.0f);
+				AnimInstance->Montage_Play(Hit1Montage);
+				UE_LOG(LogTemp, Warning, TEXT("Hit1 Montage Play"));
 				break;
 			case 1:
-				AnimInstance->Montage_Play(Hit2Montage, 1.0f);
+				AnimInstance->Montage_Play(Hit2Montage);
+				UE_LOG(LogTemp, Warning, TEXT("Hit2 Montage Play"));	
 				break;
-			default:
-				break;
+			//default:
+			//	break;
 			}
 		}
 	}
 	else
 	{
-		Die();	// 죽음 처리
+		Execute_Die(this);	// 죽음 처리
 	}
 }
 
-float AManny::GetCurrentStamina()
+void AManny::Die_Implementation()
+{
+
+}
+
+float AManny::GetCurrentStamina_Implementation()
 {
 	return StatComponent->Stamina.GetCurrent();
 }

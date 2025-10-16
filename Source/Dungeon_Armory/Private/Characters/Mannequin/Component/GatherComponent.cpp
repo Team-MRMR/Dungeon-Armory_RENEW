@@ -157,7 +157,7 @@ void UGatherComponent::UpdateToolType()
     if (!IToolEuipable)
         return;
 
-    ToolType = IToolEuipable->Execute_GetToolType(OwnerActor);
+    ToolType = IToolEuipable->GetToolType();
 }
 
 void UGatherComponent::Logging()
@@ -180,7 +180,7 @@ void UGatherComponent::Logging()
                 const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
                 Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
 
-                OwnerPlayerCharacter->DecreaseDurability();  // 도구 내구도 감소
+                OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
 
                 return;
             }
@@ -208,7 +208,7 @@ void UGatherComponent::Mining()
                 const float ConsumptionStamina = Stat->Stamina.MiningConsumption;
                 Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
 
-                OwnerPlayerCharacter->DecreaseDurability();  // 도구 내구도 감소
+                OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
 
                 return;
             }

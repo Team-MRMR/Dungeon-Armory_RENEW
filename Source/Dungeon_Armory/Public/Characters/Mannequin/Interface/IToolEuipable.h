@@ -31,8 +31,12 @@ class DUNGEON_ARMORY_API IIToolEuipable
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Tool | ToolType")
 	EToolType GetToolType() const;
+	// virtual EToolType GetToolType_Implementation() const = 0;
 
-	virtual EToolType GetToolType_Implementation() const = 0; // 순수 가상 함수
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Tool | Durability")
+	void DecreaseDurability();
+	// virtual void DecreaseDurability_Implementation() = 0;
 };
