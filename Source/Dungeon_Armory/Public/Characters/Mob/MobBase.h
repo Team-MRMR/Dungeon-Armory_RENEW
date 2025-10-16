@@ -39,6 +39,15 @@ protected:
 
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
+/***** Mob *****/
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
+	float DisappearTime;
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* DieMontage;
+
+
 /***** Stat *****/
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
@@ -57,12 +66,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMovementControllerComponent* MovementControllerComponent;
 
+/***** Sounds *****/
 protected:
 	// 피격 및 사망 시 재생할 사운드
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
 	USoundBase* HitSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
 	USoundBase* DieSound;
 
 /***** IIDamageable *****/
@@ -75,8 +85,4 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, Category = "Die")
 	void Die();
 	virtual void Die_Implementation() override;
-
-private:
-	UPROPERTY(EditAnywhere, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* DieMontage;
 };
