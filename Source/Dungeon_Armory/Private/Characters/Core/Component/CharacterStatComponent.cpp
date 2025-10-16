@@ -24,7 +24,6 @@ void UCharacterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	auto World = GetWorld();
 	if (World)
 	{
