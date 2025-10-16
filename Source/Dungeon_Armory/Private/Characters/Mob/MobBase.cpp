@@ -59,6 +59,8 @@ void AMobBase::BeginPlay()
 	// GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	TeamComponent->SetTeamType(ETeamType::Mob);
+
+	DisappearTime = 2.0f;
 }
 
 void AMobBase::Tick(float DeltaSeconds)
@@ -80,7 +82,7 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 	{
 		StatComponent->ApplyDamage(DamageAmount);
 
-		if (0.0f <= StatComponent->CurrentHealth)
+		if (1.0f <= StatComponent->CurrentHealth)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 		}
@@ -119,5 +121,5 @@ void AMobBase::Die_Implementation()
 
 	// 행동 종료
 	DetachFromControllerPendingDestroy();
-	SetLifeSpan(2.5f); // 5초 뒤 제거
+	SetLifeSpan(2.0f); // 5초 뒤 제거
 }
