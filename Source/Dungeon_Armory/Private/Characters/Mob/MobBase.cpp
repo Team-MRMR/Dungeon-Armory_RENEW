@@ -34,6 +34,8 @@ AMobBase::AMobBase()
 
 	// 이동 컨트롤러 컴포넌트 생성
 	MovementControllerComponent = CreateDefaultSubobject<UMovementControllerComponent>(TEXT("MovementControllerComponent"));
+
+	DisappearTime = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -59,8 +61,6 @@ void AMobBase::BeginPlay()
 	// GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	TeamComponent->SetTeamType(ETeamType::Mob);
-
-	DisappearTime = 2.0f;
 }
 
 void AMobBase::Tick(float DeltaSeconds)
@@ -82,7 +82,7 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 	{
 		StatComponent->ApplyDamage(DamageAmount);
 
-		if (1.0f <= StatComponent->CurrentHealth)
+		if (1.0f < StatComponent->CurrentHealth)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 		}
@@ -121,5 +121,5 @@ void AMobBase::Die_Implementation()
 
 	// 행동 종료
 	DetachFromControllerPendingDestroy();
-	SetLifeSpan(2.0f); // 5초 뒤 제거
+	SetLifeSpan(DisappearTime); // 5초 뒤 제거
 }
