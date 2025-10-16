@@ -247,9 +247,9 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 
 	StatComponent->ApplyDamage(DamageAmount);
 
-	if (0.0f <= StatComponent->CurrentHealth)
+	if (1.0f < StatComponent->CurrentHealth)
 	{
-		if (!AnimInstance->Montage_IsPlaying(Hit1Montage) || !AnimInstance->Montage_IsPlaying(Hit2Montage))
+		if (!AnimInstance->Montage_IsPlaying(Hit1Montage) && !AnimInstance->Montage_IsPlaying(Hit2Montage))
 		{
 			const int motion = FMath::RandRange(0, 1);
 			switch (motion)
