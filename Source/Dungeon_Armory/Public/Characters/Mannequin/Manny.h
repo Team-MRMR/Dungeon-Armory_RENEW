@@ -173,7 +173,7 @@ public:
 
 /***** Utilities *****/
 public:
-	UFUNCTION(BlueprintCallable, Category = "Tool | ToolType")
+	UFUNCTION(BlueprintCallable, Category = "Stat | Stamina")
 	float GetCurrentStamina();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Tool | Durability")

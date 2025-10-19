@@ -11,8 +11,6 @@
 // Sets default values for this component's properties
 UMobAttackComponent::UMobAttackComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 	bIsStartedAttack = false;
@@ -23,9 +21,13 @@ UMobAttackComponent::UMobAttackComponent()
 // Called when the game starts
 void UMobAttackComponent::BeginPlay()
 {
-	// �ִ� �ν��Ͻ� ����
-	// ���� ������Ʈ ����
 	Super::BeginPlay();
+
+	if (AnimInstance)
+	{
+		// 델리게이트 등록
+		AnimInstance->OnMontageEnded.AddDynamic(this, &UMobAttackComponent::OnAttackAnimationEnd);
+	}
 }
 
 // Called every frame
@@ -115,13 +117,14 @@ void UMobAttackComponent::OnAttack()
 		Start,
 		End,
 		FQuat::Identity,
-		ECC_Pawn,
+		ECC_GameTraceChannel1,	// PlayerTraceChannel
 		FCollisionShape::MakeSphere(Radius),
 		Params
 	);
 
 	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
 
+#if WITH_EDITOR
 	DrawDebugCapsule(
 		GetWorld(),
 		(Start + End) * 0.5f,
@@ -132,11 +135,13 @@ void UMobAttackComponent::OnAttack()
 		false,
 		0.25f
 	);
+#endif
 
 	if (bHit)
 	{
 		for (const FHitResult& Hit : HitResults)
 		{
+#if WITH_EDITOR
 			DrawDebugSphere(
 				GetWorld(),
 				Hit.ImpactPoint,
@@ -146,6 +151,7 @@ void UMobAttackComponent::OnAttack()
 				false,
 				0.25f
 			);
+#endif
 
 			AActor* HitActor = Hit.GetActor();
 			if (!HitActor)
@@ -166,6 +172,11 @@ void UMobAttackComponent::OnAttack()
 }
 
 void UMobAttackComponent::OnAttackEnd()
+{
+	bIsEndedAttack = true;
+}
+
+void UMobAttackComponent::OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	bIsEndedAttack = true;
 }
