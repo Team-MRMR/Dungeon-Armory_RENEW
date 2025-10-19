@@ -36,6 +36,12 @@ void UPlayerAttackComponent::BeginPlay()
 		AnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
 		Stat = OwnerPlayerCharacter->FindComponentByClass<UCharacterStatComponent>();
 	}
+
+	if (AnimInstance)
+	{
+		// 델리게이트 등록
+		AnimInstance->OnMontageEnded.AddDynamic(this, &UPlayerAttackComponent::OnAttackAnimationEnd);
+	}
 }
 
 void UPlayerAttackComponent::StartAttack()
@@ -43,7 +49,7 @@ void UPlayerAttackComponent::StartAttack()
 	UpdateToolType(); // 도구 타입 업데이트
 	if (ToolType != EToolType::Weapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ToolType is None. Cannot attack."));
+		UE_LOG(LogTemp, Warning, TEXT("ToolType is not Weapon. Cannot attack."));
 		return;
 	}
 
@@ -70,11 +76,11 @@ void UPlayerAttackComponent::ProceedCombo()
 	if (!ComboAttackMontage || !AnimInstance)
 		return;
 
-	UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
-	if (AnimInstance != NewAnimInstance)
-	{
-		AnimInstance = NewAnimInstance;
-	}
+	//UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
+	//if (AnimInstance != NewAnimInstance)
+	//{
+	//	AnimInstance = NewAnimInstance;
+	//}
 
 	if (AnimInstance->Montage_IsPlaying(ComboAttackMontage))
 		return;
@@ -126,6 +132,13 @@ void UPlayerAttackComponent::OnAttackEnd()
 	}
 }
 
+void UPlayerAttackComponent::OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	bIsMontageEnded = true;		// 애니메이션 몽타주 종료
+
+	bCanReceiveInput = false;	// 콤보 입력 불가
+}
+
 // ReceiveInputNotify에서 호출
 void UPlayerAttackComponent::ReceiveInput()
 {
@@ -152,7 +165,7 @@ void UPlayerAttackComponent::OnAttack()
 		Start,
 		End,
 		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-		ECC_Pawn,
+		ECC_GameTraceChannel2,
 		FCollisionShape::MakeCapsule(
 			Stat->AttackRadius,
 			Stat->AttackRange * 0.5f
@@ -173,7 +186,7 @@ void UPlayerAttackComponent::OnAttack()
 	);
 #endif
 
-	if (bHit)
+	if (bHit && Stat)
 	{
 		// 공격 범위 내의 모든 액터에 대해 처리
 		for (const FHitResult& Hit : HitResults)

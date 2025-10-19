@@ -54,6 +54,8 @@ public:
     void StartAttack() override;    // 외부에서 공격 시작 시 호출
     void OnAttack() override;       // AttackNotify에서 호출
     void OnAttackEnd() override;
+    UFUNCTION()
+    void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
     void ReceiveInput();            // 콤보 입력 수신
     
 protected:

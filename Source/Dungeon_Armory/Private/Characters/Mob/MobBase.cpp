@@ -78,6 +78,7 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 
 void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 {
+
 	if (StatComponent)
 	{
 		StatComponent->ApplyDamage(DamageAmount);
@@ -91,8 +92,6 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 			UGameplayStatics::PlaySoundAtLocation(this, DieSound, GetActorLocation());
 			Execute_Die(this);	// 죽음 처리
 		}
-
-		UE_LOG(LogTemp, Warning, TEXT("Received damage: %f, Current Health: %f"), DamageAmount, StatComponent->CurrentHealth);
 	}
 }
 
@@ -121,5 +120,5 @@ void AMobBase::Die_Implementation()
 
 	// 행동 종료
 	DetachFromControllerPendingDestroy();
-	SetLifeSpan(DisappearTime); // 5초 뒤 제거
+	SetLifeSpan(DisappearTime);
 }

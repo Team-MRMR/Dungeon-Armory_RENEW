@@ -108,18 +108,37 @@ void AMobAIController::Tick(float DeltaTime)
     if (GetMobState() == EMobState::Dead)
         return;
 
-    // 플레이어와의 거리 계산
+    // --- 위치 계산 ---
     FVector MobLocation = GetPawn()->GetActorLocation();
     FVector PlayerLocation = DetectedPlayer->GetActorLocation();
     float Distance = FVector::Dist2D(MobLocation, PlayerLocation);
 
+    // --- 몬스터가 바라보는 방향 ---
+    FVector Forward = GetPawn()->GetActorForwardVector().GetSafeNormal2D();
+
+    // --- 몬스터에서 플레이어까지의 방향 ---
+    FVector ToPlayer = (PlayerLocation - MobLocation).GetSafeNormal2D();
+
+    // --- 시야각 계산 ---
+    float Dot = FVector::DotProduct(Forward, ToPlayer);
+    float AngleDeg = FMath::Acos(Dot) * (180.0f / PI);
+
+    // --- 시야각 판정 ---
+    if (AngleDeg > StatComponent->PeripheralVisionAngleDegrees * 0.5f)
+    {
+        // 플레이어가 시야각 밖에 있다면 무조건 Patrol 상태
+        SetMobState(EMobState::Patrol);
+        return;
+    }
+
+    // --- 거리 기반 상태 전이 ---
     if (Distance <= StatComponent->AttackableDistance)  // 공격 범위 내라면
     {
-		SetMobState(EMobState::Battle);
+        SetMobState(EMobState::Battle);
     }
     else if (Distance <= StatComponent->SightRadius)    // 추격 범위 내라면
     {
-		SetMobState(EMobState::Chase);
+        SetMobState(EMobState::Chase);
     }
     else
     {
