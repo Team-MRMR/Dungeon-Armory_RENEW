@@ -175,8 +175,10 @@ void UPlayerAttackComponent::OnAttack()
 
 	if (bHit)
 	{
+		// 공격 범위 내의 모든 액터에 대해 처리
 		for (const FHitResult& Hit : HitResults)
 		{
+#if WITH_EDITOR
 			DrawDebugSphere(
 				GetWorld(),
 				Hit.ImpactPoint,
@@ -186,6 +188,7 @@ void UPlayerAttackComponent::OnAttack()
 				false,
 				0.5f
 			);
+#endif
 
 			AActor* HitActor = Hit.GetActor();
 			if (!HitActor)
@@ -200,15 +203,15 @@ void UPlayerAttackComponent::OnAttack()
 					const float DamageAmount = CalculateDamage(Stat, TargetStat);
 					DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
-					OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
-
-					const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
-					Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
-
 					continue;
 				}
 			}
 		}
+	
+		OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
+
+		const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
+		Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
 	}
 }
 
