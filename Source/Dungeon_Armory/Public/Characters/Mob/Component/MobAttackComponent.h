@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
+#include "Characters/Mob/MobBase.h"
 #include "Characters/Core/Component/AttackComponentBase.h"
 
 #include "MobAttackComponent.generated.h"
@@ -32,6 +33,8 @@ public:
 
 /***** Attack *****/
 private:
+	AMobBase* MobOwner;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* NormalAttackMontage;
 	

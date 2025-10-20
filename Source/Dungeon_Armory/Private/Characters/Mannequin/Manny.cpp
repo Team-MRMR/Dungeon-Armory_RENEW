@@ -237,9 +237,9 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 	}
 }
 
-void AManny::SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimClass)
+void AManny::SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimInstance)
 {
-	GetMesh()->SetAnimInstanceClass(NewAnimClass);
+	GetMesh()->SetAnimInstanceClass(NewAnimInstance);
 	AnimInstance = GetMesh()->GetAnimInstance();
 }
 
