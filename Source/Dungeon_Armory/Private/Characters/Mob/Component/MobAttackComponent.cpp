@@ -16,6 +16,8 @@ UMobAttackComponent::UMobAttackComponent()
 	bIsStartedAttack = false;
 	bIsEndedAttack = false;
 	bCanAttack = true;
+
+	MobOwner = Cast<AMobBase>(GetOwner());
 }
 
 // Called when the game starts
@@ -23,6 +25,7 @@ void UMobAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AnimInstance = MobOwner->GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
 		// 델리게이트 등록

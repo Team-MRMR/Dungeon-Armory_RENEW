@@ -116,7 +116,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Animation | AnimInstance")
-	void SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimClass);
+	void SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimInstance);
 
 /***** Unreal *****/
 public:

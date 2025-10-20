@@ -37,11 +37,7 @@ void UPlayerAttackComponent::BeginPlay()
 		Stat = OwnerPlayerCharacter->FindComponentByClass<UCharacterStatComponent>();
 	}
 
-	if (AnimInstance)
-	{
-		// 델리게이트 등록
-		AnimInstance->OnMontageEnded.AddDynamic(this, &UPlayerAttackComponent::OnAttackAnimationEnd);
-	}
+	// ProceedCombo에서 델리게이트 등록
 }
 
 void UPlayerAttackComponent::StartAttack()
@@ -51,6 +47,20 @@ void UPlayerAttackComponent::StartAttack()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ToolType is not Weapon. Cannot attack."));
 		return;
+	}
+
+	// 애니메이션 인스턴스 최신화
+	UAnimInstance* LatestAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
+	if (AnimInstance != LatestAnimInstance)
+	{
+		AnimInstance = LatestAnimInstance;
+		AnimInstance->OnMontageEnded.AddDynamic(this, &UPlayerAttackComponent::OnAttackAnimationEnd);
+
+		// 초기화 작업
+		CurrentComboIndex = 2;
+		bIsMontageEnded = true;
+		bNextCombo = true;
+		bCanReceiveInput = false;
 	}
 
 	const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
@@ -75,12 +85,6 @@ void UPlayerAttackComponent::ProceedCombo()
 {
 	if (!ComboAttackMontage || !AnimInstance)
 		return;
-
-	//UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
-	//if (AnimInstance != NewAnimInstance)
-	//{
-	//	AnimInstance = NewAnimInstance;
-	//}
 
 	if (AnimInstance->Montage_IsPlaying(ComboAttackMontage))
 		return;
