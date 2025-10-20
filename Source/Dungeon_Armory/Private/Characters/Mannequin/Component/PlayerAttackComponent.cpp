@@ -20,7 +20,7 @@ UPlayerAttackComponent::UPlayerAttackComponent()
 
 	ComboAttackSections = { "Combo1", "Combo2", "Combo3" };
 
-	CurrentComboIndex = 2;
+	CurrentComboIndex = -1;
 	bIsMontageEnded = true;
 	bNextCombo = true;
 	bCanReceiveInput = false;
@@ -117,7 +117,7 @@ float UPlayerAttackComponent::CalculateDamage(UCharacterStatComponent* Attacker,
 // AttackEndNotify에서 호출
 void UPlayerAttackComponent::OnAttackEnd()
 {
-	if (bNextCombo == false || CurrentComboIndex == ComboAttackSections.Num())
+	if (bNextCombo == false || ComboAttackSections.Num() <= CurrentComboIndex)
 	{
 		// 1. 다음 콤보 입력이 없거나
 		// 2. 콤보를 모두 수행했다면
@@ -138,6 +138,12 @@ void UPlayerAttackComponent::OnAttackEnd()
 
 void UPlayerAttackComponent::OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
+	if (ComboAttackSections.Num() <= CurrentComboIndex)
+	{
+		// 콤보를 모두 수행했다면
+		CurrentComboIndex = 0;	// 콤보 몽타주 인덱스 초기화
+	}
+
 	bIsMontageEnded = true;		// 애니메이션 몽타주 종료
 
 	bCanReceiveInput = false;	// 콤보 입력 불가
