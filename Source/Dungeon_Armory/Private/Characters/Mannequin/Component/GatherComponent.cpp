@@ -41,6 +41,12 @@ void UGatherComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UGatherComponent::StartGather()
 {
+    UAnimInstance* LatestAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
+    if (AnimInstance != LatestAnimInstance)
+    {
+        AnimInstance = LatestAnimInstance;
+    }
+
     const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
     const float CurrentStamina = Stat->Stamina.GetCurrent();
 
@@ -177,13 +183,11 @@ void UGatherComponent::Logging()
                 const float DamageAmount = Stat->LoggingDamage;
                 DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
-                return;
+                OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
+                const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
+                Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
             }
 
-            OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
-
-            const float ConsumptionStamina = Stat->Stamina.LoggingConsumption;
-            Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
         }
     }
 }
@@ -205,12 +209,9 @@ void UGatherComponent::Mining()
                 const float DamageAmount = Stat->MiningDamage;
                 DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 
+                OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
                 const float ConsumptionStamina = Stat->Stamina.MiningConsumption;
                 Stat->ConsumeStamina(ConsumptionStamina); // 스태미너 소비
-
-                OwnerPlayerCharacter->Execute_DecreaseDurability(OwnerPlayerCharacter);  // 도구 내구도 감소
-
-                return;
             }
         }
     }
@@ -219,12 +220,6 @@ void UGatherComponent::Mining()
 void UGatherComponent::ProceedGather()
 {
     UpdateToolType();
-
-    UAnimInstance* NewAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
-    if (AnimInstance != NewAnimInstance)
-    {
-        AnimInstance = NewAnimInstance;
-    }
 
     PlayGatherMontage();
 
