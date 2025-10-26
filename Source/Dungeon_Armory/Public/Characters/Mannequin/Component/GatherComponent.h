@@ -28,10 +28,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 // --- 애니메이션 관련 ---
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
@@ -47,6 +43,10 @@ protected:
 	UCharacterStatComponent* Stat;
 	AManny* OwnerPlayerCharacter;
 
+private:
+	float animLength;
+	float animPlayRate;
+
 // --- 도구 관련 ---
 public:
 	EToolType ToolType;
@@ -56,6 +56,16 @@ private:
 	bool bIsMontageEnded;		// 몽타주가 끝났는지 판별
 	bool bCanReceiveInput;		// 입력을 받을 수 있는지 판별
 	bool bHasNextGather;		// 선입력이 있는지 판별
+
+private:	// 벌목	관련
+	float loggingCooldownTime;
+	bool bIsLoggingCooldownTime;
+	FTimerHandle loggingCooldownTimerHandle;
+
+private:	// 채광	관련
+	float miningCooldownTime;
+	bool bIsMiningCooldownTime;
+	FTimerHandle miningCooldownTimerHandle;
 
 public:
 	void StartGather();
@@ -72,4 +82,6 @@ private:
 
 	void ProceedGather();
 	void PlayGatherMontage();
+
+	void ResetCooldown();
 };

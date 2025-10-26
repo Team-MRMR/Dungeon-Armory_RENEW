@@ -127,3 +127,49 @@ float UCharacterStatComponent::GetAttackPlayRate(float AnimationLength) const
 
 	}
 }
+
+float UCharacterStatComponent::GetLoggingPlayRate(float AnimationLength) const
+{
+	const float SafeLoggingSpeed = FMath::Max(LoggingSpeed, 0.01f);
+
+	if (SafeLoggingSpeed < 1.0f)
+	{
+		return SafeLoggingSpeed;
+	}
+	else
+	{
+		float Cooldown = 1.0f / SafeLoggingSpeed;
+
+		if (AnimationLength <= Cooldown)
+		{
+			return 1.0f;
+		}
+		else
+		{
+			return AnimationLength * SafeLoggingSpeed;
+		}
+	}
+}
+
+float UCharacterStatComponent::GetMiningPlayRate(float AnimationLength) const
+{
+	const float SafeMiningSpeed = FMath::Max(MiningSpeed, 0.01f);
+
+	if (SafeMiningSpeed < 1.0f)
+	{
+		return SafeMiningSpeed;
+	}
+	else
+	{
+		float Cooldown = 1.0f / SafeMiningSpeed;
+
+		if (AnimationLength <= Cooldown)
+		{
+			return 1.0f;
+		}
+		else
+		{
+			return AnimationLength * SafeMiningSpeed;
+		}
+	}
+}

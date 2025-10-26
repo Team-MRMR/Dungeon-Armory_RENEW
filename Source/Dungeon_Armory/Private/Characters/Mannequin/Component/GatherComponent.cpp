@@ -31,14 +31,6 @@ void UGatherComponent::BeginPlay()
     }
 }
 
-
-// Called every frame
-void UGatherComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-}
-
 void UGatherComponent::StartGather()
 {
     UAnimInstance* LatestAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
@@ -239,12 +231,69 @@ void UGatherComponent::PlayGatherMontage()
 
     if (ToolType == EToolType::Axe)
     {
-        AnimInstance->Montage_Play(LoggingMontage);
+        animLength = LoggingMontage->GetPlayLength();
+        animPlayRate = Stat->GetLoggingPlayRate(animLength);
+
+        AnimInstance->Montage_Play(
+            LoggingMontage,
+			Stat->GetLoggingPlayRate(animLength),
+            EMontagePlayReturnType::Duration,
+            0.0f,
+            true
+        );
+
+        // 몽타주 재생 후, 쿨다운 타임 설정 및 시작
+        loggingCooldownTime = Stat->GetLoggingCooldown();
+        bIsLoggingCooldownTime = true;
+
+        // 타이머 설정
+        GetWorld()->GetTimerManager().SetTimer(
+            loggingCooldownTimerHandle,
+            this,
+            &UGatherComponent::ResetCooldown,
+            loggingCooldownTime,
+            false
+        );
     }
     else if (ToolType == EToolType::Pickaxe)
     {
-        AnimInstance->Montage_Play(MiningMontage);
+        animLength = MiningMontage->GetPlayLength();
+        animPlayRate = Stat->GetMiningPlayRate(animLength);
+
+        AnimInstance->Montage_Play(
+            MiningMontage,
+            Stat->GetMiningPlayRate(animLength),
+            EMontagePlayReturnType::Duration,
+            0.0f,
+            true
+        );
+
+        // 몽타주 재생 후, 쿨다운 타임 설정 및 시작
+        miningCooldownTime = Stat->GetMiningCooldown();
+        bIsMiningCooldownTime = true;
+
+        // 타이머 설정
+        GetWorld()->GetTimerManager().SetTimer(
+            miningCooldownTimerHandle,
+            this,
+            &UGatherComponent::ResetCooldown,
+            miningCooldownTime,
+            false
+        );
     }
 
     bIsMontageEnded = false;
+}
+
+void UGatherComponent::ResetCooldown()
+{
+    switch (ToolType)
+    {
+    case EToolType::Axe:
+        bIsLoggingCooldownTime = false;
+        return;
+    case EToolType::Pickaxe:
+		bIsMiningCooldownTime = false;
+        return;
+    }
 }

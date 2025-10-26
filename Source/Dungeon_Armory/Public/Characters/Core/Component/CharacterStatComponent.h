@@ -106,22 +106,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Attack | Logic")
     float AttackRadius = 50.0f;     // °ø°Ý ¹Ý°æ
 
-// --- ¹ú¸ñ/Ã¤±¤ °ü·Ã ½ºÅÈ ---
-public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
-    float LoggingDamage;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
-    float LoggingSpeed;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
-    float LoggingEfficiency;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
-    float MiningDamage;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
-    float MiningSpeed;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
-    float MiningEfficiency;
-
 public:
     UFUNCTION(BlueprintCallable, Category = "Damage")
     void ApplyDamage(float DamageAmount);
@@ -132,6 +116,40 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Damage")
     float GetAttackPlayRate(float AnimationLength) const;
+
+// --- ¹ú¸ñ °ü·Ã ½ºÅÈ ---
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingDamage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingSpeed;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Logging")
+    float LoggingEfficiency;
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "Gather | Logging")
+    float GetLoggingCooldown() const
+    { return 1.0f / FMath::Max(LoggingSpeed, 0.01f); }
+
+    UFUNCTION(BlueprintCallable, Category = "Gather | Logging")
+    float GetLoggingPlayRate(float AnimationLength) const;
+
+// --- ¹ú¸ñ °ü·Ã ½ºÅÈ ---
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningDamage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningSpeed;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Gather | Mining")
+    float MiningEfficiency;
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "Gather | Mining")
+    float GetMiningCooldown() const
+    { return 1.0f / FMath::Max(MiningSpeed, 0.01f); }
+
+    UFUNCTION(BlueprintCallable, Category = "Gather | Mining")
+    float GetMiningPlayRate(float AnimationLength) const;
 
 // --- ¹æ¾î·Â °ü·Ã ½ºÅÈ ---
 public:
@@ -162,10 +180,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Distance")
 	float AttackableDistance = 100.0f;
-
-// --- ¹ú¸ñ °ü·Ã ¼öÄ¡ ---
-
-// --- Ã¤±¤ °ü·Ã ¼öÄ¡ ---
 
 // --- AI Perception °ü·Ã ¼öÄ¡ ---
 public:

@@ -286,7 +286,7 @@ void UPlayerAttackComponent::PlayComboAttackMontage(int32 ComboIndex)
 
 		// 타이머 설정
 		GetWorld()->GetTimerManager().SetTimer(
-			CooldownTimerHandle,
+			cooldownTimerHandle,
 			this,
 			&UPlayerAttackComponent::ResetCooldown,
 			attackCooldownTime,
