@@ -32,7 +32,7 @@ void UCharacterStatComponent::BeginPlay()
 
 	SetSpeed(BaseSpeed);
 	CurrentHealth = MaxHealth;
-	
+
 }
 void UCharacterStatComponent::ApplySpeedModifier(float SpeedMultiplier, float Duration)
 {
@@ -97,4 +97,33 @@ void UCharacterStatComponent::SetSpeedForState(EMobState State)
 void UCharacterStatComponent::ApplyDamage(const float DamageAmount)
 {
 	CurrentHealth -= DamageAmount;
+}
+
+float UCharacterStatComponent::GetAttackPlayRate(float AnimationLength) const
+{
+	const float SafeBaseAttackSpeed = FMath::Max(BaseAttackSpeed, 0.01f);
+
+	// 1. 공격 속도가 느릴 때
+	if (SafeBaseAttackSpeed < 1.0f)
+	{
+		return SafeBaseAttackSpeed;
+	}
+	// 2. 공격 속도가 빠르거나 같을 때
+	else
+	{
+		float Cooldown = 1.0f / SafeBaseAttackSpeed;
+
+		// 애니메이션 재생 시간이 Cooldown보다 짧다면 (쿨타임이 충분하면)
+		if (AnimationLength <= Cooldown)
+		{
+			return 1.0f;
+		}
+		// 애니메이션 재생 시간이 Cooldown보다 길다면
+		else
+		{
+			// PlayRate = AnimationLength * SafeBaseAttackSpeed = AnimationLength / Cooldown
+			return AnimationLength * SafeBaseAttackSpeed;
+		}
+
+	}
 }

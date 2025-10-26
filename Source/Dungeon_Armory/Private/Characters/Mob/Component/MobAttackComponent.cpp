@@ -41,7 +41,7 @@ void UMobAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsStartedAttack)
 	{
 		ElapsedTime += DeltaTime;
-		if (bIsEndedAttack && ElapsedTime >= Stat->GetAttackCooldown())
+		if (bIsEndedAttack && Stat->GetAttackCooldown() <= ElapsedTime)
 		{
 			bIsStartedAttack = false;
 			bCanAttack = true;

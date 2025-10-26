@@ -127,11 +127,11 @@ public:
     void ApplyDamage(float DamageAmount);
 
     UFUNCTION(BlueprintCallable, Category = "Damage")
-    float GetAttackCooldown() const { return 1.0f / FMath::Max(BaseAttackSpeed, 0.01f); }
+    float GetAttackCooldown() const
+    { return 1.0f / FMath::Max(BaseAttackSpeed, 0.01f); }
 
     UFUNCTION(BlueprintCallable, Category = "Damage")
-    float GetAttackPlayRate(float AnimationLength) const
-    { return (AnimationLength < GetAttackCooldown()) ? 1.0f : (BaseAttackSpeed * AnimationLength); }
+    float GetAttackPlayRate(float AnimationLength) const;
 
 // --- 방어력 관련 스탯 ---
 public:

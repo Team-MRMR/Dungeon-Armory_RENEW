@@ -45,24 +45,38 @@ protected:
     // Called when the game starts
     virtual void BeginPlay() override;
 
-	/***** Tool *****/
+/***** Tool *****/
 public:
     EToolType ToolType;
 
-    /***** Attack *****/
+/***** Attack *****/
+private:
+    float attackCooldownTime;
+    bool bIsCooldownTime;
+    FTimerHandle CooldownTimerHandle;
+
 public:
     void StartAttack() override;    // 외부에서 공격 시작 시 호출
     void OnAttack() override;       // AttackNotify에서 호출
     void OnAttackEnd() override;
-    UFUNCTION()
-    void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
     void ReceiveInput();            // 콤보 입력 수신
     
 protected:
     void ProceedCombo();
-    void PlayComboAttackMontage(int32 ComboIndex);
+	void ResetCooldown();
 
 private:
     void UpdateToolType();
     virtual float CalculateDamage(UCharacterStatComponent* Attacker, UCharacterStatComponent* Defender);
+
+/***** Animation *****/
+private:
+    float animLength;
+    float animPlayRate;
+
+private:
+    UFUNCTION()
+    void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
+    void PlayComboAttackMontage(int32 ComboIndex);
+
 };
