@@ -53,7 +53,7 @@ public:
 private:
     float attackCooldownTime;
     bool bIsCooldownTime;
-    FTimerHandle cooldownTimerHandle;
+    FTimerHandle CooldownTimerHandle;
 
 public:
     void StartAttack() override;    // 외부에서 공격 시작 시 호출
