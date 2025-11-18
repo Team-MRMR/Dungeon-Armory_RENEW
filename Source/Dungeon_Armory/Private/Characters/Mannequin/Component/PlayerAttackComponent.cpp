@@ -37,7 +37,7 @@ void UPlayerAttackComponent::BeginPlay()
 		Stat = OwnerPlayerCharacter->FindComponentByClass<UCharacterStatComponent>();
 	}
 
-	// ProceedCombo에서 델리게이트 등록
+	// StartdCombo에서 델리게이트 등록
 }
 
 /*
@@ -126,6 +126,8 @@ void UPlayerAttackComponent::OnAttack()
 		0.5f
 	);
 #endif
+
+	// 공격이 적중했고, 스탯 컴포넌트가 유효할 때
 	if (bHit && Stat)
 	{
 		// 공격 범위 내의 모든 액터에 대해 처리
