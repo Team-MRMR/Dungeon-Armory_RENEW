@@ -120,7 +120,7 @@ void UMobAttackComponent::OnAttack()
 		Start,
 		End,
 		FQuat::Identity,
-		ECC_GameTraceChannel1,	// PlayerTraceChannel
+		ECC_GameTraceChannel2,	// PlayerTraceChannel
 		FCollisionShape::MakeSphere(Radius),
 		Params
 	);

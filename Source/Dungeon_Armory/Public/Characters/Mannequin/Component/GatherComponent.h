@@ -85,5 +85,6 @@ private:
 
 	void ResetCooldown();
 
+	UFUNCTION()
 	void OnGatherAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 };

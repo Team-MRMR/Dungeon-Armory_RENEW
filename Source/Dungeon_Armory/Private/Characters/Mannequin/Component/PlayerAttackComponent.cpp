@@ -37,7 +37,7 @@ void UPlayerAttackComponent::BeginPlay()
 		Stat = OwnerPlayerCharacter->FindComponentByClass<UCharacterStatComponent>();
 	}
 
-	// StartdCombo에서 델리게이트 등록
+	// StartAttack에서 델리게이트 등록
 }
 
 /*
@@ -106,7 +106,7 @@ void UPlayerAttackComponent::OnAttack()
 		Start,
 		End,
 		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-		ECC_GameTraceChannel2,
+		ECC_GameTraceChannel3,		// MobTraceChannel
 		FCollisionShape::MakeCapsule(
 			Stat->AttackRadius,
 			Stat->AttackRange * 0.5f
