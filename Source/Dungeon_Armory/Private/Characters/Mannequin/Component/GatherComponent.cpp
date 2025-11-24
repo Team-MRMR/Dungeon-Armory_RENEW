@@ -42,7 +42,7 @@ void UGatherComponent::StartGather()
 
         // 초기화 작업
         bIsMontageEnded = true;
-        bCanReceiveInput = false;
+        bCanReceiveInput = true;
     }
 
     const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
