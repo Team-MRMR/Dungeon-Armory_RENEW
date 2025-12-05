@@ -93,6 +93,8 @@ void UMobAttackComponent::StartAttack()
 	bIsEndedAttack = false;
 
 	bCanAttack = false;
+
+	AttackCount++;
 }
 
 bool UMobAttackComponent::GetCanAttack() const

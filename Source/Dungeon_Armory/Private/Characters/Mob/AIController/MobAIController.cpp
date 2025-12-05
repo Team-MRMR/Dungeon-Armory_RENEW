@@ -132,18 +132,22 @@ void AMobAIController::Tick(float DeltaTime)
     }
 
     // --- 거리 기반 상태 전이 ---
+    EMobState MobState = EMobState::None;
     if (Distance <= StatComponent->AttackableDistance)  // 공격 범위 내라면
     {
-        SetMobState(EMobState::Battle);
+        MobState = EMobState::Battle;
     }
     else if (Distance <= StatComponent->SightRadius)    // 추격 범위 내라면
     {
-        SetMobState(EMobState::Chase);
+        MobState = EMobState::Chase;
     }
     else
     {
-        SetMobState(EMobState::Patrol);
+        MobState = EMobState::Patrol;
     }
+
+	SetMobState(MobState);
+	StatComponent->SetSpeedForState(MobState);
 }
 
 EMobState AMobAIController::GetMobState() const

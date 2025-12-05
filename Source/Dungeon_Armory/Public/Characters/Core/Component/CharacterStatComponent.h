@@ -194,18 +194,18 @@ public:
 
 // --- Function ---
 public:
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    void SetSpeedForState(EMobState State);
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    float GetSpeedForState(EMobState State) const;
-
-public:
     UFUNCTION(BlueprintCallable, Category = "Stamina")
     void UpdateStamina();
 
     UFUNCTION(BlueprintCallable, Category = "Stamina")
     void ConsumeStamina(const float ConsumptionStamina);
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    void SetSpeedForState(EMobState State);
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    float GetSpeedForState(EMobState State) const;
 
 private:
     void ResetSpeed();
