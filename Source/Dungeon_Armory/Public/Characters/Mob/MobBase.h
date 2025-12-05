@@ -35,18 +35,15 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaSeconds) override;
-
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
 /***** Mob *****/
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
 	float DisappearTime;
-private:
+
 	UPROPERTY(EditDefaultsOnly, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DieMontage;
-
 
 /***** Stat *****/
 public:

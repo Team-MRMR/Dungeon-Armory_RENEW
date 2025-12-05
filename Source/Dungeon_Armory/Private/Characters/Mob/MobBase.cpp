@@ -63,10 +63,6 @@ void AMobBase::BeginPlay()
 	TeamComponent->SetTeamType(ETeamType::Mob);
 }
 
-void AMobBase::Tick(float DeltaSeconds)
-{
-}
-
 void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
 {
 	//OutLocation = GetMesh()->GetSocketLocation(FName("EyeSocket"));	// 머리 위치를 기준으로 시점 설정

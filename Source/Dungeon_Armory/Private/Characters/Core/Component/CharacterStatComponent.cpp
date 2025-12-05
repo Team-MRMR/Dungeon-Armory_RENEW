@@ -56,6 +56,12 @@ void UCharacterStatComponent::SetSpeed(float NewSpeed)
 	}
 }
 
+void UCharacterStatComponent::SetSpeedForState(EMobState State)
+{
+	float ChangedSpeed = GetSpeedForState(State);
+	SetSpeed(ChangedSpeed);
+}
+
 float UCharacterStatComponent::GetSpeedForState(EMobState State) const
 {
 	switch (State)
@@ -86,12 +92,6 @@ void UCharacterStatComponent::UpdateStamina()
 void UCharacterStatComponent::ConsumeStamina(const float ConsumptionStamina)
 {
 	Stamina.Consume(ConsumptionStamina);
-}
-
-void UCharacterStatComponent::SetSpeedForState(EMobState State)
-{
-	float ChangedSpeed = GetSpeedForState(State);
-	SetSpeed(ChangedSpeed);
 }
 
 void UCharacterStatComponent::ApplyDamage(const float DamageAmount)
