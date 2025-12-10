@@ -13,6 +13,8 @@
 
 #include "MobBase.generated.h"
 
+class UAttackComponentBase;
+
 class UCharacterStatComponent;
 class UMobAttackComponent;
 class UMovementControllerComponent;
@@ -26,7 +28,7 @@ class USoundBase;
 UCLASS()
 class DUNGEON_ARMORY_API AMobBase : public ACharacter, public IGenericTeamAgentInterface, public IIDamageable
 {
-	GENERATED_BODY()
+	GENERATED_BODY() 
 
 /***** Unreal *****/
 public:
@@ -34,10 +36,12 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
 /***** Mob *****/
+protected:
+	virtual void CreateAttackComponent(UAttackComponentBase* const AttackComponent);
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
 	float DisappearTime;

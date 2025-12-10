@@ -21,6 +21,8 @@ class DUNGEON_ARMORY_API IIDamageable
 	GENERATED_BODY()
 
 public:
+	void CreateAttackComponent();
+
 	UFUNCTION(BlueprintNativeEvent, Category = "Damage")
 	void ReceiveDamage(float DamageAmount);
 
