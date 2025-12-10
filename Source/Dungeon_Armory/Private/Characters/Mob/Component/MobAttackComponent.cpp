@@ -13,11 +13,11 @@ UMobAttackComponent::UMobAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	MobOwner = Cast<AMobBase>(GetOwner());
+
 	bIsStartedAttack = false;
 	bIsEndedAttack = false;
 	bCanAttack = true;
-
-	MobOwner = Cast<AMobBase>(GetOwner());
 }
 
 // Called when the game starts
@@ -64,7 +64,6 @@ void UMobAttackComponent::StartAttack()
 	{
 		const float AttackRate = Stat->GetAttackPlayRate(CriticalAttackMontage->GetPlayLength());
 		
-		// ũ��Ƽ�� ���� ���
 		AnimInstance->Montage_Play(
 			CriticalAttackMontage,
 			AttackRate,
@@ -77,7 +76,6 @@ void UMobAttackComponent::StartAttack()
 	{
 		const float AttackRate = Stat->GetAttackPlayRate(NormalAttackMontage->GetPlayLength());
 
-		// �Ϲ� ���� ���
 		AnimInstance->Montage_Play(
 			NormalAttackMontage,
 			AttackRate,
@@ -93,8 +91,6 @@ void UMobAttackComponent::StartAttack()
 	bIsEndedAttack = false;
 
 	bCanAttack = false;
-
-	AttackCount++;
 }
 
 bool UMobAttackComponent::GetCanAttack() const
