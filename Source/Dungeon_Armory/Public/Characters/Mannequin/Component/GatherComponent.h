@@ -84,4 +84,7 @@ private:
 	void PlayGatherMontage();
 
 	void ResetCooldown();
+
+	UFUNCTION()
+	void OnGatherAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 };

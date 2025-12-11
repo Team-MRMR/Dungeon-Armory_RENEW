@@ -32,9 +32,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 /***** Attack *****/
-private:
+protected:
 	AMobBase* MobOwner;
 
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* NormalAttackMontage;
 	

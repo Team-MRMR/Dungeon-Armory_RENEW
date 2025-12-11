@@ -33,10 +33,16 @@ void UGatherComponent::BeginPlay()
 
 void UGatherComponent::StartGather()
 {
+    // 애니메이션 인스턴스 최신화
     UAnimInstance* LatestAnimInstance = OwnerPlayerCharacter->GetMesh()->GetAnimInstance();
     if (AnimInstance != LatestAnimInstance)
     {
         AnimInstance = LatestAnimInstance;
+        AnimInstance->OnMontageEnded.AddDynamic(this, &UGatherComponent::OnGatherAnimationEnd);
+
+        // 초기화 작업
+        bIsMontageEnded = true;
+        bCanReceiveInput = true;
     }
 
     const float ConsumptionStamina = Stat->Stamina.AttackConsumption;
@@ -296,4 +302,10 @@ void UGatherComponent::ResetCooldown()
 		bIsMiningCooldownTime = false;
         return;
     }
+}
+
+void UGatherComponent::OnGatherAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+    bIsMontageEnded = true;		// 애니메이션 몽타주 종료
+	bCanReceiveInput = true;	// 입력 가능
 }
