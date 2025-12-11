@@ -32,18 +32,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 /***** Attack *****/
-private:
+protected:
 	AMobBase* MobOwner;
 
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* NormalAttackMontage;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* CriticalAttackMontage;
-
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", meta = (AllowPrivateAccess = "true"))
-	int AttackCount = 0;
 
 	float ElapsedTime;
 	bool bCanAttack;

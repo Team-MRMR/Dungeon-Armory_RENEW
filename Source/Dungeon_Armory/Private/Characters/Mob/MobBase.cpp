@@ -26,11 +26,10 @@ AMobBase::AMobBase()
 	// 스탯 컴포넌트 생성
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 
-	// 공격 컴포넌트 생성
-	AttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("AttackComponent"));
-
 	// 팀 컴포넌트 생성
 	TeamComponent = CreateDefaultSubobject<UTeamComponent>(TEXT("TeamComponent"));
+
+	AttackComponent = nullptr;
 
 	// 이동 컨트롤러 컴포넌트 생성
 	MovementControllerComponent = CreateDefaultSubobject<UMovementControllerComponent>(TEXT("MovementControllerComponent"));
@@ -70,6 +69,16 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 
 	OutLocation = GetActorLocation();
 	OutRotation = GetActorRotation();
+}
+
+void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
+{
+	if (NewAttackComponent == nullptr)
+	{
+		return;
+	}
+
+	AttackComponent = Cast<UMobAttackComponent>(NewAttackComponent);
 }
 
 void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
