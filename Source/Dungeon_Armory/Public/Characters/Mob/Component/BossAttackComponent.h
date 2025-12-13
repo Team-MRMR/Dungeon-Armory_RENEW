@@ -8,10 +8,9 @@
 #include "Characters/Mob/Component/MobAttackComponent.h"
 #include "BossAttackComponent.generated.h"
 
-/**
- * 
- */
-UCLASS()
+class UStaticMeshComponent;
+
+UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class DUNGEON_ARMORY_API UBossAttackComponent : public UMobAttackComponent
 {
 	GENERATED_BODY()
@@ -28,17 +27,6 @@ public:
 	void StartAttack() override;
 
 // ----- BossAttackComponent
-public:
-	int GetAttackCount() const { return AttackCount; }
-	void IncrementAttackCount() { ++AttackCount; }
-	void ResetAttackCount() { AttackCount = 0; }
-
-protected:
-	UFUNCTION(BlueprintNativeEvent = "Boss Skill", meta = (AllowPrivateAccess = "true"))
-	void DropRockSkill();
-	void DropRockSkill_Implementation() {/*body*/};
-
-
 private:
 	ABossBase* BossOwner;
 
@@ -47,4 +35,31 @@ private:
 
 	int AttackCount = 0;
 
+public:
+	int GetAttackCount() const { return AttackCount; }
+	void IncrementAttackCount() { ++AttackCount; }
+	void ResetAttackCount() { AttackCount = 0; }
+
+// ----- Boss Skill
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> RockClass;
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> RockIndicatorClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	float DropRockHeight = 1000.f;
+	float DropRockRadius = 500.f;
+	float DropRockNumber = 5.f;
+
+	float RockIndicatorDuration = 1.5f;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BossSkill")
+	void DropRockSkill();
+	void DropRockSkill_Implementation();
+
+	void SpawnRockIndicator(const FVector& Location);
+
+	FVector GetRandomPointInRadius();
 };
