@@ -5,7 +5,7 @@
 // Sets default values
 ABossBase::ABossBase()
 {
-	CreateAttackComponent();
+	CreateAttackComponent(nullptr);
 }
 
 // Called when the game starts or when spawned
@@ -19,14 +19,29 @@ void ABossBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotatio
 	Super::GetActorEyesViewPoint(OutLocation, OutRotation);
 }
 
-void ABossBase::CreateAttackComponent()
+void ABossBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
 {
 	if (AttackComponent != nullptr)
 	{
 		return;
 	}
 
-	auto BossAttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("BossAttackComponent"));
-	auto AttackComponentBase = Cast<UAttackComponentBase>(BossAttackComponent);
-	Super::CreateAttackComponent(AttackComponentBase);
+	if (NewAttackComponent == nullptr)
+	{
+		auto BossAttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("BossAttackComponent"));
+		auto AttackComponentBase = Cast<UAttackComponentBase>(BossAttackComponent);
+		Super::CreateAttackComponent(AttackComponentBase);
+	}
 }
+
+//void ABossBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
+//{
+//	if (AttackComponent != nullptr || NewAttackComponent == nullptr)
+//	{
+//		return;
+//	}
+//
+//	auto BossAttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("BossAttackComponent"));
+//	auto AttackComponentBase = Cast<UAttackComponentBase>(BossAttackComponent);
+//	Super::CreateAttackComponent(AttackComponentBase);
+//}

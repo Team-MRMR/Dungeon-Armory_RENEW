@@ -23,7 +23,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
-	// ----- Mob
+// ----- Mob
 protected:
-	virtual void CreateAttackComponent();
+	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent) override { /*Empty Body*/ };
 };

@@ -73,13 +73,23 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 
 void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
 {
-	if (NewAttackComponent == nullptr)
+	if (AttackComponent != nullptr || NewAttackComponent == nullptr)
 	{
 		return;
 	}
 
-	AttackComponent = Cast<UMobAttackComponent>(NewAttackComponent);
+	AttackComponent = NewAttackComponent;
 }
+
+//void AMobBase::CreateAttackComponent_Implementation(UAttackComponentBase* const NewAttackComponent)
+//{
+//	if (NewAttackComponent == nullptr)
+//	{
+//		return;
+//	}
+//
+//	AttackComponent = Cast<UMobAttackComponent>(NewAttackComponent);
+//}
 
 void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 {

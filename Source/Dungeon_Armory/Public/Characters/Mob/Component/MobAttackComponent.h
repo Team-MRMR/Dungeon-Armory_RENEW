@@ -13,7 +13,7 @@
 class UAnimMontage;
 class UCharacterStatComponent;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable,ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUNGEON_ARMORY_API UMobAttackComponent : public UAttackComponentBase
 {
 	GENERATED_BODY()

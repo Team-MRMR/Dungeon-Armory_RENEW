@@ -39,8 +39,11 @@ protected:
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
 /***** Mob *****/
-protected:
-	virtual void CreateAttackComponent(UAttackComponentBase* const AttackComponent);
+public:
+	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AttackComponent")
+	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
@@ -61,7 +64,7 @@ public:
 
 /***** Attack *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	UMobAttackComponent* AttackComponent;
+	UAttackComponentBase* AttackComponent;
 
 /***** Movement *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
