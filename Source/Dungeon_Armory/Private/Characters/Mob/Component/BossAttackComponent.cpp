@@ -16,24 +16,69 @@ void UBossAttackComponent::BeginPlay()
 
 void UBossAttackComponent::StartAttack()
 {
-	Super::StartAttack();
-
-	IncrementAttackCount();
-	if (GetAttackCount() == SkillCycleByCount)
+	if (bIsDroppingRocks == false)
 	{
-		ResetAttackCount();
+		IncrementAttackCount();
+		if (GetAttackCount() == SkillCycleByCount)
+		{
+			ResetAttackCount();
 
-		DropRockSkill_Implementation();
+			DropRockSkill_Implementation();
+		}
+		else
+		{
+			Super::StartAttack();
+		}
 	}
 }
 
 void UBossAttackComponent::DropRockSkill_Implementation()
 {
+	if (!AnimInstance)
+		return;
+
+	if (!RoarMontage)
+	{
+		return;
+	}
+
+	const float playRate = StatComponent->GetAttackPlayRate(RoarMontage->GetPlayLength());
+
+	// 몽타주 재생
+	AnimInstance->Montage_Play(
+		RoarMontage,
+		playRate,
+		EMontagePlayReturnType::MontageLength,
+		0.0f,
+		true
+	);
+
+	// 특정 몽타주 전용 종료 델리게이트 바인딩
+	FOnMontageEnded EndDelegate;
+	EndDelegate.BindUObject(
+		this,
+		&UBossAttackComponent::OnDropRockAnimationEnd
+	);
+
+	AnimInstance->Montage_SetEndDelegate(
+		EndDelegate,
+		RoarMontage
+	);
+
+	// DropRock 스폰
 	for (int count = 0; count < DropRockNumber; ++count)
 	{
 		FVector randomLocation = GetRandomPointInRadius();
-		SpawnRockIndicator(randomLocation);
+		SpawnRock(randomLocation);
 	}
+
+	bIsDroppingRocks = true;
+}
+
+void UBossAttackComponent::SpawnRock(const FVector& Location)
+{
+	AActor* RockIndicatorInstance = BossOwner->GetWorld()->SpawnActor<AActor>(RockIndicatorClass, Location, FRotator::ZeroRotator);
+	//RockIndicatorInstance->InitialLifeSpan = RockIndicatorDuration;
 }
 
 FVector UBossAttackComponent::GetRandomPointInRadius()
@@ -49,8 +94,7 @@ FVector UBossAttackComponent::GetRandomPointInRadius()
 	return TargetLocation;
 }
 
-void UBossAttackComponent::SpawnRockIndicator(const FVector& Location)
+void UBossAttackComponent::OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	AActor* RockIndicatorInstance = BossOwner->GetWorld()->SpawnActor<AActor>(RockIndicatorClass, Location, FRotator::ZeroRotator);
-	//RockIndicatorInstance->InitialLifeSpan = RockIndicatorDuration;
+	bIsDroppingRocks = false;
 }
