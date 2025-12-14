@@ -72,30 +72,7 @@ void AMobAIController::OnPossess(APawn* InPawn)
         BehaviorTreeComponent = FindComponentByClass<UBehaviorTreeComponent>();
     }
 
-    if (StatComponent)
-    {
-        if (SightConfig)
-        {
-            SightConfig->SightRadius = StatComponent->SightRadius;
-            SightConfig->LoseSightRadius = StatComponent->LoseSightRadius;
-            SightConfig->PeripheralVisionAngleDegrees = StatComponent->PeripheralVisionAngleDegrees;
-            SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-            SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
-            SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
-
-            if (AIPerception)
-            {
-                // Perception 컴포넌트에 시야 감지 설정 추가
-                AIPerception->ConfigureSense(*SightConfig);
-
-                // 우선순위가 가장 높은 감각으로 설정
-                AIPerception->SetDominantSense(SightConfig->GetSenseImplementation());
-
-                // 감지 이벤트 콜백 등록
-                AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AMobAIController::OnTargetPerceived);
-            }
-        }
-    }
+    InitializePerceptionSystem();
 }
 
 void AMobAIController::Tick(float DeltaTime)
@@ -238,7 +215,8 @@ void AMobAIController::OnTargetPerceived(AActor* Actor, FAIStimulus Stimulus)
 
         // 플레이어가 감지됨
         DetectedPlayer = Actor;
-        BlackboardComponent->SetValueAsObject("Target", Actor);
+        BlackboardComponent->SetValueAsObject(BBKeys::Mob::Target, Actor);
+        ResetPerceptionRadius();
     }
     else if(DetectedPlayer == Actor)
     {
@@ -248,6 +226,50 @@ void AMobAIController::OnTargetPerceived(AActor* Actor, FAIStimulus Stimulus)
 
         // 플레이어를 놓침
         DetectedPlayer = nullptr;
-        BlackboardComponent->SetValueAsObject("Target", nullptr);
+        BlackboardComponent->SetValueAsObject(BBKeys::Mob::Target, nullptr);
     }
+}
+
+void AMobAIController::InitializePerceptionSystem()
+{
+    if (!StatComponent || !SightConfig || !AIPerception)
+        return;
+
+    SightConfig->SightRadius = StatComponent->SightRadius;
+    SightConfig->LoseSightRadius = StatComponent->LoseSightRadius;
+    SightConfig->PeripheralVisionAngleDegrees = StatComponent->PeripheralVisionAngleDegrees;
+    SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+    SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+    SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
+
+    // Perception 컴포넌트에 시야 감지 설정 추가
+    AIPerception->ConfigureSense(*SightConfig);
+
+    // 우선순위가 가장 높은 감각으로 설정
+    AIPerception->SetDominantSense(SightConfig->GetSenseImplementation());
+
+    // 감지 이벤트 콜백 등록
+    AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AMobAIController::OnTargetPerceived);
+}
+
+void AMobAIController::ResetPerceptionRadius()
+{
+    if (!SightConfig || !StatComponent)
+        return;
+
+    SightConfig->PeripheralVisionAngleDegrees = StatComponent->PeripheralVisionAngleDegrees;
+
+    AIPerception->ConfigureSense(*SightConfig);
+    AIPerception->RequestStimuliListenerUpdate();
+}
+
+void AMobAIController::ExtentdPerceptionRadius()
+{
+    if (!SightConfig)
+        return;
+
+    SightConfig->PeripheralVisionAngleDegrees = 180.f;
+
+    AIPerception->ConfigureSense(*SightConfig);
+    AIPerception->RequestStimuliListenerUpdate();
 }

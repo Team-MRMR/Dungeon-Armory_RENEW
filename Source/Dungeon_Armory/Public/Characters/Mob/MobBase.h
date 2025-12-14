@@ -21,7 +21,7 @@ class UMovementControllerComponent;
 class UTeamComponent;
 class UBlackboardComponent;
 
-class AAIController;
+class AMobAIController;
 
 class USoundBase;
 
@@ -39,11 +39,8 @@ protected:
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
 /***** Mob *****/
-public:
-	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AttackComponent")
-	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent);
+protected:
+	AMobAIController* MobAIController;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
@@ -51,6 +48,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DieMontage;
+
+public:
+	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AttackComponent")
+	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent);
 
 /***** Stat *****/
 public:

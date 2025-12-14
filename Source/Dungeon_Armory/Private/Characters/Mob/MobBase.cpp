@@ -42,6 +42,9 @@ void AMobBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// AI 컨트롤러 클래스 설정
+	MobAIController = Cast<AMobAIController>(GetController());
+
 	// (Pawn) 컨트롤러 회전 제어 해제
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -73,10 +76,8 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 
 void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
 {
-	if (AttackComponent != nullptr || NewAttackComponent == nullptr)
-	{
+	if (AttackComponent || !NewAttackComponent)
 		return;
-	}
 
 	AttackComponent = NewAttackComponent;
 }
@@ -93,20 +94,33 @@ void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackCompon
 
 void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 {
+	if (!StatComponent)
+		return;
 
-	if (StatComponent)
+	StatComponent->ApplyDamage(DamageAmount);
+
+	if (1.0f < StatComponent->CurrentHealth)
 	{
-		StatComponent->ApplyDamage(DamageAmount);
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+	}
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DieSound, GetActorLocation());
+		Execute_Die(this);	// 죽음 처리
+	}
 
-		if (1.0f < StatComponent->CurrentHealth)
-		{
-			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
-		}
-		else
-		{
-			UGameplayStatics::PlaySoundAtLocation(this, DieSound, GetActorLocation());
-			Execute_Die(this);	// 죽음 처리
-		}
+	if (!MobAIController)
+		return;
+
+	EMobState CurrentState = MobAIController->GetMobState();
+	switch (CurrentState)
+	{
+	case EMobState::Idle:
+	case EMobState::Patrol:
+		MobAIController->ExtentdPerceptionRadius();
+		break;
+	default:
+		MobAIController->ResetPerceptionRadius();
 	}
 }
 
@@ -120,7 +134,6 @@ void AMobBase::Die_Implementation()
 		PlayAnimMontage(DieMontage);
 	}
 
-	AMobAIController* MobAIController = Cast<AMobAIController>(GetController());
 	if (MobAIController)
 	{
 		MobAIController->SetMobState(EMobState::Dead);

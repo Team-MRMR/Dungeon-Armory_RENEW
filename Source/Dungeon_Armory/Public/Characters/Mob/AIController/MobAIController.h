@@ -71,7 +71,13 @@ private:
 	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result) override;
 
 /***** AI *****/
+public:
+	void ResetPerceptionRadius();
+	void ExtentdPerceptionRadius();
+
 protected:
+	void InitializePerceptionSystem();
+
 	UFUNCTION()
 	void OnTargetPerceived(AActor* Actor, FAIStimulus Stimulus) override;
 };
