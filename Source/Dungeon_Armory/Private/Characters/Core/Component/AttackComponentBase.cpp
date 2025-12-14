@@ -23,7 +23,7 @@ void UAttackComponentBase::BeginPlay()
 	if (OwnerCharacter)
 	{
 		AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
-		Stat = OwnerCharacter->FindComponentByClass<UCharacterStatComponent>();
+		StatComponent = OwnerCharacter->FindComponentByClass<UCharacterStatComponent>();
 	}
 }
 

@@ -8,7 +8,7 @@
 #include "Characters/Mob/Component/MobAttackComponent.h"
 #include "BossAttackComponent.generated.h"
 
-class UStaticMeshComponent;
+class UAnimMontage;
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class DUNGEON_ARMORY_API UBossAttackComponent : public UMobAttackComponent
@@ -48,18 +48,26 @@ private:
 	TSubclassOf<AActor> RockIndicatorClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* RoarMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
 	float DropRockHeight = 1000.f;
 	float DropRockRadius = 500.f;
 	float DropRockNumber = 5.f;
 
 	float RockIndicatorDuration = 1.5f;
 
+	bool bIsDroppingRocks = false;
+
 public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BossSkill")
 	void DropRockSkill();
 	void DropRockSkill_Implementation();
 
-	void SpawnRockIndicator(const FVector& Location);
+	void SpawnRock(const FVector& Location);
 
 	FVector GetRandomPointInRadius();
+
+	UFUNCTION()
+	virtual void OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 };
