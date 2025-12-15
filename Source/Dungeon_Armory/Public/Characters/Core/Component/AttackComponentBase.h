@@ -26,7 +26,7 @@ protected:
 /***** Attack *****/
 protected:
 	UAnimInstance* AnimInstance;
-	UCharacterStatComponent* Stat;
+	UCharacterStatComponent* StatComponent;
 
 public:
     virtual void StartAttack();   // 외부에서 공격 시작 시 호출

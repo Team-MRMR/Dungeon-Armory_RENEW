@@ -35,5 +35,7 @@ protected:
 
 // ----- BossBase
 protected:
-	void CreateAttackComponent();
+	 void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	 //void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	 //virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent) override { /*Empty Body*/ };
 };

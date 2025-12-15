@@ -5,7 +5,7 @@
 
 AMob::AMob()
 {
-	CreateAttackComponent();
+	CreateAttackComponent(nullptr);
 }
 
 void AMob::BeginPlay()
@@ -18,14 +18,30 @@ void AMob::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) co
 	Super::GetActorEyesViewPoint(OutLocation, OutRotation);
 }
 
-void AMob::CreateAttackComponent()
+void AMob::CreateAttackComponent(UAttackComponentBase* NewAttackComponent)
 {
 	if (AttackComponent != nullptr)
 	{
 		return;
 	}
 
-	auto MobAttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("MobAttackComponent"));
-	auto AttackComponentBase = Cast<UAttackComponentBase>(MobAttackComponent);
-	Super::CreateAttackComponent(AttackComponentBase);
+	if (NewAttackComponent == nullptr)
+	{
+		auto MobAttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("MobAttackComponent"));
+		auto AttackComponentBase = Cast<UAttackComponentBase>(MobAttackComponent);
+		Super::CreateAttackComponent(AttackComponentBase);
+	}
 }
+
+
+//void AMob::CreateAttackComponent(UAttackComponentBase* NewAttackComponent)
+//{
+//	if (AttackComponent != nullptr)
+//	{
+//		return;
+//	}
+//
+//	auto MobAttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("MobAttackComponent"));
+//	auto AttackComponentBase = Cast<UAttackComponentBase>(MobAttackComponent);
+//	Super::CreateAttackComponent(AttackComponentBase);
+//}

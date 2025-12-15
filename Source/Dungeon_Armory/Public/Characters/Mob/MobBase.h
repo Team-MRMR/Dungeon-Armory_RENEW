@@ -21,7 +21,7 @@ class UMovementControllerComponent;
 class UTeamComponent;
 class UBlackboardComponent;
 
-class AAIController;
+class AMobAIController;
 
 class USoundBase;
 
@@ -40,7 +40,7 @@ protected:
 
 /***** Mob *****/
 protected:
-	virtual void CreateAttackComponent(UAttackComponentBase* const AttackComponent);
+	AMobAIController* MobAIController;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Mob", meta = (AllowPrivateAccess = "true"))
@@ -48,6 +48,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DieMontage;
+
+public:
+	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AttackComponent")
+	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
+	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent);
 
 /***** Stat *****/
 public:
@@ -61,7 +67,7 @@ public:
 
 /***** Attack *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	UMobAttackComponent* AttackComponent;
+	UAttackComponentBase* AttackComponent;
 
 /***** Movement *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
@@ -69,11 +75,13 @@ public:
 
 /***** Sounds *****/
 protected:
-	// 피격 및 사망 시 재생할 사운드
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
-	USoundBase* HitSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* MoveSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* AttackSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* DamagedSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	USoundBase* DieSound;
 
 /***** IIDamageable *****/

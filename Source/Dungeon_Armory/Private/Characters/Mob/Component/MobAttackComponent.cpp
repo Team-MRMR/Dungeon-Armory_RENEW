@@ -41,7 +41,7 @@ void UMobAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsStartedAttack)
 	{
 		ElapsedTime += DeltaTime;
-		if (bIsEndedAttack && Stat->GetAttackCooldown() <= ElapsedTime)
+		if (bIsEndedAttack && StatComponent->GetAttackCooldown() <= ElapsedTime)
 		{
 			bIsStartedAttack = false;
 			bCanAttack = true;
@@ -58,15 +58,15 @@ void UMobAttackComponent::StartAttack()
 		return;
 
 	float Chance = FMath::FRandRange(0.0f, 1.0f);
-	bIsCritical = (Chance <= Stat->CriticalChance) ? true : false;
+	bIsCritical = (Chance <= StatComponent->CriticalChance) ? true : false;
 
 	if (bIsCritical)
 	{
-		const float AttackRate = Stat->GetAttackPlayRate(CriticalAttackMontage->GetPlayLength());
+		const float playRate = StatComponent->GetAttackPlayRate(CriticalAttackMontage->GetPlayLength());
 		
 		AnimInstance->Montage_Play(
 			CriticalAttackMontage,
-			AttackRate,
+			playRate,
 			EMontagePlayReturnType::MontageLength,
 			0.0f,
 			true
@@ -74,11 +74,11 @@ void UMobAttackComponent::StartAttack()
 	}
 	else
 	{
-		const float AttackRate = Stat->GetAttackPlayRate(NormalAttackMontage->GetPlayLength());
+		const float playRate = StatComponent->GetAttackPlayRate(NormalAttackMontage->GetPlayLength());
 
 		AnimInstance->Montage_Play(
 			NormalAttackMontage,
-			AttackRate,
+			playRate,
 			EMontagePlayReturnType::MontageLength,
 			0.0f,
 			true
@@ -105,10 +105,10 @@ void UMobAttackComponent::OnAttack()
 
 	const FVector Start = GetOwner()->GetActorLocation();
 	const FVector Forward = GetOwner()->GetActorForwardVector();
-	const float TraceDistance = Stat->AttackableDistance;
+	const float TraceDistance = StatComponent->AttackableDistance;
 	const FVector End = Start + Forward * TraceDistance;
 
-	const float Radius = Stat->AttackRadius;
+	const float Radius = StatComponent->AttackRadius;
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(GetOwner());
@@ -163,9 +163,9 @@ void UMobAttackComponent::OnAttack()
 				return;
 
 			IIDamageable* DamagedActor = Cast<IIDamageable>(HitActor);
-			if (DamagedActor && Stat)
+			if (DamagedActor && StatComponent)
 			{
-				const float DamageAmount = CalculateDamage(Stat, TargetStat);
+				const float DamageAmount = CalculateDamage(StatComponent, TargetStat);
 				DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
 			}
 		}

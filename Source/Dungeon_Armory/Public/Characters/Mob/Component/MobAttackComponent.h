@@ -13,7 +13,7 @@
 class UAnimMontage;
 class UCharacterStatComponent;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable,ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUNGEON_ARMORY_API UMobAttackComponent : public UAttackComponentBase
 {
 	GENERATED_BODY()
@@ -58,7 +58,7 @@ public:
 	void OnAttack() override;
 	void OnAttackEnd() override;
 	UFUNCTION()
-	void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
+	virtual void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 
 private:
 	virtual float CalculateDamage(UCharacterStatComponent* Attacker, UCharacterStatComponent* Defender);

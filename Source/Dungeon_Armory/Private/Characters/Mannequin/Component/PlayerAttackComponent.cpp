@@ -14,6 +14,9 @@
 #include "Animation/AnimInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+// sound
+#include "Kismet/GameplayStatics.h"
+
 UPlayerAttackComponent::UPlayerAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -212,6 +215,15 @@ void UPlayerAttackComponent::ProceedCombo()
 
 	bNextCombo = false;		// ÄÞº¸ ¼Òºñ
 	CurrentComboIndex++;	// ´ÙÀ½ ÄÞº¸ ÀÎµ¦½º
+
+	if (!OwnerPlayerCharacter->AttackSound)
+		return;
+
+	UGameplayStatics::PlaySoundAtLocation(
+		this,
+		OwnerPlayerCharacter->AttackSound,
+		OwnerPlayerCharacter->GetActorLocation()
+	);
 }
 
 void UPlayerAttackComponent::ResetCooldown()
