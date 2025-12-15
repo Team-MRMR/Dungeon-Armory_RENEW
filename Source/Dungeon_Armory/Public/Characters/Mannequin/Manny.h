@@ -118,6 +118,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Animation | AnimInstance")
 	void SetAnimInstance(TSubclassOf<UAnimInstance> NewAnimInstance);
 
+// ----- Sound
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* AttackSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* DamagedSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* DieSound;
+
 /***** Unreal *****/
 public:
 	// Sets default values for this character's properties

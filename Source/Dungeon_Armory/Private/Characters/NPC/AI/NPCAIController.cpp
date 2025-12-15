@@ -15,13 +15,12 @@
 
 ANPCAIController::ANPCAIController()
 {
-    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = false;
 }
 
 void ANPCAIController::BeginPlay()
 {
     Super::BeginPlay();
-
 }
 
 void ANPCAIController::OnPossess(APawn* InPawn)
@@ -59,11 +58,6 @@ void ANPCAIController::OnPossess(APawn* InPawn)
         // 내부적으로 생성된 BehaviorTreeComponent를 가져와서 멤버 변수에 할당
         BehaviorTreeComponent = FindComponentByClass<UBehaviorTreeComponent>();
     }
-}
-
-void ANPCAIController::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
 }
 
 void ANPCAIController::InitializeBlackboardKeys(ANPCBase* NPCBase)

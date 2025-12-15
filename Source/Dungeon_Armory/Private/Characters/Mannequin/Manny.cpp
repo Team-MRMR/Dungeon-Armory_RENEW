@@ -29,7 +29,7 @@
 #include "Manager/TeamManager.h"
 
 // sound
-#include "Sound/SoundBase.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -141,25 +141,25 @@ void AManny::SetGenericTeamId(const FGenericTeamId& NewTeamID)
 
 void AManny::Move(const FInputActionValue& Value)
 {
+	if (!Controller)
+		return;
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	// find out which way is forward
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	// get forward vector
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	// get right vector 
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
+	// add movement 
+	AddMovementInput(ForwardDirection, MovementVector.Y);
+	AddMovementInput(RightDirection, MovementVector.X);
 }
 
 void AManny::Look(const FInputActionValue& Value)
@@ -270,9 +270,16 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 			case 1:
 				AnimInstance->Montage_Play(Hit2Montage);
 				break;
-			//default:
-			//	break;
 			}
+
+			if (!DamagedSound)
+				return;
+
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				DamagedSound,
+				GetActorLocation()
+			);
 		}
 	}
 	else
@@ -283,7 +290,14 @@ void AManny::ReceiveDamage_Implementation(const float DamageAmount)
 
 void AManny::Die_Implementation()
 {
+	if (!DieSound)
+		return;
 
+	UGameplayStatics::PlaySoundAtLocation(
+		this,
+		DieSound,
+		GetActorLocation()
+	);
 }
 
 float AManny::GetCurrentStamina()

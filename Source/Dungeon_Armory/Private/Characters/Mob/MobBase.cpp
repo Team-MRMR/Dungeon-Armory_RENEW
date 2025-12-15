@@ -101,7 +101,7 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 
 	if (1.0f < StatComponent->CurrentHealth)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(this, DamagedSound, GetActorLocation());
 	}
 	else
 	{
