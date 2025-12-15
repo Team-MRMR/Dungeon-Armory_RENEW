@@ -13,9 +13,7 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 
-/*
-* Functions (Unreal)
-*/
+#include "Components/AudioComponent.h"
 
 ANPCBase::ANPCBase()
 {
