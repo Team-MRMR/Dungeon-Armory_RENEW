@@ -19,12 +19,12 @@ AAIControllerBase::AAIControllerBase()
 {
     PrimaryActorTick.bCanEverTick = false;
 
+	// 팀 컴포넌트 생성 -> 하위 클래스에서 팀 설정 필수
+	TeamComponent = CreateDefaultSubobject<UTeamComponent>(TEXT("TeamComponent"));
+    
     // AI 감지 시스템 초기화
     AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception"));
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-
-    // 팀 컴포넌트 생성
-	TeamComponent = CreateDefaultSubobject<UTeamComponent>(TEXT("TeamComponent"));
 
 	// 비헤이비어 트리 컴포넌트 초기화
     BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
@@ -34,41 +34,31 @@ AAIControllerBase::AAIControllerBase()
 void AAIControllerBase::BeginPlay()
 {
     Super::BeginPlay();
-
 }
 
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
-
-    if (ANPCBase* NPC = Cast<ANPCBase>(InPawn))
-    {
-        // TeamComponent에서 팀 정보를 가져옴
-        if (UTeamComponent* TeamCmp = NPC->TeamComponent)
-        {
-            TeamComponent = TeamCmp; // 팀 정보를 가져와 저장
-        }
-    }
 }
 
 ETeamAttitude::Type AAIControllerBase::GetTeamAttitudeTowards(const AActor& Other) const
 {
-    if (TeamComponent)
+    if (!TeamComponent)
     {
-		return TeamComponent->GetTeamAttitudeTowards(Other);
+	    return ETeamAttitude::Neutral;
     }
 
-	return ETeamAttitude::Neutral;
+	return TeamComponent->GetTeamAttitudeTowards(Other);
 }
 
 FGenericTeamId AAIControllerBase::GetGenericTeamId() const
 {
-    if (TeamComponent)
+    if (!TeamComponent)
     {
-        return TeamComponent->GetGenericTeamId();
+        return FGenericTeamId::NoTeam;
     }
 
-    return FGenericTeamId::NoTeam;
+    return TeamComponent->GetGenericTeamId();
 }
 
 void AAIControllerBase::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)

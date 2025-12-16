@@ -7,7 +7,7 @@
 
 #include "Characters/Core/Interface/IDamageable.h"
 
-#include "GenericTeamAgentInterface.h"
+//#include "GenericTeamAgentInterface.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
@@ -18,7 +18,6 @@ class UAttackComponentBase;
 class UCharacterStatComponent;
 class UMobAttackComponent;
 class UMovementControllerComponent;
-class UTeamComponent;
 class UBlackboardComponent;
 
 class AMobAIController;
@@ -62,16 +61,11 @@ public:
 
 /***** Team *****/
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	UTeamComponent* TeamComponent;
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 /***** Attack *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UAttackComponentBase* AttackComponent;
-
-/***** Movement *****/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	UMovementControllerComponent* MovementControllerComponent;
 
 /***** Sounds *****/
 protected:

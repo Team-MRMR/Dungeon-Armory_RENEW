@@ -5,8 +5,8 @@
 #include "Characters/Mob/Component/MobAttackComponent.h"
 #include "Characters/Mob/MobBase.h"
 
+#include "Characters/Core/AI/Team/TeamComponent.h"
 #include "Characters/Core/Component/CharacterStatComponent.h"
-#include "Characters/Core/Component/MovementControllerComponent.h"
 #include "Characters/Core/AI/Interface/IMovableTask.h"
 
 #include "BehaviorTree/BehaviorTree.h"
@@ -27,6 +27,8 @@ const FName AMobAIController::MobStateKey(TEXT("MobState"));
 AMobAIController::AMobAIController()
 {
     PrimaryActorTick.bCanEverTick = true;
+
+    TeamComponent->SetTeamType(ETeamType::Mob);
 }
 
 void AMobAIController::BeginPlay()
@@ -40,17 +42,11 @@ void AMobAIController::OnPossess(APawn* InPawn)
     Super::OnPossess(InPawn);
 
     // 컴포넌트 참조 할당
-    if (ACharacter* MobCharacter = Cast<ACharacter>(InPawn))
+    AMobBase* MobBase = Cast<AMobBase>(InPawn);
+    if (MobBase)
     {
-        if (AMobBase* MobBase = Cast<AMobBase>(MobCharacter))
-        {
-            StatComponent = MobBase->FindComponentByClass<UCharacterStatComponent>();
-
-			MovementControllerComponent = MobBase->FindComponentByClass<UMovementControllerComponent>();
-			//MovementControllerComponent->OnMovementCompleted.AddDynamic(this, &AMobAIController::OnMovementCompleted);
-
-			MobAttackComponent = MobBase->FindComponentByClass<UMobAttackComponent>();
-        }
+        StatComponent = MobBase->StatComponent;
+        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->AttackComponent);
     }
 
     // 비헤이비어 트리 실행
@@ -166,12 +162,12 @@ void AMobAIController::SetMobState(EMobState NewState)
 
 void AMobAIController::InitializeBlackboardKeys()
 {
-	// --- 상태 관련 키값 ---S
+	// --- 상태 관련 키값 ---
     BlackboardComponent->SetValueAsEnum(BBKeys::Mob::MobState, static_cast<uint8>(EMobState::Patrol));
 
 	// --- 컴포넌트 관련 키값 ---
 	BlackboardComponent->SetValueAsObject(BBKeys::Mob::Stat, StatComponent);
-	BlackboardComponent->SetValueAsObject(BBKeys::Mob::MovementController, MovementControllerComponent);
+	//BlackboardComponent->SetValueAsObject(BBKeys::Mob::MovementController, MovementControllerComponent);
 	BlackboardComponent->SetValueAsObject(BBKeys::Mob::AttackComponent, MobAttackComponent);
 
     // --- 거리 관련 키값 ---

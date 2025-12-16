@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Characters/Mob/Component/BossAttackComponent.h"
+
+#include "Characters/Core/AI/AIControllerBase.h"
 
 UBossAttackComponent::UBossAttackComponent()
 {
@@ -46,6 +47,8 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 	if (!RoarMontage)
 		return;
 
+	bIsDroppingRocks = true;
+
 	// 몽타주 재생
 	AnimInstance->Montage_Play(RoarMontage);
 
@@ -61,37 +64,74 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 		RoarMontage
 	);
 
+	// 1초마다 돌 스폰
+	GetWorld()->GetTimerManager().SetTimer(
+		DropRockTickTimerHandle,
+		this,
+		&UBossAttackComponent::DropRockTick,
+		DropRockInterval,
+		true
+	);
+
+	// 5초 후 스킬 종료
+	GetWorld()->GetTimerManager().SetTimer(
+		DropRockDurationTimerHandle,
+		this,
+		&UBossAttackComponent::EndDropRockSkill,
+		DropRockDuration,
+		false
+	);
+
 	// DropRock 스폰
 	for (int count = 0; count < DropRockNumber; ++count)
 	{
 		FVector randomLocation = GetRandomPointInDropRockSpawnRadius();
 		SpawnRock(randomLocation);
 	}
-
-	bIsDroppingRocks = true;
 }
 
 void UBossAttackComponent::SpawnRock(const FVector& Location)
 {
-	BossOwner->GetWorld()->SpawnActor<AActor>(RockClass, Location, FRotator::ZeroRotator);
+	GetWorld()->SpawnActor<AActor>(RockClass, Location, FRotator::ZeroRotator);
+}
+
+void UBossAttackComponent::DropRockTick()
+{
+	if (!bIsDroppingRocks)
+		return;
+
+	FVector SpawnLocation = GetRandomPointInDropRockSpawnRadius();
+	SpawnRock(SpawnLocation);
+}
+
+void UBossAttackComponent::EndDropRockSkill()
+{
+	bIsDroppingRocks = false;
+
+	GetWorld()->GetTimerManager().ClearTimer(DropRockTickTimerHandle);
+	GetWorld()->GetTimerManager().ClearTimer(DropRockDurationTimerHandle);
 }
 
 void UBossAttackComponent::OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	bIsDroppingRocks = false;
+	// 애니메이션이 먼저 끝나도
+	// 스킬은 타이머 기준으로 동작
+	// bIsDroppingRocks = false;
 }
 
 FVector UBossAttackComponent::GetRandomPointInDropRockSpawnRadius()
 {
-	FVector DropCenter = BossOwner->GetActorLocation();
-	float Radius = DropRockSpawnRadius;
+	AActor* player = Cast<AAIControllerBase>(BossOwner->GetController())->GetDetectedPlayer();
 
-	float RandX = FMath::RandRange(-Radius, Radius);
-	float RandY = FMath::RandRange(-Radius, Radius);
+	FVector dropCenter = player->GetActorLocation();
+	float radius = DropRockSpawnRadius;
 
-	FVector TargetLocation = DropCenter + FVector(RandX, RandY, DropCenter.Z + DropRockSpawnHeight);
+	float RandX = FMath::RandRange(-radius, radius);
+	float RandY = FMath::RandRange(-radius, radius);
 
-	return TargetLocation;
+	FVector targetLocation = dropCenter + FVector(RandX, RandY, dropCenter.Z + DropRockSpawnHeight);
+
+	return targetLocation;
 }
 
 #pragma endregion
@@ -134,9 +174,12 @@ void UBossAttackComponent::SpawnMobSkill_Implementation()
 
 void UBossAttackComponent::SpawnMob(const FVector& Location)
 {
+	if (SpawnMobList.Num() == 0)
+		return;
+
 	// 랜덤으로 몹 선택
 	int RandomIndex = FMath::RandRange(0, SpawnMobList.Num() - 1);
-	BossOwner->GetWorld()->SpawnActor<AMob>(SpawnMobList[RandomIndex], Location, FRotator::ZeroRotator);
+	auto SpawnedMob = BossOwner->GetWorld()->SpawnActor<AMob>(SpawnMobList[RandomIndex], Location, FRotator::ZeroRotator);
 }
 
 void UBossAttackComponent::OnSpawnMobAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
@@ -146,15 +189,17 @@ void UBossAttackComponent::OnSpawnMobAnimationEnd(UAnimMontage* Montage, bool bI
 
 FVector UBossAttackComponent::GetRandomPointInMobSpawnRadius()
 {
-	FVector DropCenter = BossOwner->GetActorLocation();
-	float Radius = MobSpawnRadius;
+	AActor* player = Cast<AAIControllerBase>(BossOwner->GetController())->GetDetectedPlayer();
 
-	float RandX = FMath::RandRange(-Radius, Radius);
-	float RandY = FMath::RandRange(-Radius, Radius);
+	FVector dropCenter = player->GetActorLocation();
+	float radius = MobSpawnRadius;
 
-	FVector TargetLocation = DropCenter + FVector(RandX, RandY, DropCenter.Z + MobSpawnHeight);
+	float RandX = FMath::RandRange(-radius, radius);
+	float RandY = FMath::RandRange(-radius, radius);
 
-	return TargetLocation;
+	FVector targetLocation = dropCenter + FVector(RandX, RandY, dropCenter.Z + MobSpawnHeight);
+
+	return targetLocation;
 }
 
 #pragma endregion

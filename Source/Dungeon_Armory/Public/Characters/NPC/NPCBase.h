@@ -42,17 +42,16 @@ protected:
 
 	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
-/***** Team Component *****/
-public:	
+/***** Stat Component *****/
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component | Stat")
 	UCharacterStatComponent* StatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component | Team")
-	UTeamComponent* TeamComponent;
+/***** Team Component *****/
+public:	
 
 public:
 	virtual FGenericTeamId GetGenericTeamId() const override;
-	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
 
 /***** Behavior Tree *****/
 public:

@@ -4,6 +4,7 @@
 #include "Characters/NPC/AI/NPCAIController.h"
 #include "Characters/NPC/NPCBase.h"
 
+#include "Characters/Core/AI/Team/TeamComponent.h"
 #include "Characters/Core/Component/CharacterStatComponent.h"
 #include "Characters/Core/Component/MovementControllerComponent.h"
 
@@ -16,6 +17,8 @@
 ANPCAIController::ANPCAIController()
 {
     PrimaryActorTick.bCanEverTick = false;
+
+	TeamComponent->SetTeamType(ETeamType::NPC);
 }
 
 void ANPCAIController::BeginPlay()
@@ -27,18 +30,12 @@ void ANPCAIController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
 
-    // 컴포넌트 참조 할당
-    ACharacter* NPCCharacter = Cast<ANPCBase>(InPawn);
-    if (!NPCCharacter)
+	// 팀 컴포넌트, 스탯 컴포넌트 할당
+    ANPCBase* NPCBase = Cast<ANPCBase>(InPawn);
+    if (!NPCBase)
         return;
 
-    ANPCBase* NPCBase = Cast<ANPCBase>(NPCCharacter);
-    if (NPCBase)
-    {
-        Stat = NPCBase->FindComponentByClass<UCharacterStatComponent>();
-
-        MovementController = NPCBase->FindComponentByClass<UMovementControllerComponent>();
-    }
+	StatComponent = NPCBase->StatComponent;
 
     // 비헤이비어 트리 실행
     if (BehaviorTree && BehaviorTree->BlackboardAsset)

@@ -26,13 +26,7 @@ AMobBase::AMobBase()
 	// 스탯 컴포넌트 생성
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 
-	// 팀 컴포넌트 생성
-	TeamComponent = CreateDefaultSubobject<UTeamComponent>(TEXT("TeamComponent"));
-
 	AttackComponent = nullptr;
-
-	// 이동 컨트롤러 컴포넌트 생성
-	MovementControllerComponent = CreateDefaultSubobject<UMovementControllerComponent>(TEXT("MovementControllerComponent"));
 
 	DisappearTime = 2.0f;
 }
@@ -61,8 +55,6 @@ void AMobBase::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->BaseSpeed;
 	// GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	// GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-
-	TeamComponent->SetTeamType(ETeamType::Mob);
 }
 
 void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
@@ -80,6 +72,17 @@ void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackCompon
 		return;
 
 	AttackComponent = NewAttackComponent;
+}
+
+FGenericTeamId AMobBase::GetGenericTeamId() const
+{
+	auto aiController = Cast<AAIControllerBase>(GetController());
+	if (!aiController)
+	{
+		return FGenericTeamId::NoTeam;
+	}
+
+	return aiController->GetGenericTeamId();
 }
 
 //void AMobBase::CreateAttackComponent_Implementation(UAttackComponentBase* const NewAttackComponent)

@@ -54,7 +54,6 @@ protected:
 /***** Component *****/
 private:
 	UCharacterStatComponent* StatComponent;
-	UMovementControllerComponent* MovementControllerComponent;
 	UMobAttackComponent* MobAttackComponent;
 
 /***** Behavior Tree *****/

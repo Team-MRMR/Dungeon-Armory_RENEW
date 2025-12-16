@@ -134,10 +134,10 @@ FGenericTeamId AManny::GetGenericTeamId() const
 	return TeamComponent->GetGenericTeamId();
 }
 
-void AManny::SetGenericTeamId(const FGenericTeamId& NewTeamID)
-{
-	TeamComponent->SetTeamType(static_cast<ETeamType>(NewTeamID.GetId()));
-}
+//void AManny::SetGenericTeamId(const FGenericTeamId& NewTeamID)
+//{
+//	TeamComponent->SetTeamType(static_cast<ETeamType>(NewTeamID.GetId()));
+//}
 
 void AManny::Move(const FInputActionValue& Value)
 {

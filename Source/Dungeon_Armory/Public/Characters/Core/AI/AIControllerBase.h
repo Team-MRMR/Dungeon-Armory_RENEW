@@ -21,7 +21,7 @@ struct FAIStimulus;
  * Base Class에서 Controller의 기능적 역할을 맡고,
  * Dervied Class에서는 비헤이비어 트리와 관련된 작업을 실행하는 역할을 수행
  */
-UCLASS()
+UCLASS(Abstract)
 class DUNGEON_ARMORY_API AAIControllerBase : public AAIController
 {
 	GENERATED_BODY()
@@ -35,6 +35,9 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;	// Called when the controller possess a Pawn
 
 /***** AI *****/
+public:
+	AActor* GetDetectedPlayer() const { return DetectedPlayer; }
+
 protected:
 	// 현재 감지 중인 플레이어 참조
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
@@ -65,7 +68,7 @@ protected:
 public:
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 	virtual FGenericTeamId GetGenericTeamId() const override;
-	
+
 /***** Behavior Tree *****/
 public:
 	/** 비헤이비어 트리 컴포넌트 */
