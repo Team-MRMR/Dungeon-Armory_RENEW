@@ -24,6 +24,8 @@ void UBossAttackComponent::StartAttack()
 		return;
 	}
 
+	Super::StartAttack();
+
 	if (GetAttackCount() == SkillCycleByCount)
 	{
 		ResetAttackCount();
@@ -33,7 +35,6 @@ void UBossAttackComponent::StartAttack()
 		return;
 	}
 
-	Super::StartAttack();
 	IncrementAttackCount();
 }
 
@@ -64,13 +65,15 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 		RoarMontage
 	);
 
+	float& DropRockFirstDelay = DropRockInterval;
 	// 1초마다 돌 스폰
 	GetWorld()->GetTimerManager().SetTimer(
 		DropRockTickTimerHandle,
 		this,
 		&UBossAttackComponent::DropRockTick,
 		DropRockInterval,
-		true
+		true,
+		DropRockFirstDelay
 	);
 
 	// 5초 후 스킬 종료
@@ -82,12 +85,12 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 		false
 	);
 
-	// DropRock 스폰
-	for (int count = 0; count < DropRockNumber; ++count)
-	{
-		FVector randomLocation = GetRandomPointInDropRockSpawnRadius();
-		SpawnRock(randomLocation);
-	}
+	//// DropRock 스폰
+	//for (int count = 0; count < DropRockNumber; ++count)
+	//{
+	//	FVector randomLocation = GetRandomPointInDropRockSpawnRadius();
+	//	SpawnRock(randomLocation);
+	//}
 }
 
 void UBossAttackComponent::SpawnRock(const FVector& Location)
@@ -100,12 +103,18 @@ void UBossAttackComponent::DropRockTick()
 	if (!bIsDroppingRocks)
 		return;
 
-	FVector SpawnLocation = GetRandomPointInDropRockSpawnRadius();
-	SpawnRock(SpawnLocation);
+	FVector spawnLocation = GetSpawnLocationInDropRockSkill();
+	if (spawnLocation.IsNearlyZero())
+	{
+		return;
+	}
+
+	SpawnRock(spawnLocation);
 }
 
 void UBossAttackComponent::EndDropRockSkill()
 {
+	PlayerActor = nullptr;
 	bIsDroppingRocks = false;
 
 	GetWorld()->GetTimerManager().ClearTimer(DropRockTickTimerHandle);
@@ -119,19 +128,22 @@ void UBossAttackComponent::OnDropRockAnimationEnd(UAnimMontage* Montage, bool bI
 	// bIsDroppingRocks = false;
 }
 
-FVector UBossAttackComponent::GetRandomPointInDropRockSpawnRadius()
+FVector UBossAttackComponent::GetSpawnLocationInDropRockSkill()
 {
-	AActor* player = Cast<AAIControllerBase>(BossOwner->GetController())->GetDetectedPlayer();
+	if (!PlayerActor)
+	{
+		PlayerActor = Cast<AAIControllerBase>(BossOwner->GetController())->GetDetectedPlayer();
+		if (!PlayerActor)
+		{
+			PlayerActor = nullptr;
+			return FVector(0, 0, 0);
+		}
+	}
 
-	FVector dropCenter = player->GetActorLocation();
-	float radius = DropRockSpawnRadius;
+	FVector playerLocation = PlayerActor->GetActorLocation();
+	FVector spawnLocation =  playerLocation + FVector(0, 0, DropRockSpawnHeight);
 
-	float RandX = FMath::RandRange(-radius, radius);
-	float RandY = FMath::RandRange(-radius, radius);
-
-	FVector targetLocation = dropCenter + FVector(RandX, RandY, dropCenter.Z + DropRockSpawnHeight);
-
-	return targetLocation;
+	return spawnLocation;
 }
 
 #pragma endregion

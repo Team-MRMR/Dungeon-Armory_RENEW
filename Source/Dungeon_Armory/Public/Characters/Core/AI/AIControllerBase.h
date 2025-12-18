@@ -36,7 +36,7 @@ protected:
 
 /***** AI *****/
 public:
-	AActor* GetDetectedPlayer() const { return DetectedPlayer; }
+	AActor* GetDetectedPlayer() { return DetectedPlayer ? DetectedPlayer : nullptr; }
 
 protected:
 	// 현재 감지 중인 플레이어 참조

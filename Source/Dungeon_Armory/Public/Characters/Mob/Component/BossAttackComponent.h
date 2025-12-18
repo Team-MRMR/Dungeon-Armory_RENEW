@@ -48,11 +48,12 @@ public:
 
 // ---- Boss Skill - logic
 private:
-	bool bIsTimeDropRock;
-
-private:
 	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* RoarMontage;
+
+private:
+	AActor* PlayerActor;
+	bool bIsTimeDropRock;
 
 // ----- Boss Skill - DropRock
 private:
@@ -69,6 +70,9 @@ private:
 	float DropRockDuration = 5.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
 	float DropRockInterval = 1.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	float DropRockFirstSpawnDelay = 1.0f;
+
 
 	FTimerHandle DropRockTickTimerHandle;
 	FTimerHandle DropRockDurationTimerHandle;
@@ -88,7 +92,7 @@ public:
 	virtual void OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 
 private:
-	FVector GetRandomPointInDropRockSpawnRadius();
+	FVector GetSpawnLocationInDropRockSkill();
 
 // ----- Boss Skill - SpawnMob
 private:
