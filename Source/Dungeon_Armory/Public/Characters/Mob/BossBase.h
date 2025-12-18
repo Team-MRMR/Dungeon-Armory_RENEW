@@ -10,16 +10,6 @@
 
 class AMobBase;
 
-class UCharacterStatComponent;
-class UBossAttackComponent;
-class UMovementControllerComponent;
-class UTeamComponent;
-class UBlackboardComponent;
-
-class AAIController;
-
-class USoundBase;
-
 UCLASS()
 class DUNGEON_ARMORY_API ABossBase : public AMobBase
 {
@@ -36,6 +26,4 @@ protected:
 // ----- BossBase
 protected:
 	 void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	 //void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	 //virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent) override { /*Empty Body*/ };
 };

@@ -54,6 +54,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Team, meta = (AllowPrivateAccess = "true"))
 	UTeamComponent* TeamComponent;
 
+	virtual FGenericTeamId GetGenericTeamId() const override;
+	//virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
+
 /***** Input *****/
 private:
 	/** MappingContext */
@@ -138,13 +141,6 @@ protected:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-/***** Team *****/
-	/** IGenericTeamAgentInterface implementation */
-	virtual FGenericTeamId GetGenericTeamId() const override;
-
-	/** Assigns Team Agent to given TeamID */
-	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
 
 /***** Camera *****/
 public:

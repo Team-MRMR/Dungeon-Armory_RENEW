@@ -14,8 +14,6 @@ UTeamComponent::UTeamComponent()
 void UTeamComponent::BeginPlay()
 {
     Super::BeginPlay();
-
-	SetTeamType(TeamType);
 }
 
 ETeamAttitude::Type UTeamComponent::GetTeamAttitudeTowards(const AActor& Other) const
@@ -33,6 +31,16 @@ ETeamAttitude::Type UTeamComponent::GetTeamAttitudeTowards(const AActor& Other) 
             return ETeamAttitude::Friendly;
         case ERelationType::Hostile:
             return ETeamAttitude::Hostile;
+        case ERelationType::Neutral:
+			UE_LOG(LogTemp, Error, TEXT("%d(%s) and %d(%s) => Neutral"),
+                static_cast<int32>(OwnTeamType), *GetOwner()->GetName(),
+                static_cast<int32>(OtherTeamType), *Other.GetName());
+            return ETeamAttitude::Neutral;
+        default:
+            UE_LOG(LogTemp, Error, TEXT("%d(%s) and %d(%s) => Undefined"),
+                static_cast<int32>(OwnTeamType), *GetOwner()->GetName(),
+                static_cast<int32>(OtherTeamType), *Other.GetName());
+			return ETeamAttitude::Neutral;
         }
     }
 
@@ -46,6 +54,7 @@ ETeamType UTeamComponent::GetTeamType() const
 
 void UTeamComponent::SetTeamType(const ETeamType NewTeamType)
 {
+    TeamType = NewTeamType;
 	SetGenericTeamId(FGenericTeamId(static_cast<uint8>(NewTeamType)));
 }
 

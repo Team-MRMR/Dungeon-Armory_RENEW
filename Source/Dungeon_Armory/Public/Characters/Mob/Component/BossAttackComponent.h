@@ -4,12 +4,17 @@
 
 #include "CoreMinimal.h"
 
+#include "Characters/Mob/Mob.h"
 #include "Characters/Mob/BossBase.h"
 #include "Characters/Mob/Component/MobAttackComponent.h"
+
 #include "BossAttackComponent.generated.h"
 
-class AMob;
+class AActor;
 class UAnimMontage;
+
+class UMobAttackComponent;
+class ABossBase;
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class DUNGEON_ARMORY_API UBossAttackComponent : public UMobAttackComponent
@@ -43,14 +48,12 @@ public:
 
 // ---- Boss Skill - logic
 private:
-	bool bIsTimeDropRock;
-
-private:
-
-
-private:
 	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* RoarMontage;
+
+private:
+	AActor* PlayerActor;
+	bool bIsTimeDropRock;
 
 // ----- Boss Skill - DropRock
 private:
@@ -63,6 +66,16 @@ private:
 	float DropRockSpawnRadius = 500.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
 	int DropRockNumber = 5;
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	float DropRockDuration = 5.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	float DropRockInterval = 1.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Skill | DropRock", meta = (AllowPrivateAccess = "true"))
+	float DropRockFirstSpawnDelay = 1.0f;
+
+
+	FTimerHandle DropRockTickTimerHandle;
+	FTimerHandle DropRockDurationTimerHandle;
 
 	bool bIsDroppingRocks = false;
 
@@ -72,12 +85,14 @@ public:
 	void DropRockSkill_Implementation();
 
 	void SpawnRock(const FVector& Location);
+	void DropRockTick();
+	void EndDropRockSkill();
 
 	UFUNCTION()
 	virtual void OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
 
 private:
-	FVector GetRandomPointInDropRockSpawnRadius();
+	FVector GetSpawnLocationInDropRockSkill();
 
 // ----- Boss Skill - SpawnMob
 private:

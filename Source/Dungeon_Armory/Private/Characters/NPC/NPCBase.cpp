@@ -21,9 +21,6 @@ ANPCBase::ANPCBase()
 
 	// ½ºÅÈ ÄÄÆ÷³ÍÆ® »ý¼º
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
-
-	// ÆÀ ÄÄÆ÷³ÍÆ® »ý¼º
-	TeamComponent = CreateDefaultSubobject<UTeamComponent>(TEXT("TeamComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -41,8 +38,6 @@ void ANPCBase::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->BaseSpeed;
 	//GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	//GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-
-	TeamComponent->SetTeamType(ETeamType::Mob);
 }
 
 void ANPCBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
@@ -60,12 +55,13 @@ void ANPCBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 
 FGenericTeamId ANPCBase::GetGenericTeamId() const
 {
-	return TeamComponent->GetGenericTeamId();
-}
+	auto aiController = Cast<AAIControllerBase>(GetController());
+	if (!aiController)
+	{
+		return FGenericTeamId::NoTeam;
+	}
 
-void ANPCBase::SetGenericTeamId(const FGenericTeamId& NewTeamID)
-{
-	TeamComponent->SetTeamType(static_cast<ETeamType>(NewTeamID.GetId()));
+	return aiController->GetGenericTeamId();
 }
 
 void ANPCBase::SetCurrentState(NPCState NewState)

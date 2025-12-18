@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Characters/Mob/BossBase.h"
+#include "Characters/Mob/Component/BossAttackComponent.h"
 
 // Sets default values
 ABossBase::ABossBase()
@@ -33,15 +34,3 @@ void ABossBase::CreateAttackComponent(UAttackComponentBase* const NewAttackCompo
 		Super::CreateAttackComponent(AttackComponentBase);
 	}
 }
-
-//void ABossBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
-//{
-//	if (AttackComponent != nullptr || NewAttackComponent == nullptr)
-//	{
-//		return;
-//	}
-//
-//	auto BossAttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("BossAttackComponent"));
-//	auto AttackComponentBase = Cast<UAttackComponentBase>(BossAttackComponent);
-//	Super::CreateAttackComponent(AttackComponentBase);
-//}
