@@ -137,18 +137,18 @@ void UGatherComponent::DoLineTrace(FHitResult& OutHitResult)
     );
 
     // 5. 디버그용 선 그리기 (테스트 시에만)
-#if WITH_EDITOR
-    DrawDebugCapsule(
-        GetWorld(),
-        (Start + End) * 0.5f,
-        Stat->AttackRange * 0.5f,
-        Stat->AttackRadius,
-        FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-        bIsHit ? FColor::Red : FColor::Green,
-        false,
-        0.5f
-    );
-#endif
+//#if WITH_EDITOR
+//    DrawDebugCapsule(
+//        GetWorld(),
+//        (Start + End) * 0.5f,
+//        Stat->AttackRange * 0.5f,
+//        Stat->AttackRadius,
+//        FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+//        bIsHit ? FColor::Red : FColor::Green,
+//        false,
+//        0.5f
+//    );
+//#endif
 }
 
 void UGatherComponent::UpdateToolType()

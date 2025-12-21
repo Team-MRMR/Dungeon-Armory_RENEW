@@ -136,17 +136,17 @@ void UPlayerAttackComponent::OnAttack()
 		// 공격 범위 내의 모든 액터에 대해 처리
 		for (const FHitResult& Hit : HitResults)
 		{
-#if WITH_EDITOR
-			DrawDebugSphere(
-				GetWorld(),
-				Hit.ImpactPoint,
-				5.f,
-				12,
-				FColor::Red,
-				false,
-				0.5f
-			);
-#endif
+//#if WITH_EDITOR
+//			DrawDebugSphere(
+//				GetWorld(),
+//				Hit.ImpactPoint,
+//				5.f,
+//				12,
+//				FColor::Red,
+//				false,
+//				0.5f
+//			);
+//#endif
 			AActor* HitActor = Hit.GetActor();
 			if (!HitActor)
 				continue;
