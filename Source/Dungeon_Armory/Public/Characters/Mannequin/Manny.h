@@ -25,7 +25,6 @@ class UCharacterStatComponent;
 class UPlayerAttackComponent;
 class UGatherComponent;
 
-
 UCLASS()
 class DUNGEON_ARMORY_API AManny : public ACharacter, public IGenericTeamAgentInterface, public IIDamageable, public IIToolEuipable
 {
