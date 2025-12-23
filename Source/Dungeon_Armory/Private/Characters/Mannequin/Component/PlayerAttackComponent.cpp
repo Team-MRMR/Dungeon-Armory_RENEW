@@ -118,16 +118,16 @@ void UPlayerAttackComponent::OnAttack()
 	);
 
 #if WITH_EDITOR
-	DrawDebugCapsule(
-		GetWorld(),
-		(Start + End) * 0.5f,
-		Stat->AttackRange * 0.5f,
-		Stat->AttackRadius,
-		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-		bHit ? FColor::Red : FColor::Green,
-		false,
-		0.5f
-	);
+	//DrawDebugCapsule(
+	//	GetWorld(),
+	//	(Start + End) * 0.5f,
+	//	Stat->AttackRange * 0.5f,
+	//	Stat->AttackRadius,
+	//	FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+	//	bHit ? FColor::Red : FColor::Green,
+	//	false,
+	//	0.5f
+	//);
 #endif
 
 	// 공격이 적중했고, 스탯 컴포넌트가 유효할 때
@@ -136,17 +136,17 @@ void UPlayerAttackComponent::OnAttack()
 		// 공격 범위 내의 모든 액터에 대해 처리
 		for (const FHitResult& Hit : HitResults)
 		{
-//#if WITH_EDITOR
-//			DrawDebugSphere(
-//				GetWorld(),
-//				Hit.ImpactPoint,
-//				5.f,
-//				12,
-//				FColor::Red,
-//				false,
-//				0.5f
-//			);
-//#endif
+#if WITH_EDITOR
+			//DrawDebugSphere(
+			//	GetWorld(),
+			//	Hit.ImpactPoint,
+			//	5.f,
+			//	12,
+			//	FColor::Red,
+			//	false,
+			//	0.5f
+			//);
+#endif
 			AActor* HitActor = Hit.GetActor();
 			if (!HitActor)
 				continue;
