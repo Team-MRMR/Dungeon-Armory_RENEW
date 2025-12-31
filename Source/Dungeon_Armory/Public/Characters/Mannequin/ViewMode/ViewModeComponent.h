@@ -9,8 +9,9 @@
 UENUM(BlueprintType)
 enum class EViewMode : uint8
 {
-    TPS UMETA(DisplayName = "ThirdPerson"),
-    FPS UMETA(DisplayName = "FirstPerson")
+	NONE    UMETA(Hidden),
+    FPS     UMETA(DisplayName = "FirstPerson"),
+    TPS     UMETA(DisplayName = "ThirdPerson"),
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -26,6 +27,7 @@ public:
 
     void SetIndoorState(bool bIndoor);
 
+	EViewMode GetViewMode() const { return CurrentViewMode; }
 
 private:
     void UpdateViewMode(float DeltaTime);
@@ -39,8 +41,8 @@ private:
     USpringArmComponent* SpringArm = nullptr;
     UCameraComponent* Camera = nullptr;
 
+	EViewMode TargetViewMode = EViewMode::FPS;
     EViewMode CurrentViewMode = EViewMode::FPS;
-    EViewMode TargetViewMode = EViewMode::FPS;
 
     bool bIsIndoor = false;
 

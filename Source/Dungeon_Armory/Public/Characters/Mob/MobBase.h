@@ -16,7 +16,6 @@
 class UAttackComponentBase;
 
 class UCharacterStatComponent;
-class UMobAttackComponent;
 class UMovementControllerComponent;
 class UBlackboardComponent;
 
@@ -24,7 +23,7 @@ class AMobAIController;
 
 class USoundBase;
 
-UCLASS()
+UCLASS(Abstract)
 class DUNGEON_ARMORY_API AMobBase : public ACharacter, public IGenericTeamAgentInterface, public IIDamageable
 {
 	GENERATED_BODY() 
@@ -47,12 +46,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "IDamageable", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DieMontage;
-
-public:
-	void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AttackComponent")
-	//void CreateAttackComponent(UAttackComponentBase* NewAttackComponent);
-	//virtual void CreateAttackComponent_Implementation(UAttackComponentBase* NewAttackComponent);
 
 /***** Stat *****/
 public:

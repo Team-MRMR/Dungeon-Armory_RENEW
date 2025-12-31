@@ -233,7 +233,10 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 	}
 	else
 	{
-		AttackComponent->StartAttack();
+		if (ViewModeComponent->GetViewMode() == EViewMode::TPS)
+		{
+			AttackComponent->StartAttack();
+		}
 	}
 }
 

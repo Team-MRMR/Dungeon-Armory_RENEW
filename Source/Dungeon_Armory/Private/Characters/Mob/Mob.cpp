@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Characters/Mob/Mob.h"
+#include "Characters/Mob/Component/MobAttackComponent.h"
 
 AMob::AMob()
 {
-	CreateAttackComponent(nullptr);
+	AttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("AttackComponent"));
 }
 
 void AMob::BeginPlay()
@@ -17,31 +17,3 @@ void AMob::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) co
 {
 	Super::GetActorEyesViewPoint(OutLocation, OutRotation);
 }
-
-void AMob::CreateAttackComponent(UAttackComponentBase* NewAttackComponent)
-{
-	if (AttackComponent != nullptr)
-	{
-		return;
-	}
-
-	if (NewAttackComponent == nullptr)
-	{
-		auto MobAttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("MobAttackComponent"));
-		auto AttackComponentBase = Cast<UAttackComponentBase>(MobAttackComponent);
-		Super::CreateAttackComponent(AttackComponentBase);
-	}
-}
-
-
-//void AMob::CreateAttackComponent(UAttackComponentBase* NewAttackComponent)
-//{
-//	if (AttackComponent != nullptr)
-//	{
-//		return;
-//	}
-//
-//	auto MobAttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("MobAttackComponent"));
-//	auto AttackComponentBase = Cast<UAttackComponentBase>(MobAttackComponent);
-//	Super::CreateAttackComponent(AttackComponentBase);
-//}
