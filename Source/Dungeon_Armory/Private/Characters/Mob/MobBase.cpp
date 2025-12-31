@@ -66,14 +66,6 @@ void AMobBase::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 	OutRotation = GetActorRotation();
 }
 
-void AMobBase::CreateAttackComponent(UAttackComponentBase* const NewAttackComponent)
-{
-	if (AttackComponent || !NewAttackComponent)
-		return;
-
-	AttackComponent = NewAttackComponent;
-}
-
 FGenericTeamId AMobBase::GetGenericTeamId() const
 {
 	auto aiController = Cast<AAIControllerBase>(GetController());

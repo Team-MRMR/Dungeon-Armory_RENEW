@@ -42,19 +42,18 @@ void UViewModeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 void UViewModeComponent::SetIndoorState(bool bIndoor)
 {
     EViewMode DesiredMode = bIndoor ? EViewMode::FPS : EViewMode::TPS;
+    if (CurrentViewMode == DesiredMode)
+        return;
 
-    if (TargetViewMode != DesiredMode)
-    {
-        bIsIndoor = bIndoor;
-        TargetViewMode = DesiredMode;
-        InterpAlpha = 0.0f;
-    }
+    bIsIndoor = bIndoor;
+    CurrentViewMode = DesiredMode;
+    InterpAlpha = 0.0f;
 }
 
 void UViewModeComponent::UpdateViewMode(float DeltaTime)
 {
-    FVector TargetCameraPos = (TargetViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
-    float TargetArmLength = (TargetViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
+    FVector TargetCameraPos = (CurrentViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
+    float TargetArmLength = (CurrentViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
 
     FVector CurrentCameraPos = Camera->GetRelativeLocation();
     float CurrentArmLength = SpringArm->TargetArmLength;
