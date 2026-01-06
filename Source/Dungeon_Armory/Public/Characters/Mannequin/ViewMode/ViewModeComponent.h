@@ -41,8 +41,8 @@ private:
     USpringArmComponent* SpringArm = nullptr;
     UCameraComponent* Camera = nullptr;
 
-	EViewMode TargetViewMode = EViewMode::FPS;
-    EViewMode CurrentViewMode = EViewMode::FPS;
+	EViewMode TargetViewMode = EViewMode::TPS;
+    EViewMode CurrentViewMode = EViewMode::TPS;
 
     bool bIsIndoor = false;
 

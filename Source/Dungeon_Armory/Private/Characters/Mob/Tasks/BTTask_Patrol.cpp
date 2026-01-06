@@ -51,6 +51,8 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (!bFound)
 		return EBTNodeResult::Failed;
 
+	UE_LOG(LogTemp, Warning, TEXT("HomeLocation - RandomLocation: %f."), FVector::Distance(HomeLocation, RandomLocation));
+
 	Blackboard->SetValueAsVector(BBKeys::Mob::RandomLocation, RandomLocation.Location);
 
 	FAIMoveRequest MoveRequest;
