@@ -5,7 +5,7 @@
 
 ABossBase::ABossBase()
 {
-	_AttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("AttackComponent"));
+	AttackComponent = CreateDefaultSubobject<UBossAttackComponent>(TEXT("AttackComponent"));
 }
 
 void ABossBase::BeginPlay()

@@ -5,7 +5,7 @@
 
 AMob::AMob()
 {
-	_AttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("AttackComponent"));
+	AttackComponent = CreateDefaultSubobject<UMobAttackComponent>(TEXT("AttackComponent"));
 }
 
 void AMob::BeginPlay()

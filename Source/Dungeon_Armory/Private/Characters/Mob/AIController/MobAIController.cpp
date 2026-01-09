@@ -46,7 +46,7 @@ void AMobAIController::OnPossess(APawn* InPawn)
     if (MobBase)
     {
         StatComponent = MobBase->StatComponent;
-        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->_AttackComponent);
+        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->AttackComponent);
     }
 
     // 비헤이비어 트리 실행
