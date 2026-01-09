@@ -4,6 +4,8 @@
 #include "Characters/Mannequin/ViewMode/ViewModeComponent.h"
 #include "GameFramework/Character.h"
 
+class AManny;
+
 AViewModeTriggerBox::AViewModeTriggerBox()
 {
     PrimaryActorTick.bCanEverTick = false;
@@ -15,23 +17,6 @@ void AViewModeTriggerBox::BeginPlay()
 
     OnActorBeginOverlap.AddDynamic(this, &AViewModeTriggerBox::OnTriggerBeginOverlap);
     OnActorEndOverlap.AddDynamic(this, &AViewModeTriggerBox::OnTriggerEndOverlap);
-
-    //// --- 수동으로 Overlapping 상태 확인 및 처리 ---
-    //TArray<AActor*> OverlappingActors;
-    //GetOverlappingActors(OverlappingActors, ACharacter::StaticClass());
-
-    //for (AActor* Actor : OverlappingActors)
-    //{
-    //    ACharacter* Character = Cast<ACharacter>(Actor);
-    //    if (!Character)
-    //        continue;
-
-    //    UViewModeComponent* ViewModeComponent = Character->FindComponentByClass<UViewModeComponent>();
-    //    if (ViewModeComponent)
-    //    {
-    //        ViewModeComponent->SetIndoorState(true); // 시작 시 트리거 안에 있으면 실내로 설정
-    //    }
-    //}
 }
 
 void AViewModeTriggerBox::OnTriggerBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -43,7 +28,7 @@ void AViewModeTriggerBox::OnTriggerBeginOverlap(AActor* OverlappedActor, AActor*
     UViewModeComponent* ViewModeComponent = Character->FindComponentByClass<UViewModeComponent>();
     if (ViewModeComponent)
     {
-        ViewModeComponent->SetIndoorState(true); // 실내로 진입
+        ViewModeComponent->SetViewMode(EViewMode::FPS); // 실내로 진입
     }
 }
 
@@ -56,6 +41,6 @@ void AViewModeTriggerBox::OnTriggerEndOverlap(AActor* OverlappedActor, AActor* O
     UViewModeComponent* ViewModeComponent = Character->FindComponentByClass<UViewModeComponent>();
     if (ViewModeComponent)
     {
-        ViewModeComponent->SetIndoorState(false); // 실외로 나감
+        ViewModeComponent->SetViewMode(EViewMode::TPS); // 실외로 나감
     }
 }

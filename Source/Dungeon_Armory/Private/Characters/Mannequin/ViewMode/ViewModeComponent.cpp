@@ -39,14 +39,12 @@ void UViewModeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
     UpdateViewMode(DeltaTime);
 }
 
-void UViewModeComponent::SetIndoorState(bool bIndoor)
+void UViewModeComponent::SetViewMode(EViewMode nextViewMode)
 {
-    EViewMode DesiredMode = bIndoor ? EViewMode::FPS : EViewMode::TPS;
-    if (CurrentViewMode == DesiredMode)
+    if (CurrentViewMode == nextViewMode)
         return;
 
-    bIsIndoor = bIndoor;
-    CurrentViewMode = DesiredMode;
+    CurrentViewMode = nextViewMode;
     InterpAlpha = 0.0f;
 }
 
@@ -58,14 +56,10 @@ void UViewModeComponent::UpdateViewMode(float DeltaTime)
     FVector CurrentCameraPos = Camera->GetRelativeLocation();
     float CurrentArmLength = SpringArm->TargetArmLength;
 
-    bool bViewModeChanged = (CurrentViewMode != TargetViewMode);
-
     const float Tolerance = 1.0f;
-    bool bNeedCorrection =
-        !CurrentCameraPos.Equals(TargetCameraPos, Tolerance) ||
-        !FMath::IsNearlyEqual(CurrentArmLength, TargetArmLength, Tolerance);
+    bool bNeedCorrection = !FMath::IsNearlyEqual(CurrentArmLength, TargetArmLength, Tolerance);
 
-    if (bViewModeChanged || bNeedCorrection)
+    if (bNeedCorrection)
     {
         InterpAlpha += DeltaTime * InterpSpeed;
         InterpAlpha = FMath::Clamp(InterpAlpha, 0.0f, 1.0f);

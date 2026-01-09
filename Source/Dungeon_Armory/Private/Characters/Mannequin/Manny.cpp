@@ -213,16 +213,16 @@ void AManny::LeftClickAction(const FInputActionValue& Value)
 
 	// 4. 디버그용으로 시각화	
 #if WITH_EDITOR
-	//DrawDebugCapsule(
-	//	GetWorld(),
-	//	(Start + End) * 0.5f,
-	//	StatComponent->AttackRange * 0.5f,
-	//	StatComponent->AttackRadius,
-	//	FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-	//	bHit ? FColor::Red : FColor::Green,
-	//	false,
-	//	0.5f
-	//);
+	DrawDebugCapsule(
+		GetWorld(),
+		(Start + End) * 0.5f,
+		StatComponent->AttackRange * 0.5f,
+		StatComponent->AttackRadius,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+		bHit ? FColor::Red : FColor::Green,
+		false,
+		0.5f
+	);
 #endif
 
 	auto GatherableActor = Cast<AGatherableActorBase>(HitActor);
