@@ -106,25 +106,25 @@ void AMobAIController::Tick(float DeltaTime)
     float HalfVision = StatComponent->PeripheralVisionAngleDegrees * 0.5f;
 
     // --- 시야각 판정 ---
-    if (AngleDeg > HalfVision)
+    EMobState MobState = EMobState::None;
+    if (AngleDeg <= HalfVision)
     {
         // --- 거리 계산 ---
-        float Distance = FVector::Dist2D(MobLocation, PlayerLocation);
+        float Distance = FVector::Distance(MobLocation, PlayerLocation);
 
         // --- 거리 기반 상태 전이 ---
-        EMobState MobState = EMobState::None;
         if (Distance <= StatComponent->AttackableDistance)  // 공격 범위 내라면
         {
             MobState = EMobState::Battle;
         }
-        else if (Distance <= StatComponent->SightRadius)    // 추격 범위 내라면
-        {
-            MobState = EMobState::Chase;
-        }
-
-        SetMobState(MobState);
-        StatComponent->SetSpeedForState(MobState);
     }
+    else
+    {
+        MobState = EMobState::Chase;
+    }
+
+    SetMobState(MobState);
+    StatComponent->SetSpeedForState(MobState);
 }
 
 EMobState AMobAIController::GetMobState() const
@@ -251,7 +251,6 @@ void AMobAIController::ExtentdPerceptionRadius()
         return;
 
     SightConfig->PeripheralVisionAngleDegrees = 360.f;
-	UE_LOG(LogTemp, Warning, TEXT("New PeripheralVisionAngleDegrees: %f."), SightConfig->PeripheralVisionAngleDegrees);
 
     AIPerception->ConfigureSense(*SightConfig);
     AIPerception->RequestStimuliListenerUpdate();

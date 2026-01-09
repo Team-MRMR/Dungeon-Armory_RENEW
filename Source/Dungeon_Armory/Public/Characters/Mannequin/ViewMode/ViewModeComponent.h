@@ -25,8 +25,9 @@ public:
     virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-    void SetIndoorState(bool bIndoor);
+    void SetViewMode(EViewMode nextViewMode);
 
+	UFUNCTION(BlueprintCallable, Category = "ViewMode")
 	EViewMode GetViewMode() const { return CurrentViewMode; }
 
 private:
