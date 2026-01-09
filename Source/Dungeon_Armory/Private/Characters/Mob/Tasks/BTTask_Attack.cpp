@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (!Mob)
 		return EBTNodeResult::Failed;
 
-	auto AttackComponent = Mob->AttackComponent;
+	auto AttackComponent = Mob->_AttackComponent;
 	if (!AttackComponent)
 		return EBTNodeResult::Failed;
 
