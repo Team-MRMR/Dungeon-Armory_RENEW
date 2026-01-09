@@ -46,7 +46,7 @@ void AMobAIController::OnPossess(APawn* InPawn)
     if (MobBase)
     {
         StatComponent = MobBase->StatComponent;
-        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->AttackComponent);
+        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->_AttackComponent);
     }
 
     // 비헤이비어 트리 실행
@@ -116,6 +116,10 @@ void AMobAIController::Tick(float DeltaTime)
         if (Distance <= StatComponent->AttackableDistance)  // 공격 범위 내라면
         {
             MobState = EMobState::Battle;
+        }
+        else
+        {
+            MobState = EMobState::Chase;
         }
     }
     else
