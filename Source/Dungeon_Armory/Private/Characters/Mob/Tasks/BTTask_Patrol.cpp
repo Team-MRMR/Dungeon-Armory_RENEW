@@ -51,8 +51,6 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (!bFound)
 		return EBTNodeResult::Failed;
 
-	UE_LOG(LogTemp, Warning, TEXT("HomeLocation - RandomLocation: %f."), FVector::Distance(HomeLocation, RandomLocation));
-
 	Blackboard->SetValueAsVector(BBKeys::Mob::RandomLocation, RandomLocation.Location);
 
 	FAIMoveRequest MoveRequest;
@@ -61,7 +59,17 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 	FNavPathSharedPtr NavPath;
 	FPathFollowingRequestResult Result = AIController->MoveTo(MoveRequest, &NavPath);
-	
+
+	if (Result.Code == EPathFollowingRequestResult::Failed)
+	{
+		return EBTNodeResult::Failed; // 이동 실패 시 즉시 실패 반환
+	}
+
+	if (Result.Code == EPathFollowingRequestResult::AlreadyAtGoal)
+	{
+		return EBTNodeResult::Succeeded; // 이미 도착했다면 즉시 성공 반환
+	}
+
 	return EBTNodeResult::InProgress;
 }
 

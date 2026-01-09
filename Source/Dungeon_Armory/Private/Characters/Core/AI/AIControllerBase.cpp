@@ -66,18 +66,25 @@ void AAIControllerBase::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingRe
     if (!BehaviorTreeComponent)
         return;
 
-    const UBTNode* ActiveNode = BehaviorTreeComponent->GetActiveNode();
-    if (!ActiveNode)
-        return;
-
-    // IMovableTask 인터페이스를 사용하여 이동 완료 처리
-    if (IMovableTask* MovableTask = Cast<IMovableTask>(const_cast<UBTNode*>(ActiveNode)))
+    // 성공(0)인 경우에만 태스크를 완료 처리합니다.
+    // 결과가 Aborted(3)라면, 새로운 이동이 시작되었거나 중단된 것이므로 무시해야 합니다.
+    if (Result != EPathFollowingResult::Success)
     {
-        MovableTask->OnMoveCompleted(BehaviorTreeComponent);
+        UE_LOG(LogTemp, Log, TEXT("Move skipped or aborted. Result: %d"), (int)Result);
+        return;
+    }
 
-        if (Result != EPathFollowingResult::Success)
+    const UBTNode* ActiveNode = (BehaviorTreeComponent->GetActiveNode());
+    if (ActiveNode)
+    {
+        UE_LOG(LogTemp, Log, TEXT("Move Completed on Node: %s"), *ActiveNode->GetName());
+
+        // IIMovableTask 인터페이스를 사용하여 이동 완료 처리
+        IMovableTask* MovableTask = const_cast<IMovableTask*>(Cast<IMovableTask>(ActiveNode));
+        if (MovableTask)
         {
-            BehaviorTreeComponent->RestartTree();
+            UE_LOG(LogTemp, Warning, TEXT("MovableTask OnMoveCompleted called. | %d"), (int)Result);
+            MovableTask->OnMoveCompleted(BehaviorTreeComponent);
         }
     }
 }
