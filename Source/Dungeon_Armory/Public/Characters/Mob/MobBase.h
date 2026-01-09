@@ -58,7 +58,7 @@ public:
 
 /***** Attack *****/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	UAttackComponentBase* _AttackComponent;
+	UAttackComponentBase* AttackComponent;
 
 /***** Sounds *****/
 protected:

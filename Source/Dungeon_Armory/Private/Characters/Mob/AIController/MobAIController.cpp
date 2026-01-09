@@ -46,7 +46,7 @@ void AMobAIController::OnPossess(APawn* InPawn)
     if (MobBase)
     {
         StatComponent = MobBase->StatComponent;
-        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->_AttackComponent);
+        MobAttackComponent = Cast<UMobAttackComponent>(MobBase->AttackComponent);
     }
 
     // 비헤이비어 트리 실행
@@ -147,6 +147,7 @@ void AMobAIController::SetMobState(EMobState NewState)
     EMobState CurrState = GetMobState();
     if (CurrState != NewState)
     {
+        UE_LOG(LogTemp, Warning, TEXT("@@@ State Changed: %d -> %d"), (int)CurrState, (int)NewState);
         // 동일 상태로의 변경은 무시
         BlackboardComponent->SetValueAsEnum(MobStateKey, static_cast<uint8>(NewState));
     }
@@ -169,20 +170,6 @@ void AMobAIController::InitializeBlackboardKeys()
 void AMobAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
 	Super::OnMoveCompleted(RequestID, Result);
-
-	if (!BehaviorTreeComponent)
-		return;
-
-	const UBTNode* ActiveNode = (BehaviorTreeComponent->GetActiveNode());
-	if (ActiveNode)
-	{
-		// IIMovableTask 인터페이스를 사용하여 이동 완료 처리
-		IMovableTask* MovableTask = const_cast<IMovableTask*>(Cast<IMovableTask>(ActiveNode));
-		if (MovableTask)
-		{
-			MovableTask->OnMoveCompleted(BehaviorTreeComponent);
-		}
-	}
 }
 
 // 감지 이벤트 처리
