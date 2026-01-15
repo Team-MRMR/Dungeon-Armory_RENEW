@@ -30,10 +30,14 @@ namespace BBKeys
 
 		// 공격 관련 객체
 		static const FName AttackComponent(TEXT("AttackComponent"));
+		
+		// 스킬 관련 부울
+		static const FName bSkillPhase(TEXT("bSkillPhase"));
 
 		// 거리 관련 수치
 		static const FName HomeLocation(TEXT("HomeLocation"));
 		static const FName RandomLocation(TEXT("RandomLocation"));
+
 	}
 }
 
@@ -57,6 +61,9 @@ private:
 	UMobAttackComponent* MobAttackComponent;
 
 /***** Behavior Tree *****/
+public:
+	void SetSkillPhase(bool bSkillPhase);
+
 protected:
 	// 블랙보드 키 이름 상수
 	static const FName MobStateKey;

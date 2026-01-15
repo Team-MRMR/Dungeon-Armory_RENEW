@@ -20,7 +20,6 @@ public:
 	UBTTask_Chase();
 
 protected:
-	virtual void InitializeFromAsset(UBehaviorTree& BehaviorTree) override;
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:  // IIMovableTask

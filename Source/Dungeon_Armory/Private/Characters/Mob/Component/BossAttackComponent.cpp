@@ -2,7 +2,7 @@
 
 #include "Characters/Mob/Component/BossAttackComponent.h"
 
-#include "Characters/Core/AI/AIControllerBase.h"
+#include "Characters/Mob/AIController/MobAIController.h"
 
 UBossAttackComponent::UBossAttackComponent()
 {
@@ -10,6 +10,7 @@ UBossAttackComponent::UBossAttackComponent()
 	AttackCount = 0;
 
 	bIsTimeDropRock = true;
+
 }
 
 void UBossAttackComponent::BeginPlay()
@@ -32,10 +33,15 @@ void UBossAttackComponent::StartAttack()
 
 		bIsTimeDropRock ? DropRockSkill_Implementation() : SpawnMobSkill_Implementation();
 		bIsTimeDropRock = !bIsTimeDropRock;
+
+		Cast<AMobAIController>(BossOwner->GetController())->SetSkillPhase(true);
+
 		return;
 	}
-
-	IncrementAttackCount();
+	else
+	{
+		IncrementAttackCount();
+	}
 }
 
 #pragma region Boss Skill - DropRock
@@ -50,8 +56,8 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 
 	bIsDroppingRocks = true;
 
-	// 몽타주 재생
-	AnimInstance->Montage_Play(RoarMontage);
+	// 몽타주 재생은 Task에서 처리
+	// BossOwner->PlayAnimMontage(RoarMontage);
 
 	// 특정 몽타주 전용 종료 델리게이트 바인딩
 	FOnMontageEnded EndDelegate;
@@ -84,13 +90,6 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 		DropRockDuration,
 		false
 	);
-
-	//// DropRock 스폰
-	//for (int count = 0; count < DropRockNumber; ++count)
-	//{
-	//	FVector randomLocation = GetRandomPointInDropRockSpawnRadius();
-	//	SpawnRock(randomLocation);
-	//}
 }
 
 void UBossAttackComponent::SpawnRock(const FVector& Location)
@@ -123,9 +122,6 @@ void UBossAttackComponent::EndDropRockSkill()
 
 void UBossAttackComponent::OnDropRockAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	// 애니메이션이 먼저 끝나도
-	// 스킬은 타이머 기준으로 동작
-	// bIsDroppingRocks = false;
 }
 
 FVector UBossAttackComponent::GetSpawnLocationInDropRockSkill()
@@ -159,8 +155,8 @@ void UBossAttackComponent::SpawnMobSkill_Implementation()
 	if (!RoarMontage)
 		return;
 
-	// 몽타주 재생
-	AnimInstance->Montage_Play(RoarMontage);
+	// 몽타주 재생은 Task에서 처리
+	// BossOwner->PlayAnimMontage(RoarMontage);
 
 	// 특정 몽타주 전용 종료 델리게이트 바인딩
 	FOnMontageEnded EndDelegate;
@@ -197,6 +193,7 @@ void UBossAttackComponent::SpawnMob(const FVector& Location)
 void UBossAttackComponent::OnSpawnMobAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	bIsSpawningMobs = false;
+
 }
 
 FVector UBossAttackComponent::GetRandomPointInMobSpawnRadius()

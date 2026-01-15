@@ -18,11 +18,6 @@ UBTTask_Chase::UBTTask_Chase()
     NodeName = TEXT("Mob Chase");
 }
 
-void UBTTask_Chase::InitializeFromAsset(UBehaviorTree& BehaviorTreeAsset)
-{
-    Super::InitializeFromAsset(BehaviorTreeAsset);
-}
-
 EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     AAIController* AIController = OwnerComp.GetAIOwner();
