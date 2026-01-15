@@ -10,8 +10,8 @@ UENUM(BlueprintType)
 enum class EViewMode : uint8
 {
 	NONE    UMETA(Hidden),
-    FPS     UMETA(DisplayName = "FirstPerson"),
-    TPS     UMETA(DisplayName = "ThirdPerson"),
+    FPS     UMETA(DisplayName = "FPS"),
+    TPS     UMETA(DisplayName = "TPS"),
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -25,6 +25,7 @@ public:
     virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable, Category = "ViewMode")
     void SetViewMode(EViewMode nextViewMode);
 
 	UFUNCTION(BlueprintCallable, Category = "ViewMode")
@@ -32,8 +33,8 @@ public:
 
 private:
     void UpdateViewMode(float DeltaTime);
-    void ApplyCameraTransform(float Alpha);
-    void ApplySpringArmTransform(float Alpha);
+    //void ApplyCameraTransform(float Alpha);
+    //void ApplySpringArmTransform(float Alpha);
 
 private:
     USkeletalMeshComponent* Mesh = nullptr;

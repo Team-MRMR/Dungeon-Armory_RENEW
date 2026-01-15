@@ -50,11 +50,11 @@ void UViewModeComponent::SetViewMode(EViewMode nextViewMode)
 
 void UViewModeComponent::UpdateViewMode(float DeltaTime)
 {
-    FVector TargetCameraPos = (CurrentViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
-    float TargetArmLength = (CurrentViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
-
     FVector CurrentCameraPos = Camera->GetRelativeLocation();
     float CurrentArmLength = SpringArm->TargetArmLength;
+
+    FVector TargetCameraPos = (CurrentViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
+    float TargetArmLength = (CurrentViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
 
     const float Tolerance = 1.0f;
     bool bNeedCorrection = !FMath::IsNearlyEqual(CurrentArmLength, TargetArmLength, Tolerance);
@@ -71,48 +71,34 @@ void UViewModeComponent::UpdateViewMode(float DeltaTime)
         Camera->SetRelativeLocation(NewCameraPos);
         SpringArm->TargetArmLength = NewArmLength;
 
-        // 메시 렌더링 설정
-        if (Mesh)
-        {
-            if (InterpAlpha > FPSRenderOffTiming && TargetViewMode == EViewMode::FPS)
-            {
-                Mesh->SetOwnerNoSee(false);
-            }
-            else if (InterpAlpha > TPSRenderOffTiming && TargetViewMode == EViewMode::TPS)
-            {
-                Mesh->SetOwnerNoSee(false);
-            }
-        }
-
         if (InterpAlpha >= 1.0f)
         {
             // 보정 완료
-            CurrentViewMode = TargetViewMode;
             InterpAlpha = 0.f; // 다음 보간을 위해 초기화
         }
     }
 }
 
-void UViewModeComponent::ApplyCameraTransform(float Alpha)
-{
-    if (!Camera)
-        return;
-
-    FVector FromPos = (CurrentViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
-    FVector ToPos = (TargetViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
-
-    FVector NewCameraPosition = FMath::Lerp(FromPos, ToPos, Alpha);
-    Camera->SetRelativeLocation(NewCameraPosition);
-}
-
-void UViewModeComponent::ApplySpringArmTransform(float Alpha)
-{
-    if (!SpringArm)
-        return;
-
-    float FromLength = (CurrentViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
-    float ToLength = (TargetViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
-
-    float NewLength = FMath::Lerp(FromLength, ToLength, Alpha);
-    SpringArm->TargetArmLength = NewLength;
-}
+//void UViewModeComponent::ApplyCameraTransform(float Alpha)
+//{
+//    if (!Camera)
+//        return;
+//
+//    FVector FromPos = (CurrentViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
+//    FVector ToPos = (TargetViewMode == EViewMode::FPS) ? FPSCameraPosition : TPSCameraPosition;
+//
+//    FVector NewCameraPosition = FMath::Lerp(FromPos, ToPos, Alpha);
+//    Camera->SetRelativeLocation(NewCameraPosition);
+//}
+//
+//void UViewModeComponent::ApplySpringArmTransform(float Alpha)
+//{
+//    if (!SpringArm)
+//        return;
+//
+//    float FromLength = (CurrentViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
+//    float ToLength = (TargetViewMode == EViewMode::FPS) ? FPSTargetArmLength : TPSTargetArmLength;
+//
+//    float NewLength = FMath::Lerp(FromLength, ToLength, Alpha);
+//    SpringArm->TargetArmLength = NewLength;
+//}

@@ -26,7 +26,7 @@ AMobBase::AMobBase()
 	// ½ºÅÈ ÄÄÆ÷³ÍÆ® »ý¼º
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 
-	AttackComponent = nullptr;
+	_AttackComponent = nullptr;
 
 	DisappearTime = 2.0f;
 }

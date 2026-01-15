@@ -18,6 +18,8 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+	void CheckInitialOverlap();
+
     UFUNCTION()
     void OnTriggerBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
