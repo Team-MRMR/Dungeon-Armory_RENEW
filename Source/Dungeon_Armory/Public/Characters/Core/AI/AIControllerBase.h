@@ -36,6 +36,7 @@ protected:
 
 /***** AI *****/
 public:
+	void ResetDetectedPlayer() { DetectedPlayer = nullptr; }
 	AActor* GetDetectedPlayer() { return DetectedPlayer ? DetectedPlayer : nullptr; }
 
 protected:

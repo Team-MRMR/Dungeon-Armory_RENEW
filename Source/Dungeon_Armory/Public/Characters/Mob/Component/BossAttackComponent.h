@@ -36,7 +36,7 @@ public:
 private:
 	ABossBase* BossOwner;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Attack", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	int SkillCycleByCount = 4;
 
 	int AttackCount = 0;
@@ -47,9 +47,12 @@ public:
 	void ResetAttackCount() { AttackCount = 0; }
 
 // ---- Boss Skill - logic
-private:
+public:
 	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* RoarMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* StunMontage;
 
 private:
 	AActor* PlayerActor;

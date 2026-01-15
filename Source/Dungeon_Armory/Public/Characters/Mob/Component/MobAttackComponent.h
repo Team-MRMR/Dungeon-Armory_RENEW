@@ -13,6 +13,8 @@
 class UAnimMontage;
 class UCharacterStatComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackFinishedDelegate);
+
 UCLASS(Blueprintable,ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUNGEON_ARMORY_API UMobAttackComponent : public UAttackComponentBase
 {
@@ -57,8 +59,12 @@ public:
 	bool GetCanAttack() const;
 	void OnAttack() override;
 	void OnAttackEnd() override;
+
 	UFUNCTION()
 	virtual void OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted);
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnAttackFinishedDelegate OnAttackFinished;
 
 private:
 	virtual float CalculateDamage(UCharacterStatComponent* Attacker, UCharacterStatComponent* Defender);

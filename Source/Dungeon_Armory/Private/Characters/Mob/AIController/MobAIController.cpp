@@ -131,6 +131,14 @@ void AMobAIController::Tick(float DeltaTime)
     StatComponent->SetSpeedForState(MobState);
 }
 
+void AMobAIController::SetSkillPhase(bool bSkillPhase)
+{
+    if (!BlackboardComponent)
+        return;
+
+	BlackboardComponent->SetValueAsBool(BBKeys::Mob::bSkillPhase, bSkillPhase);
+}
+
 EMobState AMobAIController::GetMobState() const
 {
     if (!BlackboardComponent)
@@ -147,7 +155,6 @@ void AMobAIController::SetMobState(EMobState NewState)
     EMobState CurrState = GetMobState();
     if (CurrState != NewState)
     {
-        UE_LOG(LogTemp, Warning, TEXT("@@@ State Changed: %d -> %d"), (int)CurrState, (int)NewState);
         // 동일 상태로의 변경은 무시
         BlackboardComponent->SetValueAsEnum(MobStateKey, static_cast<uint8>(NewState));
     }

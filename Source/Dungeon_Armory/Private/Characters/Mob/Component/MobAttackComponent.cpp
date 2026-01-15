@@ -181,11 +181,15 @@ void UMobAttackComponent::OnAttack()
 void UMobAttackComponent::OnAttackEnd()
 {
 	bIsEndedAttack = true;
+
+	OnAttackFinished.Broadcast();
 }
 
 void UMobAttackComponent::OnAttackAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	bIsEndedAttack = true;
+
+	OnAttackFinished.Broadcast();
 }
 
 float UMobAttackComponent::CalculateDamage(UCharacterStatComponent* Attacker, UCharacterStatComponent* Defender)
