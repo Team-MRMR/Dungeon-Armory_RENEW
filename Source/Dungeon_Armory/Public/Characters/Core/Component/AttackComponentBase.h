@@ -24,6 +24,9 @@ protected:
 	virtual void BeginPlay() override;
 
 /***** Attack *****/
+public:
+	virtual void ResetAttackComponent();
+
 protected:
 	UAnimInstance* AnimInstance;
 	UCharacterStatComponent* StatComponent;

@@ -39,9 +39,12 @@ void UBTTask_Stun::OnStunFinished(UBehaviorTreeComponent* OwnerComp)
     ABossBase* Boss = (AIController) ? Cast<ABossBase>(AIController->GetPawn()) : nullptr;
 
     if (!Boss)
+    {
 		FinishLatentTask(*OwnerComp, EBTNodeResult::Failed);
+        return;
+    }
 
-	Boss->StopAnimMontage();
+    Boss->StopAnimMontage();
 
     FinishLatentTask(*OwnerComp, EBTNodeResult::Succeeded);
 }

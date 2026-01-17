@@ -49,6 +49,13 @@ void UMobAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	}
 }
 
+void UMobAttackComponent::ResetAttackComponent()
+{
+	bIsStartedAttack = false;
+	bIsEndedAttack = false;
+	bCanAttack = true;
+}
+
 void UMobAttackComponent::StartAttack()
 {
 	if (!AnimInstance)
