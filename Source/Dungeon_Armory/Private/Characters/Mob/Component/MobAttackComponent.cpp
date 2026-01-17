@@ -133,16 +133,16 @@ void UMobAttackComponent::OnAttack()
 	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
 
 #if WITH_EDITOR
-	//DrawDebugCapsule(
-	//	GetWorld(),
-	//	(Start + End) * 0.5f,
-	//	TraceDistance * 0.5f,
-	//	Radius,
-	//	FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-	//	TraceColor,
-	//	false,
-	//	0.25f
-	//);
+	DrawDebugCapsule(
+		GetWorld(),
+		(Start + End) * 0.5f,
+		TraceDistance * 0.5f,
+		Radius,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+		TraceColor,
+		false,
+		0.25f
+	);
 #endif
 
 	if (bHit)
