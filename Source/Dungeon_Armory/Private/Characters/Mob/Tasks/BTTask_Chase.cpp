@@ -33,10 +33,10 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
     // MoveToActor를 사용하면 타겟이 움직여도 엔진이 자동으로 추적합니다.
     // bAllowRebind를 true로 설정하면 타겟 위치 변화에 대응합니다.
     FAIMoveRequest MoveRequest(TargetActor);
-    MoveRequest.SetAcceptanceRadius(10.f);
+    MoveRequest.SetAcceptanceRadius(100.f);
     MoveRequest.SetCanStrafe(true);
 
-    EPathFollowingRequestResult::Type RequestResult = AIController->MoveToActor(TargetActor, 10.f);
+    EPathFollowingRequestResult::Type RequestResult = AIController->MoveTo(MoveRequest);
 
     if (RequestResult == EPathFollowingRequestResult::Failed)
     {

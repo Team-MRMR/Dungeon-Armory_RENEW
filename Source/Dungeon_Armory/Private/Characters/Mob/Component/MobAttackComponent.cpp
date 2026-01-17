@@ -133,16 +133,16 @@ void UMobAttackComponent::OnAttack()
 	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
 
 #if WITH_EDITOR
-	//DrawDebugCapsule(
-	//	GetWorld(),
-	//	(Start + End) * 0.5f,
-	//	TraceDistance * 0.5f,
-	//	Radius,
-	//	FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
-	//	TraceColor,
-	//	false,
-	//	0.25f
-	//);
+	DrawDebugCapsule(
+		GetWorld(),
+		(Start + End) * 0.5f,
+		TraceDistance * 0.5f,
+		Radius,
+		FRotationMatrix::MakeFromZ(End - Start).ToQuat(),
+		TraceColor,
+		false,
+		0.25f
+	);
 #endif
 
 	if (bHit)
@@ -175,8 +175,6 @@ void UMobAttackComponent::OnAttack()
 			{
 				const float DamageAmount = CalculateDamage(StatComponent, TargetStat);
 				DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
-
-				UE_LOG(LogTemp, Warning, TEXT("Mob Attack Hit Actor: %s \nMob DMG: %f. \n Player Remain HP: %f."), *HitActor->GetName(), DamageAmount, TargetStat->CurrentHealth);
 			}
 		}
 	}
