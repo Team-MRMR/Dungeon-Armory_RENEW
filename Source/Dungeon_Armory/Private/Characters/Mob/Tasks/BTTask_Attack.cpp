@@ -53,7 +53,7 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 
     // 2. 회전
     FRotator CurrentRot = Mob->GetActorRotation();
-	FRotator NewRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaSeconds, 12.f);
+	FRotator NewRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaSeconds, 25.f);
     Mob->SetActorRotation(NewRot);
 
     // 3. 각도 차이 확인 (Shortest Path 계산)
@@ -65,7 +65,7 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
     // 4. 충분히 돌아봤다면 공격 시작
 	if (AttackComponent)
 	{
-		if (AngleDiff < 5.f)
+		if (AngleDiff < 15.f)
 		{
 			AttackComponent->StartAttack();
 		}
