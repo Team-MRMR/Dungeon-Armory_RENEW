@@ -38,7 +38,7 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	bool bIsAttacking = false;
 	if (auto AnimInstance = Mob->GetMesh()->GetAnimInstance())
 	{
-		// ÇöÀç ¾î¶² ¸ùÅ¸ÁÖ¶óµµ Àç»ı ÁßÀÌ¶ó¸é true
+		// í˜„ì¬ ì–´ë–¤ ëª½íƒ€ì£¼ë¼ë„ ì¬ìƒ ì¤‘ì´ë¼ë©´ true
 		bIsAttacking = AnimInstance->IsAnyMontagePlaying();
 	}
 
@@ -47,22 +47,22 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
-    // 1. ¹æÇâ °è»ê
+    // 1. ë°©í–¥ ê³„ì‚°
     FVector LookDir = (Target->GetActorLocation() - Mob->GetActorLocation()).GetSafeNormal2D();
     FRotator TargetRot = LookDir.Rotation();
 
-    // 2. È¸Àü
+    // 2. íšŒì „
     FRotator CurrentRot = Mob->GetActorRotation();
 	FRotator NewRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaSeconds, 12.f);
     Mob->SetActorRotation(NewRot);
 
-    // 3. °¢µµ Â÷ÀÌ È®ÀÎ (Shortest Path °è»ê)
-    FRotator DeltaRot = (TargetRot - CurrentRot).GetNormalized(); // -180 ~ 180 »çÀÌ·Î Á¤±ÔÈ­
+    // 3. ê°ë„ ì°¨ì´ í™•ì¸ (Shortest Path ê³„ì‚°)
+    FRotator DeltaRot = (TargetRot - CurrentRot).GetNormalized(); // -180 ~ 180 ì‚¬ì´ë¡œ ì •ê·œí™”
 	float AngleDiff = FMath::Abs(DeltaRot.Yaw);
 
     auto AttackComponent = Cast<UMobAttackComponent>(Mob->_AttackComponent);
 
-    // 4. ÃæºĞÈ÷ µ¹¾ÆºÃ´Ù¸é °ø°İ ½ÃÀÛ
+    // 4. ì¶©ë¶„íˆ ëŒì•„ë´¤ë‹¤ë©´ ê³µê²© ì‹œì‘
 	if (AttackComponent)
 	{
 		if (AngleDiff < 5.f)
