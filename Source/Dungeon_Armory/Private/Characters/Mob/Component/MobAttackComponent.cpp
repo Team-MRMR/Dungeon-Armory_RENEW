@@ -175,8 +175,6 @@ void UMobAttackComponent::OnAttack()
 			{
 				const float DamageAmount = CalculateDamage(StatComponent, TargetStat);
 				DamagedActor->Execute_ReceiveDamage(HitActor, DamageAmount);
-
-				UE_LOG(LogTemp, Warning, TEXT("Mob Attack Hit Actor: %s \nMob DMG: %f. \n Player Remain HP: %f."), *HitActor->GetName(), DamageAmount, TargetStat->CurrentHealth);
 			}
 		}
 	}

@@ -121,8 +121,6 @@ void AMobBase::ReceiveDamage_Implementation(float DamageAmount)
 
 void AMobBase::Die_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MobBase::Die_Implementation() called."));
-
 	// 局聪皋捞记 根鸥林 犁积
 	if (DieMontage)
 	{
