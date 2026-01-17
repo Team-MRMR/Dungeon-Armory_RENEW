@@ -24,6 +24,17 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
     if(!AIController)
 		return EBTNodeResult::Failed;
 
+	// Taget 가져오기
+	auto Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard)
+		return EBTNodeResult::Failed;
+
+	AActor* Target = Cast<AActor>(Blackboard->GetValueAsObject(BBKeys::Mob::Target));
+	if (!Target)
+		return EBTNodeResult::Failed;
+
+
+	// AttackComponent 가져오기
 	auto Mob = Cast<AMobBase>(AIController->GetPawn());
 	if (!Mob)
 		return EBTNodeResult::Failed;
@@ -32,6 +43,9 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (!AttackComponent)
 		return EBTNodeResult::Failed;
 
+	// Taget 쪽으로 바라보기
+	Mob->FaceRotation((Target->GetActorLocation() - Mob->GetActorLocation()).Rotation(), 1.0f);
+	// 공격 시작
 	AttackComponent->StartAttack();
 
 	return EBTNodeResult::InProgress;
@@ -48,9 +62,4 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
-}
-
-void UBTTask_Attack::OnAttackFinished(UBehaviorTreeComponent* OwnerComp)
-{
-
 }
