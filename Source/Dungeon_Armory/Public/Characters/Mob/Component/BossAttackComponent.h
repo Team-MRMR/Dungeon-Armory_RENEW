@@ -30,6 +30,7 @@ protected:
 
 // ----- Parent
 public:
+	void ResetAttackComponent() override;
 	void StartAttack() override;
 
 // ----- BossAttackComponent
@@ -39,19 +40,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	int SkillCycleByCount = 4;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	int AttackCount = 0;
-
-public:
-	int GetAttackCount() const { return AttackCount; }
-	void IncrementAttackCount() { ++AttackCount; }
-	void ResetAttackCount() { AttackCount = 0; }
 
 // ---- Boss Skill - logic
 public:
-	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Skill")
 	UAnimMontage* RoarMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Skill")
 	UAnimMontage* StunMontage;
 
 private:

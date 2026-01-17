@@ -27,7 +27,8 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
         return EBTNodeResult::Failed;
 
     AActor* TargetActor = Cast<AActor>(Blackboard->GetValueAsObject(BBKeys::Mob::Target));
-    if (!TargetActor) return EBTNodeResult::Failed;
+    if (!TargetActor)
+        return EBTNodeResult::Failed;
 
     // MoveToActor를 사용하면 타겟이 움직여도 엔진이 자동으로 추적합니다.
     // bAllowRebind를 true로 설정하면 타겟 위치 변화에 대응합니다.

@@ -27,6 +27,11 @@ void UAttackComponentBase::BeginPlay()
 	}
 }
 
+void UAttackComponentBase::ResetAttackComponent()
+{
+	
+}
+
 void UAttackComponentBase::StartAttack()
 {
 	

@@ -10,12 +10,16 @@ UBossAttackComponent::UBossAttackComponent()
 	AttackCount = 0;
 
 	bIsTimeDropRock = true;
-
 }
 
 void UBossAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void UBossAttackComponent::ResetAttackComponent()
+{
+	Super::ResetAttackComponent();
 }
 
 void UBossAttackComponent::StartAttack()
@@ -25,11 +29,9 @@ void UBossAttackComponent::StartAttack()
 		return;
 	}
 
-	Super::StartAttack();
-
-	if (GetAttackCount() == SkillCycleByCount)
+	if (AttackCount == SkillCycleByCount)
 	{
-		ResetAttackCount();
+		AttackCount = 0;
 
 		bIsTimeDropRock ? DropRockSkill_Implementation() : SpawnMobSkill_Implementation();
 		bIsTimeDropRock = !bIsTimeDropRock;
@@ -40,7 +42,8 @@ void UBossAttackComponent::StartAttack()
 	}
 	else
 	{
-		IncrementAttackCount();
+		Super::StartAttack();
+		++AttackCount;
 	}
 }
 
@@ -58,18 +61,6 @@ void UBossAttackComponent::DropRockSkill_Implementation()
 
 	// 몽타주 재생은 Task에서 처리
 	// BossOwner->PlayAnimMontage(RoarMontage);
-
-	// 특정 몽타주 전용 종료 델리게이트 바인딩
-	FOnMontageEnded EndDelegate;
-	EndDelegate.BindUObject(
-		this,
-		&UBossAttackComponent::OnDropRockAnimationEnd
-	);
-
-	AnimInstance->Montage_SetEndDelegate(
-		EndDelegate,
-		RoarMontage
-	);
 
 	float& DropRockFirstDelay = DropRockInterval;
 	// 1초마다 돌 스폰
@@ -158,26 +149,17 @@ void UBossAttackComponent::SpawnMobSkill_Implementation()
 	// 몽타주 재생은 Task에서 처리
 	// BossOwner->PlayAnimMontage(RoarMontage);
 
-	// 특정 몽타주 전용 종료 델리게이트 바인딩
-	FOnMontageEnded EndDelegate;
-	EndDelegate.BindUObject(
-		this,
-		&UBossAttackComponent::OnSpawnMobAnimationEnd
-	);
-
-	AnimInstance->Montage_SetEndDelegate(
-		EndDelegate,
-		RoarMontage
-	);
+	
 
 	// Mob 스폰
+	bIsSpawningMobs = true;
 	for (int count = 0; count < SpawnMobNumber; ++count)
 	{
 		FVector randomLocation = GetRandomPointInMobSpawnRadius();
 		SpawnMob(randomLocation);
 	}
+	bIsSpawningMobs = false;
 
-	bIsSpawningMobs = true;
 }
 
 void UBossAttackComponent::SpawnMob(const FVector& Location)
@@ -192,8 +174,6 @@ void UBossAttackComponent::SpawnMob(const FVector& Location)
 
 void UBossAttackComponent::OnSpawnMobAnimationEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	bIsSpawningMobs = false;
-
 }
 
 FVector UBossAttackComponent::GetRandomPointInMobSpawnRadius()
