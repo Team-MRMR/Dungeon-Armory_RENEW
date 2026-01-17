@@ -44,7 +44,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 
 	// Taget 쪽으로 바라보기
-	Mob->FaceRotation((Target->GetActorLocation() - Mob->GetActorLocation()).Rotation(), 1.0f);
+	Mob->FaceRotation(Target->GetActorLocation().Rotation(), 1.0f);
 	// 공격 시작
 	AttackComponent->StartAttack();
 
